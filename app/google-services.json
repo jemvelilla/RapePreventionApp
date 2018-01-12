@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "449831256111",
+    "firebase_url": "https://rapepreventionapp-dev1.firebaseio.com",
+    "project_id": "rapepreventionapp-dev1",
+    "storage_bucket": "rapepreventionapp-dev1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:449831256111:android:e20743e068f26611",
+        "android_client_info": {
+          "package_name": "com.build1.rapepreventionapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "449831256111-52ui0jjh1lrtk48cjhh9m1a2bqgf16fc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.build1.rapepreventionapp",
+            "certificate_hash": "a70c088f9c756421859d147cf4d34725073fbf07"
+          }
+        },
+        {
+          "client_id": "449831256111-35raorid039sisb934u4bgnqeobhek7j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEyvqfGvCbm1g5sm7h3EjejjQzjHX3E7Y"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "449831256111-35raorid039sisb934u4bgnqeobhek7j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

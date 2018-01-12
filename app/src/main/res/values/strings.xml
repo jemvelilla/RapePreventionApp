@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">TULONG: Rape Prevention</string>
+
+    <string name="next">NEXT</string>
+    <string name="skip">SKIP</string>
+    <string name="start">GOT IT</string>
+
+    <string name="slide_1_title">Welcome!</string>
+    <string name="slide_1_sub">Here is how to use the application.</string>
+    <string name="slide_2_sub">Turn on the location, Bluetooth, and mobile data services.</string>
+    <string name="slide_3_sub">Add your contacts.</string>
+    <string name="slide_4_sub">Configure automated call.</string>
+</resources>
