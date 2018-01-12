@@ -27,6 +27,8 @@
         </activity>
         <activity android:name=".RegisterStep4" android:screenOrientation="portrait">
         </activity>
+        <activity android:name=".AccountCreated" android:screenOrientation="portrait">
+        </activity>
         <activity android:name=".Login" android:screenOrientation="portrait">
         </activity>
         <activity android:name=".Slides" android:screenOrientation="portrait">
