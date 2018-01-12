@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "449831256111-pa2junf85k1ujc4dr01gvomuf6vtc8ci.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.build1.rapepreventionapp",
+            "certificate_hash": "123e0995da3e1e3edef5d4b8cd3db052674e9477"
+          }
+        },
+        {
           "client_id": "449831256111-52ui0jjh1lrtk48cjhh9m1a2bqgf16fc.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
