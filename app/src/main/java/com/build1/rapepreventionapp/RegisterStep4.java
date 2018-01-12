@@ -32,7 +32,7 @@ public class RegisterStep4 extends AppCompatActivity {
 
         if (password.getText().toString().equals(confPassword.getText().toString())){
 
-            Intent i = new Intent(getApplicationContext(), Slides.class);
+            Intent i = new Intent(getApplicationContext(), AccountCreated.class);
             startActivity(i);
 
             user = database.getReference("Users").child(info.getFirstName() + " " + info.getLastName());
