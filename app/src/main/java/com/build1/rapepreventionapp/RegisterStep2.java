@@ -15,16 +15,19 @@ public class RegisterStep2 extends AppCompatActivity {
     }
     public void btnOnClickMobNum(View v){
         EditText mobNum = (EditText) findViewById(R.id.editTextMobNum);
+        String mobileNum = mobNum.getText().toString().trim();
+        String mobileNumPattern = "^(09|\\+639)\\d{9}$";
 
-        if (mobNum.getText().toString().trim().equals("")){
-            mobNum.setError("Input your Mobile Number");
-        }else{
+        if (mobileNum.matches(mobileNumPattern)){
             info = (UserInformation) getIntent().getSerializableExtra("info");
             info.setMobileNumber(mobNum.getText().toString());
 
             Intent i = new Intent(getApplicationContext(), RegisterStep3.class);
             i.putExtra("info", info);
             startActivity(i);
+
+        }else{
+            mobNum.setError("Invalid Mobile Number");
         }
     }
     public void btnOnClickLoginPage(View v){
