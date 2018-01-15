@@ -23,4 +23,8 @@ public class Login extends AppCompatActivity {
         Intent i = new Intent(getApplicationContext(), RegisterStep1.class);
         startActivity(i);
     }
+    public void btnOnClickForgotPass(View view) {
+        Intent i = new Intent(getApplicationContext(), ForgotPassStep1.class);
+        startActivity(i);
+    }
 }
