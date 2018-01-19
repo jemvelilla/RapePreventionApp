@@ -23,7 +23,7 @@ public class Home extends AppCompatActivity {
     public void btnOnClickLogout(View v){
         mAuth = FirebaseAuth.getInstance();
         mAuth.signOut();
-        startActivity(new Intent(getApplicationContext(), Login.class));
+        startActivity(new Intent(Home.this, Login.class));
         finish();
     }
 
