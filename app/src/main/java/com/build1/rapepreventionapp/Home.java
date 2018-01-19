@@ -24,6 +24,7 @@ public class Home extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mAuth.signOut();
         startActivity(new Intent(getApplicationContext(), Login.class));
+        finish();
     }
 
 }
