@@ -37,8 +37,6 @@ public class RegisterStep1 extends AppCompatActivity {
 
         if (email.matches(emailPattern)){
 
-            info.setEmail(emailAdd.getText().toString());
-
             auth.fetchProvidersForEmail(email).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
                 @Override
                 public void onComplete(@NonNull Task<ProviderQueryResult> task) {
@@ -46,6 +44,8 @@ public class RegisterStep1 extends AppCompatActivity {
                     boolean check = !task.getResult().getProviders().isEmpty();
 
                     if (!check){
+                        info.setEmail(emailAdd.getText().toString());
+
                         Intent i = new Intent(getApplicationContext(), RegisterStep2.class);
                         i.putExtra("info", info);
                         startActivity(i);
