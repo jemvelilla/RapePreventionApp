@@ -14,7 +14,7 @@ public class ForgotPassStep3 extends AppCompatActivity {
         setContentView(R.layout.activity_forgot_password_step3);
 
         TextView user = (TextView) findViewById(R.id.tvName);
-        user.setText( );
+        user.setText("");
     }
 
 
