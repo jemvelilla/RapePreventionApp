@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.TextView;
 
 public class ForgotPassStep3 extends AppCompatActivity {
 
@@ -11,6 +12,9 @@ public class ForgotPassStep3 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password_step3);
+
+        TextView user = (TextView) findViewById(R.id.tvName);
+        user.setText( );
     }
 
 

@@ -1,6 +1,9 @@
 package com.build1.rapepreventionapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -66,19 +69,24 @@ public class Login extends AppCompatActivity {
         String emailText = email.getText().toString();
         String passwordText = password.getText().toString();
 
-        if(TextUtils.isEmpty(emailText) || TextUtils.isEmpty(passwordText)){
-            Toast.makeText(this, "Enter both values", Toast.LENGTH_LONG).show();
-        } else{
-            mAuth.signInWithEmailAndPassword(emailText,passwordText).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
+        if(isNetworkAvailable()){
+            if(TextUtils.isEmpty(emailText) || TextUtils.isEmpty(passwordText)){
+                Toast.makeText(this, "Enter both values", Toast.LENGTH_LONG).show();
+            } else{
+                mAuth.signInWithEmailAndPassword(emailText,passwordText).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
 
-                    if(!task.isSuccessful()){
-                        Toast.makeText(Login.this, "Incorrect username or password.", Toast.LENGTH_LONG).show();
+                        if(!task.isSuccessful()){
+                            Toast.makeText(Login.this, "Incorrect username or password.", Toast.LENGTH_LONG).show();
+                        }
                     }
-                }
-            });
+                });
+            }
+        } else {
+            Toast.makeText(Login.this, "Slow or internet connection.", Toast.LENGTH_LONG).show();
         }
+
     }
 
     public void btnOnClickSignUp(View view) {
@@ -88,5 +96,12 @@ public class Login extends AppCompatActivity {
     public void btnOnClickForgotPass(View view) {
         Intent i = new Intent(getApplicationContext(), ForgotPassStep1.class);
         startActivity(i);
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

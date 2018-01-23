@@ -37,7 +37,4 @@ public class ForgotPassStep2 extends AppCompatActivity {
                 }
             });
     }
-
-
-
 }

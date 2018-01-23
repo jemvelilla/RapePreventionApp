@@ -1,12 +1,16 @@
 package com.build1.rapepreventionapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -35,23 +39,35 @@ public class ForgotPassStep1 extends AppCompatActivity {
         String email = emailAdd.getText().toString().trim();
         Log.v("email",email);
 
-        auth.fetchProvidersForEmail(email).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
-            @Override
-            public void onComplete(@NonNull Task<ProviderQueryResult> task) {
+        if (isNetworkAvailable()){
 
-                boolean check = !task.getResult().getProviders().isEmpty();
+            auth.fetchProvidersForEmail(email).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
+                @Override
+                public void onComplete(@NonNull Task<ProviderQueryResult> task) {
 
-                if (check){
+                    boolean check = !task.getResult().getProviders().isEmpty();
 
-                    Intent i = new Intent(getApplicationContext(), ForgotPassStep2.class);
-                    i.putExtra("email", emailAdd.getText().toString());
-                    startActivity(i);
+                    if (check){
 
-                } else {
-                    emailAdd.setError("Email address doesn't exist.");
+                        Intent i = new Intent(getApplicationContext(), ForgotPassStep2.class);
+                        i.putExtra("email", emailAdd.getText().toString());
+                        startActivity(i);
+
+                    } else {
+                        emailAdd.setError("Email address doesn't exist.");
+                    }
+
                 }
+            });
+        } else{
+            Toast.makeText(ForgotPassStep1.this, "Slow or no internet connection.", Toast.LENGTH_LONG).show();
+        }
+    }
 
-            }
-        });
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
