@@ -1,16 +1,23 @@
 package com.build1.rapepreventionapp;
 
+<<<<<<< HEAD
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+=======
+import android.content.Intent;
+>>>>>>> e58aef2390235de59606da5dc7feef9900674f06
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+<<<<<<< HEAD
 import android.widget.Toast;
+=======
+>>>>>>> e58aef2390235de59606da5dc7feef9900674f06
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -39,6 +46,7 @@ public class ForgotPassStep1 extends AppCompatActivity {
         String email = emailAdd.getText().toString().trim();
         Log.v("email",email);
 
+<<<<<<< HEAD
         if (isNetworkAvailable()){
 
             auth.fetchProvidersForEmail(email).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
@@ -69,5 +77,25 @@ public class ForgotPassStep1 extends AppCompatActivity {
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+=======
+        auth.fetchProvidersForEmail(email).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
+            @Override
+            public void onComplete(@NonNull Task<ProviderQueryResult> task) {
+
+                boolean check = !task.getResult().getProviders().isEmpty();
+
+                if (check){
+
+                    Intent i = new Intent(getApplicationContext(), ForgotPassStep2.class);
+                    i.putExtra("email", emailAdd.getText().toString());
+                    startActivity(i);
+
+                } else {
+                    emailAdd.setError("Email address doesn't exist.");
+                }
+
+            }
+        });
+>>>>>>> e58aef2390235de59606da5dc7feef9900674f06
     }
 }

@@ -68,6 +68,7 @@ public class Login extends AppCompatActivity {
 
         String emailText = email.getText().toString();
         String passwordText = password.getText().toString();
+<<<<<<< HEAD
 
         if(isNetworkAvailable()){
             if(TextUtils.isEmpty(emailText) || TextUtils.isEmpty(passwordText)){
@@ -86,7 +87,22 @@ public class Login extends AppCompatActivity {
         } else {
             Toast.makeText(Login.this, "Slow or internet connection.", Toast.LENGTH_LONG).show();
         }
+=======
+>>>>>>> e58aef2390235de59606da5dc7feef9900674f06
 
+        if(TextUtils.isEmpty(emailText) || TextUtils.isEmpty(passwordText)){
+            Toast.makeText(this, "Enter both values", Toast.LENGTH_LONG).show();
+        } else{
+            mAuth.signInWithEmailAndPassword(emailText,passwordText).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+
+                    if(!task.isSuccessful()){
+                        Toast.makeText(Login.this, "Incorrect username or password.", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        }
     }
 
     public void btnOnClickSignUp(View view) {
@@ -97,6 +113,7 @@ public class Login extends AppCompatActivity {
         Intent i = new Intent(getApplicationContext(), ForgotPassStep1.class);
         startActivity(i);
     }
+<<<<<<< HEAD
 
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
@@ -104,4 +121,6 @@ public class Login extends AppCompatActivity {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+=======
+>>>>>>> e58aef2390235de59606da5dc7feef9900674f06
 }
