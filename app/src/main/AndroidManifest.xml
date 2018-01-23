@@ -25,6 +25,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2dba82e9477c8f28769e5f4e1cf130c58180da2d
         <activity
             android:name=".Welcome"
             android:screenOrientation="portrait"></activity>
@@ -72,7 +76,23 @@
 
         <activity
             android:name=".Home"
+<<<<<<< HEAD
             android:label="@string/title_activity_home"></activity>
+=======
+            android:label="TULONG Rape Prevention">
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="tulongrapeprevention.com" />
+            </intent-filter>
+
+        </activity>
+
+>>>>>>> 2dba82e9477c8f28769e5f4e1cf130c58180da2d
     </application>
 
 </manifest>

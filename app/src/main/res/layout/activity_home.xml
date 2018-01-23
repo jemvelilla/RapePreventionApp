@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 2dba82e9477c8f28769e5f4e1cf130c58180da2d
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
@@ -15,7 +18,10 @@ tools:context="com.build1.rapepreventionapp.Home">
         android:layout_height="match_parent"
         tools:context="com.build1.rapepreventionapp.Home" />
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 2dba82e9477c8f28769e5f4e1cf130c58180da2d
 </android.support.constraint.ConstraintLayout>
