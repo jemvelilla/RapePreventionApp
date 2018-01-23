@@ -30,7 +30,7 @@ public class Welcome extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser()!=null){
-                    Intent intent = new Intent(getApplicationContext(), Home.class);
+                    Intent intent = new Intent(getApplicationContext(), BottomNavigation.class);
                     startActivity(intent);
                 }
             }

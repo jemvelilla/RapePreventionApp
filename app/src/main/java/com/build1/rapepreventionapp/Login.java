@@ -46,11 +46,11 @@ public class Login extends AppCompatActivity {
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser()!=null){
-                    Intent intent = new Intent(getApplicationContext(), Home.class);
-                    startActivity(intent);
-                    finish();
-                }
+            if (firebaseAuth.getCurrentUser()!=null){
+                Intent intent = new Intent(getApplicationContext(), BottomNavigation.class);
+                startActivity(intent);
+                finish();
+            }
             }
         };
         Log.v("message","onCreate");
@@ -85,19 +85,7 @@ public class Login extends AppCompatActivity {
         } else {
             Toast.makeText(Login.this, "Slow or no internet connection.", Toast.LENGTH_LONG).show();
         }
-        if(TextUtils.isEmpty(emailText) || TextUtils.isEmpty(passwordText)){
-            Toast.makeText(this, "Enter both values", Toast.LENGTH_LONG).show();
-        } else{
-            mAuth.signInWithEmailAndPassword(emailText,passwordText).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
 
-                    if(!task.isSuccessful()){
-                        Toast.makeText(Login.this, "Incorrect username or password.", Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
-        }
     }
 
     public void btnOnClickSignUp(View view) {
