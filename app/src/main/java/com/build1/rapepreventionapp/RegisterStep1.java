@@ -2,11 +2,8 @@ package com.build1.rapepreventionapp;
 
 import android.content.Context;
 import android.content.Intent;
-<<<<<<< HEAD
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-=======
->>>>>>> 2dba82e9477c8f28769e5f4e1cf130c58180da2d
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -49,7 +46,6 @@ public class RegisterStep1 extends AppCompatActivity {
 
         if (email.matches(emailPattern)){
 
-<<<<<<< HEAD
             if(isNetworkAvailable()){
 
                 auth.fetchProvidersForEmail(email).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
@@ -75,32 +71,6 @@ public class RegisterStep1 extends AppCompatActivity {
         }else {
             emailAdd.setError("Invalid Email Address");
         } //end check email address format
-=======
-            auth.fetchProvidersForEmail(email).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
-                @Override
-                public void onComplete(@NonNull Task<ProviderQueryResult> task) {
-
-                    boolean check = !task.getResult().getProviders().isEmpty();
-
-                    if (!check){
-                        info.setEmail(emailAdd.getText().toString());
-
-                        Intent i = new Intent(getApplicationContext(), RegisterStep2.class);
-                        i.putExtra("info", info);
-                        startActivity(i);
-                    } else {
-                        emailAdd.setError("Email address already exists.");
-                    }
-
-                }
-            });
-
-        }else {
-            emailAdd.setError("Invalid Email Address");
-        }
->>>>>>> 2dba82e9477c8f28769e5f4e1cf130c58180da2d
-
-
     }
 
     public void btnOnClickLoginPage(View v){

@@ -68,8 +68,6 @@ public class Login extends AppCompatActivity {
 
         String emailText = email.getText().toString();
         String passwordText = password.getText().toString();
-<<<<<<< HEAD
-
         if(isNetworkAvailable()){
             if(TextUtils.isEmpty(emailText) || TextUtils.isEmpty(passwordText)){
                 Toast.makeText(this, "Enter both values", Toast.LENGTH_LONG).show();
@@ -85,11 +83,8 @@ public class Login extends AppCompatActivity {
                 });
             }
         } else {
-            Toast.makeText(Login.this, "Slow or internet connection.", Toast.LENGTH_LONG).show();
+            Toast.makeText(Login.this, "Slow or no internet connection.", Toast.LENGTH_LONG).show();
         }
-=======
->>>>>>> 2dba82e9477c8f28769e5f4e1cf130c58180da2d
-
         if(TextUtils.isEmpty(emailText) || TextUtils.isEmpty(passwordText)){
             Toast.makeText(this, "Enter both values", Toast.LENGTH_LONG).show();
         } else{
@@ -113,7 +108,6 @@ public class Login extends AppCompatActivity {
         Intent i = new Intent(getApplicationContext(), ForgotPassStep1.class);
         startActivity(i);
     }
-<<<<<<< HEAD
 
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
@@ -121,6 +115,4 @@ public class Login extends AppCompatActivity {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
-=======
->>>>>>> 2dba82e9477c8f28769e5f4e1cf130c58180da2d
 }
