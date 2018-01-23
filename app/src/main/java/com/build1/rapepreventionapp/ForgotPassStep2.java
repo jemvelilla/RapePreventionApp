@@ -39,8 +39,5 @@ public class ForgotPassStep2 extends AppCompatActivity {
     }
 
 
-    public void btnOnClickContinueCode (View view){
-        Intent i = new Intent(getApplicationContext(), ForgotPassStep3.class);
-        startActivity(i);
-    }
+
 }
