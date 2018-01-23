@@ -31,5 +31,7 @@ dependencies {
     compile 'com.google.firebase:firebase-auth:11.8.0'
     compile 'com.google.firebase:firebase-messaging:11.8.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
+    //google play services 24/01/2018 2:27am
+    compile 'com.google.android.gms:play-services:11.8.0'
 }
 apply plugin: 'com.google.gms.google-services'
