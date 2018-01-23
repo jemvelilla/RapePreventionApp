@@ -12,5 +12,4 @@ tools:context="com.build1.rapepreventionapp.Home">
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         tools:context="com.build1.rapepreventionapp.Home" />
-
 </android.support.constraint.ConstraintLayout>
