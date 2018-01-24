@@ -57,8 +57,7 @@ public class BottomNavigation extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.homeBtn:
-//                removeFragment(new Contacts());
-//                removeFragment(new Profile());
+                pushFragment(new Home());
                 Toast.makeText(getApplicationContext(),"Home", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.contactsBtn:
