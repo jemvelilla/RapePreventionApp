@@ -34,4 +34,6 @@ public class RegisterStep2 extends AppCompatActivity {
         Intent i = new Intent(getApplicationContext(), Login.class);
         startActivity(i);
     }
+
+
 }

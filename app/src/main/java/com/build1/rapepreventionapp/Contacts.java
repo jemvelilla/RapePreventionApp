@@ -30,8 +30,8 @@ public class Contacts extends Fragment implements View.OnClickListener{
     String contactName;
     String contactNumber;
 
-    List<String> nameList;
-    List<String> numList;
+    List<String> nameList = new ArrayList<>();
+    List<String> numList = new ArrayList<>();
 
     String[] names;
     String[] numbers;
@@ -63,9 +63,6 @@ public class Contacts extends Fragment implements View.OnClickListener{
             names = contactName.split(",");
             numbers = contactNumber.split(",");
 
-            nameList = new ArrayList<>();
-            numList = new ArrayList<>();
-
             for (int i=0; i < names.length; i++){
                 nameList.add(names[i]);
                 numList.add(numbers[i]);
@@ -94,46 +91,39 @@ public class Contacts extends Fragment implements View.OnClickListener{
             listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
                     Toast.makeText(getActivity(), nameList.get(position) + " is removed from your emergency contacts.", Toast.LENGTH_SHORT).show();
 
-                arrayAdapter.remove(arrayAdapter.getItem(position));
-                arrayAdapter.notifyDataSetChanged();
-
-                for (int i=0; i < names.length; i++){
-                    nameList.add(names[i]);
-                    numList.add(numbers[i]);
                     nameList.remove(nameList.get(position));
                     numList.remove(numList.get(position));
-                }
+                    arrayAdapter.notifyDataSetChanged();
 
-                StringBuilder nameBuilder = new StringBuilder();
-                for (String numbers : nameList){
-                    nameBuilder.append(numbers);
-                    nameBuilder.append(',');
+                    StringBuilder nameBuilder = new StringBuilder();
+                    for (String numbers : nameList){
+                        nameBuilder.append(numbers);
+                        nameBuilder.append(',');
 
-                    SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.remove("contactNames");
-                    editor.commit();
-                    editor.putString("contactNames", nameBuilder.toString());
-                    editor.commit();
-                }
+                        SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.remove("contactNames");
+                        editor.commit();
+                        editor.putString("contactNames", nameBuilder.toString());
+                        editor.commit();
+                    }
 
-                StringBuilder numberBuilder = new StringBuilder();
-                for (String numbers : numList){
-                    numberBuilder.append(numbers);
-                    numberBuilder.append(',');
+                    StringBuilder numberBuilder = new StringBuilder();
+                    for (String numbers : numList){
+                        numberBuilder.append(numbers);
+                        numberBuilder.append(',');
 
-                    SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.remove("contactNumbers");
-                    editor.commit();
-                    editor.putString("contactNumbers", numberBuilder.toString());
-                    editor.commit();
-                }
+                        SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.remove("contactNumbers");
+                        editor.commit();
+                        editor.putString("contactNumbers", numberBuilder.toString());
+                        editor.commit();
+                    }
 
-                   return true;
+                    return true;
                 }
             });
 
@@ -141,8 +131,6 @@ public class Contacts extends Fragment implements View.OnClickListener{
         }
 
         Log.v("view", "onCreateView");
-
-
 
         return v;
     }
