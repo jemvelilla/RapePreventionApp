@@ -94,6 +94,9 @@ public class Contacts extends Fragment implements View.OnClickListener{
             listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    Toast.makeText(getActivity(), nameList.get(position) + " is removed from your emergency contacts.", Toast.LENGTH_SHORT).show();
+
                 arrayAdapter.remove(arrayAdapter.getItem(position));
                 arrayAdapter.notifyDataSetChanged();
 
@@ -130,7 +133,6 @@ public class Contacts extends Fragment implements View.OnClickListener{
                     editor.commit();
                 }
 
-                Toast.makeText(getActivity(), nameList.get(position) + " is removed from your emergency contacts.", Toast.LENGTH_SHORT).show();
                    return true;
                 }
             });
