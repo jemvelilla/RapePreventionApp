@@ -1,5 +1,6 @@
 package com.build1.rapepreventionapp;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -13,10 +14,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +67,7 @@ public class Contacts extends Fragment implements View.OnClickListener{
             }
 
 
-            ArrayAdapter<String> arrayAdapter =
+            final ArrayAdapter<String> arrayAdapter =
                     new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_2, android.R.id.text1, nameList){
                         @Override
                         public View getView(int position, View convertView, ViewGroup parent) {
@@ -81,6 +84,21 @@ public class Contacts extends Fragment implements View.OnClickListener{
             ListView listView = (ListView) v.findViewById(R.id.listView);
             listView.setAdapter(arrayAdapter);
             arrayAdapter.notifyDataSetChanged();
+
+            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                arrayAdapter.remove(arrayAdapter.getItem(position));
+                arrayAdapter.notifyDataSetChanged();
+
+                SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.remove("contactNames");
+                editor.commit();
+
+                   return true;
+                }
+            });
 
             Log.v("view", "not null");
         }
