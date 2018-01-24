@@ -1,15 +1,10 @@
 package com.build1.rapepreventionapp;
 
-import android.content.pm.PackageManager;
+
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.Manifest;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +19,7 @@ import com.google.android.gms.maps.SupportMapFragment;
  * Created by Darise on 24/01/2018.
  */
 
-public class Home extends Fragment implements OnMapReadyCallback {
-
+public class Map extends Fragment implements OnMapReadyCallback {
 
 
     @Nullable

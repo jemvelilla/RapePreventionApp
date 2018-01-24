@@ -10,25 +10,22 @@
 
     <ImageView
         android:id="@+id/icon2"
-        android:layout_width="90sp"
-        android:layout_height="90sp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:layout_width="100sp"
+        android:layout_height="100sp"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginStart="20dp"
-        android:background="@drawable/icon2" />
+        android:background="@drawable/icon2"
+        app:layout_constraintTop_toTopOf="@+id/listView" />
 
     <TextView
         android:id="@+id/titleContacts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/listView"
-        android:layout_alignLeft="@+id/icon2"
-        android:layout_alignStart="@+id/icon2"
-        android:layout_marginBottom="26dp"
-        android:layout_marginLeft="77dp"
-        android:layout_marginStart="77dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="86dp"
+        android:layout_marginStart="86dp"
         android:text="Contacts"
         android:textSize="25sp"
         tools:ignore="MissingConstraints" />
@@ -40,4 +37,19 @@
         android:layout_below="@+id/icon2">
     </ListView>
 
+    <Button
+        android:id="@+id/addBtn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/round"
+        android:onClick="btnOnClickAdd"
+        android:text="+"
+        android:textAllCaps="false"
+        android:textColor="#FFF"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20sp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"/>
 </RelativeLayout>
