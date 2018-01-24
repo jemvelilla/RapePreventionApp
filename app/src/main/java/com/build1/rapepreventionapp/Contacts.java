@@ -30,6 +30,11 @@ public class Contacts extends Fragment implements View.OnClickListener{
     String contactName;
     String contactNumber;
 
+    List<String> nameList;
+    List<String> numList;
+
+    String[] names;
+    String[] numbers;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,11 +60,11 @@ public class Contacts extends Fragment implements View.OnClickListener{
             Button btnAdd = (Button) v.findViewById(R.id.addBtn);
             btnAdd.setOnClickListener(this);
 
-            String[] names = contactName.split(",");
-            String[] numbers = contactNumber.split(",");
+            names = contactName.split(",");
+            numbers = contactNumber.split(",");
 
-            final List<String> nameList = new ArrayList<>();
-            final List<String> numList = new ArrayList<>();
+            nameList = new ArrayList<>();
+            numList = new ArrayList<>();
 
             for (int i=0; i < names.length; i++){
                 nameList.add(names[i]);
@@ -85,16 +90,46 @@ public class Contacts extends Fragment implements View.OnClickListener{
             listView.setAdapter(arrayAdapter);
             arrayAdapter.notifyDataSetChanged();
 
+            //delete from sharedpreferences
             listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 arrayAdapter.remove(arrayAdapter.getItem(position));
                 arrayAdapter.notifyDataSetChanged();
 
-                SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.remove("contactNames");
-                editor.commit();
+                for (int i=0; i < names.length; i++){
+                    nameList.add(names[i]);
+                    numList.add(numbers[i]);
+                    nameList.remove(nameList.get(position));
+                    numList.remove(numList.get(position));
+                }
+
+                StringBuilder nameBuilder = new StringBuilder();
+                for (String numbers : nameList){
+                    nameBuilder.append(numbers);
+                    nameBuilder.append(',');
+
+                    SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.remove("contactNames");
+                    editor.commit();
+                    editor.putString("contactNames", nameBuilder.toString());
+                    editor.commit();
+                }
+
+                StringBuilder numberBuilder = new StringBuilder();
+                for (String numbers : numList){
+                    numberBuilder.append(numbers);
+                    numberBuilder.append(',');
+
+                    SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.remove("contactNumbers");
+                    editor.commit();
+                    editor.putString("contactNumbers", numberBuilder.toString());
+                    editor.commit();
+                }
+
 
                    return true;
                 }
