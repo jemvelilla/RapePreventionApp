@@ -1,6 +1,6 @@
 package com.build1.rapepreventionapp;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -31,9 +31,9 @@ public class Contacts extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View view) {
 
-        FragmentManager fragmentManager = getFragmentManager();
+        android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
         if (fragmentManager != null) {
-            FragmentTransaction ft = fragmentManager.beginTransaction();
+            android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction();
             if (ft != null) {
                 ft.replace(R.id.rootLayout, new Contacts2());
                 ft.commit();

@@ -1,13 +1,12 @@
 package com.build1.rapepreventionapp;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,9 +56,8 @@ public class BottomNavigation extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.homeBtn:
-//                removeFragment(new Contacts());
-//                removeFragment(new Profile());
-                Toast.makeText(getApplicationContext(),"Home", Toast.LENGTH_SHORT).show();
+                pushFragment(new Map());
+                Toast.makeText(getApplicationContext(),"Map", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.contactsBtn:
                 // Action to perform when Bag Menu item is selected.
@@ -72,6 +70,8 @@ public class BottomNavigation extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"Profile", Toast.LENGTH_SHORT).show();
                 break;
         }
+
+
     }
 
     /**
@@ -83,7 +83,7 @@ public class BottomNavigation extends AppCompatActivity {
         if (fragment == null)
             return;
 
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         if (fragmentManager != null) {
             FragmentTransaction ft = fragmentManager.beginTransaction();
             if (ft != null) {

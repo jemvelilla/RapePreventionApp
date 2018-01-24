@@ -83,12 +83,6 @@
             android:value="AIzaSyBC3ugj9ifSjas3AuqWFOXCyoSSE6sxDXI" />
 
         <activity
-            android:name=".Home"
-            android:label="TULONG Rape Prevention">
-
-        </activity>
-
-        <activity
             android:name=".BottomNavigation"
             android:label="TULONG Rape Prevention">
 
