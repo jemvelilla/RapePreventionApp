@@ -130,7 +130,7 @@ public class Contacts extends Fragment implements View.OnClickListener{
                     editor.commit();
                 }
 
-
+                Toast.makeText(getActivity(), nameList.get(position) + " is removed from your emergency contacts.", Toast.LENGTH_SHORT).show();
                    return true;
                 }
             });
