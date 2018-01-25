@@ -63,15 +63,14 @@ public class ForgotPassStep3 extends AppCompatActivity {
                             if (task.isSuccessful())
                             {
                                 Toast.makeText(ForgotPassStep3.this, "Password successfully updated.", Toast.LENGTH_LONG).show();
+                                Intent i = new Intent(getApplicationContext(), Login.class);
+                                startActivity(i);
                             } else {
                                 Toast.makeText(ForgotPassStep3.this, "Failed.", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
 
-
-            Intent i = new Intent(getApplicationContext(), Login.class);
-            startActivity(i);
         } else {
             Toast.makeText(ForgotPassStep3.this, "Passwords do not match.", Toast.LENGTH_LONG).show();
         }
