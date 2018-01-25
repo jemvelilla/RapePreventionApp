@@ -55,7 +55,7 @@ public class ForgotPassStep3 extends AppCompatActivity {
 
     public void btnOnClickSearchEmail (View view){
 
-        if(newPassword.getText().toString() == confirmPassword.getText().toString()){
+        if(newPassword.getText().toString().equals(confirmPassword.getText().toString())){
             mAuth.confirmPasswordReset(code, newPassword.getText().toString())
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
