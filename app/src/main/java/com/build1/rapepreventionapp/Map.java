@@ -50,6 +50,7 @@ public class Map extends Fragment implements OnMapReadyCallback {
 
         BottomNavigation bottomNavigation = new BottomNavigation();
         mMap = googleMap;
+        /*
         if (bottomNavigation.mLocationPermissionGranted) {
             bottomNavigation.getDeviceLocation();
 
@@ -64,7 +65,7 @@ public class Map extends Fragment implements OnMapReadyCallback {
                 return;
             }
             mMap.setMyLocationEnabled(true);
-        }
+        }*/
 
     }
 }
