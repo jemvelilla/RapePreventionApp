@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences preferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE);
         contactNumber = preferences.getString("contactNumbers", "");
-       sendSMS();
+        //sendSMS();
 
         new Handler().postDelayed(new Runnable(){
             @Override
