@@ -27,19 +27,8 @@ public class ForgotPassStep2 extends AppCompatActivity {
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
         email = (String) getIntent().getSerializableExtra("email");
-        String emailAddress = email;
 
-        auth.signInWithEmailAndPassword(emailAddress,"jemylanicole").addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-
-                if(!task.isSuccessful()){
-                    Toast.makeText(ForgotPassStep2.this, "Incorrect username or password.", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-        auth.sendPasswordResetEmail(emailAddress)
+        auth.sendPasswordResetEmail(email.toString())
             .addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
@@ -51,4 +40,6 @@ public class ForgotPassStep2 extends AppCompatActivity {
                 }
             });
     }
+
+
 }
