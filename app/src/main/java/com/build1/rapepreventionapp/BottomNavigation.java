@@ -1,5 +1,6 @@
 package com.build1.rapepreventionapp;
 
+import android.location.Location;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -8,21 +9,71 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.google.android.gms.gcm.Task;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 
 import java.util.AbstractQueue;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BottomNavigation extends AppCompatActivity {
+    private FusedLocationProviderClient mFusedLocationProviderClient;
+    public Boolean mLocationPermissionGranted = false;
+    private static final String TAG = "BottomNavigation";
+    private static final float DEFAULT_ZOOM = 15f;
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom_navigation);
         setupNavigationView();
+    }
+
+
+
+    public void getDeviceLocation(){
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        try{
+            if (mLocationPermissionGranted){
+                final com.google.android.gms.tasks.Task<Location> location = mFusedLocationProviderClient.getLastLocation();
+                location.addOnCompleteListener(new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull com.google.android.gms.tasks.Task<Location> task) {
+                        if (task.isSuccessful()){
+                            Log.d(TAG, "onComplete: found location!");
+                            Location currentLocation = (Location) task.getResult();
+
+                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
+                                    DEFAULT_ZOOM);
+                        }else{
+                            Log.d(TAG, "onComplete: location is null");
+
+                        }
+                    }
+                });
+            }
+
+        }catch (SecurityException e){
+            Log.e(TAG, "getDeviceLocation: SecurityException" +e.getMessage());
+        }
+    }
+
+    private void moveCamera(LatLng latLng, float zoom){
+        Log.d(TAG, "moveCamera: location is null");
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));
+
     }
 
     private void setupNavigationView() {
