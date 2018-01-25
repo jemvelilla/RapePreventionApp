@@ -14,10 +14,19 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.List;
 
 public class ForgotPassStep3 extends AppCompatActivity {
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener authStateListener;
+
     FirebaseUser currentUser;
     EditText newPassword, confirmPassword;
+
+    String code;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,32 +35,47 @@ public class ForgotPassStep3 extends AppCompatActivity {
         user.setText("");
 
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        mAuth = FirebaseAuth.getInstance();
 
         newPassword = (EditText) findViewById(R.id.editTextNewPassword);
         confirmPassword = (EditText) findViewById(R.id.editTextConfirmPassword);
 
 
+        //for link clicked
+        final Intent intent = getIntent();
+        final String action = intent.getAction();
+
+        if (Intent.ACTION_VIEW.equals(action)) {
+            String segments = intent.getData().toString();
+            String subUrl = segments.replace(segments.substring(segments.lastIndexOf("&")), "");
+            code = subUrl.substring(subUrl.lastIndexOf("=")+1);
+        }
     }
 
 
     public void btnOnClickSearchEmail (View view){
 
-        currentUser.updatePassword(newPassword.getText().toString())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful())
-                        {
-                            Toast.makeText(ForgotPassStep3.this, "Password successfully updated.", Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(ForgotPassStep3.this, "Failed.", Toast.LENGTH_LONG).show();
+        if(newPassword.getText().toString() == confirmPassword.getText().toString()){
+            mAuth.confirmPasswordReset(code, newPassword.getText().toString())
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful())
+                            {
+                                Toast.makeText(ForgotPassStep3.this, "Password successfully updated.", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(ForgotPassStep3.this, "Failed.", Toast.LENGTH_LONG).show();
+                            }
                         }
-                    }
-                });
+                    });
 
 
-        Intent i = new Intent(getApplicationContext(), Login.class);
-        startActivity(i);
+            Intent i = new Intent(getApplicationContext(), Login.class);
+            startActivity(i);
+        } else {
+            Toast.makeText(ForgotPassStep3.this, "Passwords do not match.", Toast.LENGTH_LONG).show();
+        }
+
     }
 
 

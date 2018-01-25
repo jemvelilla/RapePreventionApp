@@ -13,9 +13,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.AbstractQueue;
 import java.util.ArrayList;
@@ -33,15 +36,33 @@ public class BottomNavigation extends AppCompatActivity {
         final String action = intent.getAction();
 
         if (Intent.ACTION_VIEW.equals(action)) {
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
             final List<String> segments = intent.getData().getPathSegments();
             for (int i=0; i< segments.size(); i++) {
                 Log.v("data", segments.get(i));
             }
+//
+//            Query query = databaseReference.child(segments.get(0)).orderByChild("first_name");
+//            query.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    if (dataSnapshot.exists()) {
+//                        // dataSnapshot is the "issue" node with all children with id 0
+//                        for (DataSnapshot issue : dataSnapshot.getChildren()) {
+//                            // do something with the individual "issues"
+//                            Log.v("data", issue.getValue().toString());
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//
+//                }
+//            });
+
         }
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-
-        Query query = databaseReference.child("");
 
         setupNavigationView();
     }
