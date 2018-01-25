@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.transition.Slide;
 import android.util.Log;
 import android.view.View;
@@ -51,7 +52,8 @@ public class RegisterStep4 extends AppCompatActivity {
         if (pass.matches(pattern) && confpass.matches(pattern)){
             if (password.getText().toString().equals(confPassword.getText().toString())){
 
-                user = database.getReference("Users").child(info.getFirstName() + " " + info.getLastName());
+                String username = TextUtils.substring(email, 0, email.indexOf("@")-1);
+                user = database.getReference("Users").child(username);
 
                 user.child("email").setValue(email);
                 user.child("mobile_number").setValue(info.getMobileNumber().toString());

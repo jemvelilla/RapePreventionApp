@@ -8,9 +8,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.AbstractQueue;
 import java.util.ArrayList;
@@ -22,6 +27,22 @@ public class BottomNavigation extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom_navigation);
+
+        //for link clicked
+        final Intent intent = getIntent();
+        final String action = intent.getAction();
+
+        if (Intent.ACTION_VIEW.equals(action)) {
+            final List<String> segments = intent.getData().getPathSegments();
+            for (int i=0; i< segments.size(); i++) {
+                Log.v("data", segments.get(i));
+            }
+        }
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        Query query = databaseReference.child("");
+
         setupNavigationView();
     }
 
