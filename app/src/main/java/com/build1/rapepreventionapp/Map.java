@@ -4,6 +4,7 @@ package com.build1.rapepreventionapp;
 import android.app.Activity;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,12 +22,16 @@ import android.Manifest;
 import com.google.android.gms.gcm.Task;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.PlaceDetectionClient;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 
 /**
@@ -40,6 +45,8 @@ public class Map extends Fragment implements OnMapReadyCallback {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private Boolean mLocationPermissionGranted = false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
+    private GeoDataClient mGeoDataClient;
+    private PlaceDetectionClient mPlaceDetectionClient;
     private final float DEFAULT_ZOOM = 16f;
 
     GoogleMap mMap;
@@ -76,6 +83,18 @@ public class Map extends Fragment implements OnMapReadyCallback {
 
     }
 
+    private void geoLocate(){
+        Geocoder geocoder = new Geocoder(getActivity().getApplicationContext());
+    }
+
+    private void geoDataClient(){
+        mGeoDataClient = Places.getGeoDataClient(getActivity().getApplicationContext(), null);
+    }
+
+    private void placeDetectionClient() {
+        mPlaceDetectionClient = Places.getPlaceDetectionClient(getActivity().getApplicationContext(), null);
+    }
+
     private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the device location");
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity().getApplicationContext());
@@ -91,7 +110,7 @@ public class Map extends Fragment implements OnMapReadyCallback {
                             Location currentLocation = (Location) task.getResult();
 
                             moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                                    DEFAULT_ZOOM);
+                                    DEFAULT_ZOOM, "You are here!");
                         } else {
                             Log.d(TAG, "onComplete: NASAN");
 
@@ -105,9 +124,15 @@ public class Map extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    private void moveCamera(LatLng latLng, float zoom) {
+    private void moveCamera(LatLng latLng, float zoom, String title) {
         Log.d(TAG, "moveCamera: moving the camera to :");
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+
+        if (!title.equals("You are here!")){
+            MarkerOptions options = new MarkerOptions().position(latLng).title(title);
+            mMap.addMarker(options);
+        }
+
     }
 
     @Override
