@@ -96,6 +96,8 @@ public class BottomNavigation extends AppCompatActivity {
 
     }
 
+
+
     /**
      * Method to push any fragment into given id.
      *
