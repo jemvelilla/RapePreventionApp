@@ -86,6 +86,10 @@ public class RegisterStep3 extends AppCompatActivity {
             cP2.setError("Field Required");
         }else if (!cp2MobNum.matches(mobileNumPattern)){
             cP2Num.setError("Invalid mobile number");
+        } else if (cP3.getText().toString().trim().equals("")){
+            cP2.setError("Field Required");
+        }else if (!cp3MobNum.matches(mobileNumPattern)){
+            cP2Num.setError("Invalid mobile number");
         }
         else{
             info = (UserInformation) getIntent().getSerializableExtra("info");
@@ -98,11 +102,9 @@ public class RegisterStep3 extends AppCompatActivity {
             info.setContactNumber1(cP1Num.getText().toString());
             info.setContactPerson2(cP2.getText().toString());
             info.setContactNumber2(cP2Num.getText().toString());
+            info.setContactPerson3(cP3.getText().toString());
+            info.setContactNumber3(cP3Num.getText().toString());
 
-            if (!cP3.getText().toString().trim().equals("") && cp3MobNum.matches(mobileNumPattern)) { //jem !cP2Num ba tlga to?
-                info.setContactPerson3(cP3.getText().toString());
-                info.setContactNumber3(cP3Num.getText().toString());
-            }
 
             Intent i = new Intent(getApplicationContext(), RegisterStep4.class);
             i.putExtra("info", info);
