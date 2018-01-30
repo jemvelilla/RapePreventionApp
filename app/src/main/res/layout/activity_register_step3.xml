@@ -172,7 +172,7 @@
         android:layout_marginStart="24dp"
         android:nextFocusForward="@+id/editTextCP3Num"
         android:imeOptions="actionNext"
-        android:hint="Contact Person 3"
+        android:hint="Contact Person 3*"
         android:inputType="textCapWords"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/editTextCP2Num"
