@@ -37,5 +37,16 @@
 
     </RelativeLayout>
 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/place_info"
+            android:src="@drawable/ic_info"
+            />
+
 
 </RelativeLayout>

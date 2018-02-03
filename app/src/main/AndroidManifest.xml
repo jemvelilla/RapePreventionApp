@@ -87,7 +87,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBC3ugj9ifSjas3AuqWFOXCyoSSE6sxDXI" />
+            android:value="AIzaSyDr1asme-e-xPsHFa7IvFiJIOZHZFmndac" />
 
         <activity
             android:name=".BottomNavigation"
