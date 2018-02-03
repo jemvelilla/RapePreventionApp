@@ -16,6 +16,18 @@
         android:background="@drawable/icon2"
         app:layout_constraintTop_toTopOf="@+id/listView" />
 
+    <Button
+        android:id="@+id/btnAddContacts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/titleContacts"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="30dp"
+        android:text="Add"
+        android:background="@drawable/rectangle"
+        android:padding="10dp"
+        android:textColor="#fff"/>
+
     <TextView
         android:id="@+id/titleContacts"
         android:layout_width="wrap_content"

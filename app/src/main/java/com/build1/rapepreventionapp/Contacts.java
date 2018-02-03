@@ -53,8 +53,6 @@ public class Contacts extends Fragment implements View.OnClickListener{
         Button btnContacts = (Button) v.findViewById(R.id.connBtn);
         btnContacts.setOnClickListener(this);
 
-
-
         if(!contactName.isEmpty() && !contactNumber.isEmpty()){
             v = inflater.inflate(R.layout.activity_contactlist, container, false);
             Button btnAdd = (Button) v.findViewById(R.id.addBtn);

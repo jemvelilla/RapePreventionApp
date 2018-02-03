@@ -8,11 +8,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,6 +28,9 @@ import java.util.List;
 
 public class BottomNavigation extends AppCompatActivity {
 
+    String currentUser;
+    private FirebaseAuth mAuth;
+    DatabaseReference databaseUsers;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +47,28 @@ public class BottomNavigation extends AppCompatActivity {
                 Log.v("data", segments.get(i));
             }
         }
+        mAuth = FirebaseAuth.getInstance();
+        currentUser =  mAuth.getCurrentUser().getUid();
+        databaseUsers = FirebaseDatabase.getInstance().getReference("Users").child(currentUser);
 
+        UserInformation.details = new ArrayList();
+
+        databaseUsers.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()){
+
+                    String details = userSnapshot.getValue(String.class);
+                    UserInformation.details.add(details);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         setupNavigationView();
     }
@@ -79,17 +105,14 @@ public class BottomNavigation extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.homeBtn:
                 pushFragment(new Map());
-                Toast.makeText(getApplicationContext(),"Map", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.contactsBtn:
                 // Action to perform when Bag Menu item is selected.
                 pushFragment(new Contacts());
-                Toast.makeText(getApplicationContext(),"Contacts", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.profileBtn:
                 // Action to perform when Account Menu item is selected.
                 pushFragment(new Profile());
-                Toast.makeText(getApplicationContext(),"Profile", Toast.LENGTH_SHORT).show();
                 break;
         }
 

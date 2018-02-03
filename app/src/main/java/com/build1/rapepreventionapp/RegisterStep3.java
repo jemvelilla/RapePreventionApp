@@ -87,9 +87,9 @@ public class RegisterStep3 extends AppCompatActivity {
         }else if (!cp2MobNum.matches(mobileNumPattern)){
             cP2Num.setError("Invalid mobile number");
         } else if (cP3.getText().toString().trim().equals("")){
-            cP2.setError("Field Required");
+            cP3.setError("Field Required");
         }else if (!cp3MobNum.matches(mobileNumPattern)){
-            cP2Num.setError("Invalid mobile number");
+            cP3Num.setError("Invalid mobile number");
         }
         else{
             info = (UserInformation) getIntent().getSerializableExtra("info");

@@ -1,13 +1,17 @@
 package com.build1.rapepreventionapp;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by JEMYLA VELILLA on 08/01/2018.
  */
 
 public class UserInformation implements Serializable {
+    public static List<String> contactName;
+    public static List<String> contactNumber;
 
+    public static List<String> details;
     private String email;
     private String mobileNumber;
     private String firstName;

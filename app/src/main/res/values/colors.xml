@@ -36,5 +36,7 @@
         <item>@color/dot_inactive_screen1</item>
     </array>
 
+    <color name="startpink">#EC3061</color>
+    <color name="endpink">#f48fb1</color>
 
 </resources>

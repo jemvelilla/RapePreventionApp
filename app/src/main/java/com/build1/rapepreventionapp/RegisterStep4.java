@@ -15,6 +15,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -48,29 +50,8 @@ public class RegisterStep4 extends AppCompatActivity {
         String pattern = "((?=.*\\d)(?=.*[A-Z]).{6,20})";
 
 
-
         if (pass.matches(pattern) && confpass.matches(pattern)){
             if (password.getText().toString().equals(confPassword.getText().toString())){
-
-                String username = TextUtils.substring(email, 0, email.indexOf("@"));
-                user = database.getReference("Users").child(username);
-
-                user.child("email").setValue(email);
-                user.child("mobile_number").setValue(info.getMobileNumber().toString());
-                user.child("first_name").setValue(info.getFirstName().toString());
-                user.child("last_name").setValue(info.getLastName().toString());
-                user.child("age").setValue(Integer.toString(info.getAge()));
-                user.child("birthdate").setValue(info.getBirthday().toString());
-                user.child("current_address").setValue(info.getCurrentAddress().toString());
-                user.child("contact_person1").setValue(info.getContactPerson1().toString());
-                user.child("contact_number_person1").setValue(info.getContactNumber1().toString());
-                user.child("contact_person2").setValue(info.getContactPerson2().toString());
-                user.child("contact_number_person2").setValue(info.getContactNumber2().toString());
-
-                if(info.getContactPerson3() != null && info.getContactNumber3()!= null) {
-                    user.child("contact_person3").setValue(info.getContactPerson3().toString());
-                    user.child("contact_number_person3").setValue(info.getContactNumber3().toString());
-                }
 
                 firebaseAuth.createUserWithEmailAndPassword(email,pass)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -78,6 +59,7 @@ public class RegisterStep4 extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()){
                                     Intent i = new Intent(getApplicationContext(), AccountCreated.class);
+                                    i.putExtra("info", info);
                                     startActivity(i);
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Registration failed. Please try again.", Toast.LENGTH_LONG).show();

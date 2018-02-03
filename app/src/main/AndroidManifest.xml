@@ -64,6 +64,11 @@
             android:name=".ForgotPassStep2"
             android:screenOrientation="portrait"></activity>
         <activity
+            android:name=".AccountVerification"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".WebActivity"></activity>
+        <activity
             android:name=".ForgotPassStep3"
             android:screenOrientation="portrait">
 
@@ -73,7 +78,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="http" />
                 <data android:scheme="https" />
-                <data android:host="rapepreventionapp.com" />
+                <data android:host="rapepreventionapp-dev1.firebaseapp.com" />
             </intent-filter>
 
         </activity>
@@ -87,7 +92,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBC3ugj9ifSjas3AuqWFOXCyoSSE6sxDXI" />
+            android:value="AIzaSyDr1asme-e-xPsHFa7IvFiJIOZHZFmndac" />
 
         <activity
             android:name=".BottomNavigation"
@@ -99,7 +104,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="http" />
                 <data android:scheme="https" />
-                <data android:host="tulongrapeprevention.com" />
+                <data android:host="rapepreventionapp.com" />
+                <data android:pathPrefix="/?mode=verifyEmail" />
             </intent-filter>
 
         </activity>

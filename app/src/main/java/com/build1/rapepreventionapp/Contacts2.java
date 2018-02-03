@@ -30,16 +30,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Contacts2 extends Fragment{
+public class Contacts2 extends Fragment implements View.OnClickListener{
     List<String> contactName = new ArrayList<>();
     List<String> contactNumber = new ArrayList<>();
-    ListView contactList;
 
+    ListView contactList;
+    String name, number;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", 0);
+        SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
         String tempName = preferences.getString("contactNames", "");
         String tempNumber = preferences.getString("contactNumbers", "");
 
@@ -58,7 +59,8 @@ public class Contacts2 extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_contacts2, container, false);
-
+        Button btnAddContacts = (Button) v.findViewById(R.id.btnAddContacts);
+        btnAddContacts.setOnClickListener(this);
 
         contactList = (ListView) v.findViewById(R.id.listView);
 
@@ -67,15 +69,26 @@ public class Contacts2 extends Fragment{
                         .CONTENT_URI, null,null,null,null);
         getActivity().startManagingCursor(cursor);
 
+        UserInformation.contactName = new ArrayList<>();
+        UserInformation.contactNumber = new ArrayList<>();
+
+        if(cursor.getCount() > 0){
+            while (cursor.moveToNext()){
+                String phoneName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                UserInformation.contactName.add(phoneName);
+                UserInformation.contactNumber.add(phoneNumber);
+            }
+        }
+
         String[] from = {ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.NUMBER,
                 ContactsContract.CommonDataKinds.Phone._ID};
 
         final int[] to = {android.R.id.text1, android.R.id.text2};
 
-        SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_activated_2,cursor,from,to);
+        SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_checked,cursor,from,to);
         contactList.setAdapter(simpleCursorAdapter);
         contactList.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-
 
         contactList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -84,40 +97,17 @@ public class Contacts2 extends Fragment{
                                     long id) {
                 // TODO Auto-generated method stub
 
-                String name = ((TextView)(v.findViewById(android.R.id.text1))).getText().toString();
-                String number = ((TextView)(v.findViewById(android.R.id.text2))).getText().toString();
+                name = ((TextView)v).getText().toString();
+                number = UserInformation.contactNumber.get(position);
 
                 if(contactName.size() < 10 && contactNumber.size() < 10){
 
                     if(!contactName.contains(name) && !contactNumber.contains(number)){
                         contactName.add(name);
                         contactNumber.add(number);
-
-                        StringBuilder nameBuilder = new StringBuilder();
-                        for (String names : contactName){
-                            nameBuilder.append(names);
-                            nameBuilder.append(',');
-
-                            SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = preferences.edit();
-                            editor.putString("contactNames", nameBuilder.toString());
-                            editor.commit();
-                        }
-
-                        StringBuilder numberBuilder = new StringBuilder();
-                        for (String numbers : contactNumber){
-                            numberBuilder.append(numbers);
-                            numberBuilder.append(',');
-
-                            SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = preferences.edit();
-                            editor.putString("contactNumbers", numberBuilder.toString());
-                            editor.commit();
-                        }
-
-                        Toast.makeText(getActivity(), name + " is added to your emergency contacts.", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getActivity(), name + " is already added.", Toast.LENGTH_SHORT).show();
+                        contactName.remove(name);
+                        contactNumber.remove(number);
                     }
 
                 } else {
@@ -129,4 +119,34 @@ public class Contacts2 extends Fragment{
         return v;
     }
 
+    @Override
+    public void onClick(View view) {
+            StringBuilder nameBuilder = new StringBuilder();
+            for (String names : contactName) {
+                if(!contactName.contains(names)){
+                    nameBuilder.append(names);
+                    nameBuilder.append(',');
+
+                    SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("contactNames", nameBuilder.toString());
+                    editor.commit();
+                }
+            }
+
+            StringBuilder numberBuilder = new StringBuilder();
+            for (String numbers : contactNumber){
+                if(!contactNumber.contains(number)){
+                    numberBuilder.append(numbers);
+                    numberBuilder.append(',');
+
+                    SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("contactNumbers", numberBuilder.toString());
+                    editor.commit();
+                }
+            }
+
+            Toast.makeText(getActivity(), contactName.size() + " contacts added.", Toast.LENGTH_SHORT).show();
+    }
 }

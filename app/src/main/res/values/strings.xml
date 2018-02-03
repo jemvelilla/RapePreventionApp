@@ -12,4 +12,13 @@
     <string name="slide_4_sub">Configure automated call.</string>
     <string name="title_activity_home">Map</string>
     <string name="check_toast">Position %1$d : %2$s</string>
+
+    <!-- DIALOG BOX -->
+    <string name="selectSettings">SETTINGS</string>
+    <string-array name="settingsArray">
+        <item>Edit Profile</item>
+        <item>Configure Automated Call</item>
+        <item>Log Out</item>
+    </string-array>
+
 </resources>
