@@ -59,7 +59,6 @@ public class Profile extends Fragment implements View.OnClickListener{
         tvName.setText(UserInformation.details.get(10) + " " + UserInformation.details.get(11));
         tvPhoneNum.setText(UserInformation.details.get(12));
 
-
         return v;
     }
 

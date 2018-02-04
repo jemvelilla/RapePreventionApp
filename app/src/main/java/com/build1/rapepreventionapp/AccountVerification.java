@@ -54,9 +54,7 @@ public class AccountVerification extends AppCompatActivity {
                     Uri uri = Uri.parse("https://mail.google.com");
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     startActivity(intent);
-//
-//                    Intent i = new Intent(AccountVerification.this, WebActivity.class);
-//                    startActivity(i);
+
                 } else {
                     Toast.makeText(AccountVerification.this, "Failed.", Toast.LENGTH_LONG).show();
                 }
