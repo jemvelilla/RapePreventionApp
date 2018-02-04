@@ -1,9 +1,11 @@
 package com.build1.rapepreventionapp;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -39,12 +41,14 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -71,6 +75,8 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
     private Marker mMarker;
     private ImageButton mInfo;
     List<Address> addresses;
+    List<Address> victimAddress;
+    ArrayList<LatLng> listPoints;
 
     GoogleMap mMap;
 
@@ -129,6 +135,7 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
 
         SupportMapFragment fragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         fragment.getMapAsync(this);
+        listPoints =new ArrayList<>();
 
 
     }
@@ -265,6 +272,29 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
                 return;
             }
             mMap.setMyLocationEnabled(true);
+            mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+                @Override
+                public void onMapLongClick(LatLng latLng) {
+                    //reset when 2
+                    if (listPoints.size() == 1) {
+                        listPoints.clear();
+                        mMap.clear();
+                    }
+                    //save first marker
+                    listPoints.add(latLng);
+                    //marker
+                    MarkerOptions markerOptions = new MarkerOptions();
+                    markerOptions.position(latLng);
+
+                    if (listPoints.size() == 1){
+                        //add 1st marker
+                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE));
+                    }else{
+                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+                    }
+                    mMap.addMarker(markerOptions);
+                }
+            });
             //initMap();
 
 
@@ -273,7 +303,7 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
         Log.d(TAG, "onMapReady: Map is Ready");
         }
 
-        public void getLocationPermission(){
+    public void getLocationPermission(){
             Log.d(TAG, "getLocationPermission: getting location permissions");
         String[] permissions = {
                 Manifest.permission.ACCESS_FINE_LOCATION,
@@ -292,6 +322,7 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
         }
         }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         mLocationPermissionGranted = false;
@@ -303,14 +334,17 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
                     for (int i = 0; i < grantResults.length; i++){
                         if (grantResults[i] != PackageManager.PERMISSION_GRANTED){
                             mLocationPermissionGranted = false;
+                            mMap.setMyLocationEnabled(true);
                             Log.d(TAG, "onRequestPermissionsResult: failes");
                             return;
                         }
-                    }
-                    Log.d(TAG, "onRequestPermissionsResult: granted");
+                    }Log.d(TAG, "onRequestPermissionsResult: granted");
+
+
                     mLocationPermissionGranted = true;
                     //initMap();
                 }
+                break;
             }
         }
     }

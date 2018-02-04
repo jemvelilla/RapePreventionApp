@@ -42,9 +42,10 @@ public class RegisterStep1 extends AppCompatActivity {
         final EditText emailAdd = (EditText) findViewById(R.id.editTextEmailAdd);
 
         final String email = emailAdd.getText().toString().trim();
-        final String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        final String emailPatternGbiz = "[a-zA-Z0-9._-]+@[a-z]+[._-]+[a-z]+[._-]+[a-z]+[._-]+[a-z]+";
+        final String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+[._-]+[a-z]+";
 
-        if (email.matches(emailPattern)){
+        if (email.matches(emailPattern) || email.matches(emailPatternGbiz)){
 
             if(isNetworkAvailable()){
 
