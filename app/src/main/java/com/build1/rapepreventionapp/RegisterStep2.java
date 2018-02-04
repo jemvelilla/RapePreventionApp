@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 
+import com.build1.rapepreventionapp.Model.UserInformation;
+
 public class RegisterStep2 extends AppCompatActivity {
     private UserInformation info;
     @Override

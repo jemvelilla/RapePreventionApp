@@ -1,7 +1,6 @@
 package com.build1.rapepreventionapp;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -10,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+
+import com.build1.rapepreventionapp.Model.UserInformation;
 
 import java.util.Calendar;
 

@@ -17,6 +17,8 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.build1.rapepreventionapp.Model.UserInformation;
+
 import java.util.ArrayList;
 import java.util.List;
 

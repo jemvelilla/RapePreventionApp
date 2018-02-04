@@ -13,11 +13,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.build1.rapepreventionapp.Model.EditInformation;
+import com.build1.rapepreventionapp.Model.UserInformation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.ArrayList;
 
 public class ChangePassword extends Fragment implements View.OnClickListener{
 
@@ -32,6 +36,7 @@ public class ChangePassword extends Fragment implements View.OnClickListener{
         super.onCreate(savedInstanceState);
 
         mAuth = FirebaseAuth.getInstance();
+        EditInformation.details = new ArrayList();
     }
 
     @Nullable
@@ -40,7 +45,7 @@ public class ChangePassword extends Fragment implements View.OnClickListener{
         View v = inflater.inflate(R.layout.activity_change_password, container, false);
 
         tvUsername = (TextView) v.findViewById(R.id.username);
-        tvUsername.setText(mAuth.getCurrentUser().getEmail());
+        tvUsername.setText(UserInformation.details.get(10) + " " + UserInformation.details.get(11));
 
         currentPassword = (EditText) v.findViewById(R.id.editCurrentPassword);
         newPassword = (EditText) v.findViewById(R.id.editNewPassword);
@@ -100,6 +105,14 @@ public class ChangePassword extends Fragment implements View.OnClickListener{
                 //
                 break;
             case R.id.btnCancel:
+                android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
+                if (fragmentManager != null) {
+                    android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction();
+                    if (ft != null) {
+                        ft.replace(R.id.rootLayout, new Profile());
+                        ft.commit();
+                    }
+                }
                 break;
         }
 
