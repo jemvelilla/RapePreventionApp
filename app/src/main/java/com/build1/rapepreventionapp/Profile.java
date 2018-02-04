@@ -64,10 +64,18 @@ public class Profile extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View view) {
-        Intent i = new Intent(getActivity().getApplicationContext(), Login.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
-        getActivity().finish();
-        mAuth.signOut();
+//        Intent i = new Intent(getActivity().getApplicationContext(), Login.class);
+//        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        startActivity(i);
+//        getActivity().finish();
+//        mAuth.signOut();
+        android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
+        if (fragmentManager != null) {
+            android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction();
+            if (ft != null) {
+                ft.replace(R.id.rootLayout, new EditProfile());
+                ft.commit();
+            }
+        }
     }
 }
