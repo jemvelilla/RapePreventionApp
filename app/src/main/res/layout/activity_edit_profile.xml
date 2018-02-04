@@ -84,9 +84,15 @@
     <EditText
         android:id="@+id/editTextCAdd"
         android:layout_width="317dp"
+<<<<<<< HEAD
         android:layout_height="43dp"
         android:layout_marginBottom="300dp"
         android:layout_marginEnd="20dp"
+=======
+        android:layout_height="46dp"
+        android:layout_marginBottom="444dp"
+        android:layout_marginEnd="70dp"
+>>>>>>> a35ec4524a738842a8cc50dd611dbcbb3c4e6f41
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:hint="Current Address*"
@@ -169,7 +175,7 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <EditText
-        android:id="@+id/editText5"
+        android:id="@+id/editTextCP3Num"
         android:layout_width="121dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="144dp"

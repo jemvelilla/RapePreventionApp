@@ -2,14 +2,9 @@ package com.build1.rapepreventionapp;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,6 +86,12 @@ public class Contacts extends Fragment implements View.OnClickListener{
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                     Toast.makeText(getActivity(), nameList.get(position) + " is removed from your emergency contacts.", Toast.LENGTH_SHORT).show();
 
+                    SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.remove("contactNames");
+                    editor.remove("contactNumbers");
+                    editor.commit();
+
                     nameList.remove(nameList.get(position));
                     numList.remove(numList.get(position));
                     arrayAdapter.notifyDataSetChanged();
@@ -100,10 +101,8 @@ public class Contacts extends Fragment implements View.OnClickListener{
                         nameBuilder.append(numbers);
                         nameBuilder.append(',');
 
-                        SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.remove("contactNames");
-                        editor.commit();
+                        preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
+                        editor = preferences.edit();
                         editor.putString("contactNames", nameBuilder.toString());
                         editor.commit();
                     }
@@ -113,10 +112,8 @@ public class Contacts extends Fragment implements View.OnClickListener{
                         numberBuilder.append(numbers);
                         numberBuilder.append(',');
 
-                        SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.remove("contactNumbers");
-                        editor.commit();
+                        preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
+                        editor = preferences.edit();
                         editor.putString("contactNumbers", numberBuilder.toString());
                         editor.commit();
                     }

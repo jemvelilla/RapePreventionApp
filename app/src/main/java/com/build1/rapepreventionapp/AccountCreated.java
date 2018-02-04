@@ -6,20 +6,21 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class AccountCreated extends AppCompatActivity {
 
-    private static int SPLASH_TIME_OUT = 3000;
-
     private UserInformation info;
     FirebaseDatabase database;
     DatabaseReference user;
+    FirebaseAuth mAuth;
 
     private String userKey;
     @Override
@@ -29,8 +30,16 @@ public class AccountCreated extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         info = (UserInformation) getIntent().getSerializableExtra("info");
+        mAuth = FirebaseAuth.getInstance();
 
-        userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        userKey = mAuth.getCurrentUser().getUid();
+
+
+        //set display name
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(info.getFirstName().toString()).build();
+        mAuth.getCurrentUser().updateProfile(profileUpdates);
+
         user = database.getReference("Users").child(userKey);
 
         user.child("email").setValue(info.getEmail());
