@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:text="Edit Profile"
-        android:textSize="23dp"
+        android:textSize="23sp"
         app:layout_constraintHorizontal_bias="0.427"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
