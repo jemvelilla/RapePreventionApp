@@ -10,10 +10,8 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="106dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="197dp"
+        android:layout_height="104dp"
         android:src="@drawable/hp"
-        app:layout_constraintBottom_toTopOf="@+id/editTextCP1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -21,16 +19,13 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="325dp"
-        android:layout_marginTop="128dp"
+        android:layout_marginTop="108dp"
         android:text="Tell us something about yourself."
         android:textSize="23dp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonNextthree"
         app:layout_constraintHorizontal_bias="0.523"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editTextFN"
@@ -95,9 +90,8 @@
 
     <EditText
         android:id="@+id/editTextCAdd"
-        android:layout_width="317dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="270dp"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
@@ -105,11 +99,12 @@
         android:imeOptions="actionNext"
         android:inputType="textCapWords"
         android:nextFocusForward="@+id/editTextCP1"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/editTextCP1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextAge" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextAge"
+        app:layout_constraintVertical_bias="1.0" />
 
     <EditText
         android:id="@+id/editTextCP1"
@@ -122,8 +117,7 @@
         android:inputType="textCapWords"
         android:nextFocusForward="@+id/editTextCP1Num"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/editTextCP1Num"
