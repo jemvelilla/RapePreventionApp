@@ -7,12 +7,13 @@ package com.build1.rapepreventionapp.Model;
 public class UserModel {
 
     boolean isSelected;
-    String name;
+    String name, number;
 
-    public UserModel(boolean isSelected, String name) {
+    public UserModel(boolean isSelected, String name, String number) {
 
         this.isSelected = isSelected;
         this.name = name;
+        this.number = number;
     }
 
     public boolean isSelected() {
@@ -29,5 +30,13 @@ public class UserModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
     }
 }

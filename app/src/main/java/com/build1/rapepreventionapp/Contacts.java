@@ -138,7 +138,7 @@ public class Contacts extends Fragment implements View.OnClickListener{
         if (fragmentManager != null) {
             android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction();
             if (ft != null) {
-                ft.replace(R.id.rootLayout, new Contact());
+                ft.replace(R.id.rootLayout, new Phonebook());
                 ft.commit();
             }
         }
