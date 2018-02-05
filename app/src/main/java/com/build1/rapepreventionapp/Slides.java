@@ -136,6 +136,7 @@ public class Slides extends AppCompatActivity {
                 nextBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        finish();
                         Intent i = new Intent(getApplicationContext(), Login.class);
                         startActivity(i);
                     }

@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.build1.rapepreventionapp.Model.UserInformation;
 import com.google.firebase.auth.FirebaseAuth;
@@ -62,6 +63,7 @@ public class BottomNavigation extends AppCompatActivity {
                     String details = userSnapshot.getValue(String.class);
                     UserInformation.details.add(details);
                 }
+                Toast.makeText(getApplicationContext(), "Successfully loaded.", Toast.LENGTH_SHORT).show();
             }
 
             @Override

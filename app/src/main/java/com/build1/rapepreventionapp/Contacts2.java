@@ -25,6 +25,7 @@ import java.util.List;
 public class Contacts2 extends Fragment implements View.OnClickListener{
     List<String> contactName = new ArrayList<>();
     List<String> contactNumber = new ArrayList<>();
+    List<String> isChecked = new ArrayList<>();
     List<String> storedName = new ArrayList<>();
     List<String> storedNumber = new ArrayList<>();
 
@@ -87,9 +88,10 @@ public class Contacts2 extends Fragment implements View.OnClickListener{
             public View getView(final int position, View convertView, ViewGroup parent) {
                 if(convertView == null)
                 {
-                    View v = getLayoutInflater().inflate(android.R.layout.simple_list_item_multiple_choice, null);
+                    LayoutInflater inflater = getActivity().getLayoutInflater();
+                    convertView = inflater.inflate(android.R.layout.simple_list_item_multiple_choice, null);
 
-                    final CheckedTextView ctv = (CheckedTextView)v.findViewById(android.R.id.text1);
+                    final CheckedTextView ctv = (CheckedTextView)convertView.findViewById(android.R.id.text1);
                     ctv.setText(UserInformation.contactName.get(position));
 
                     ctv.setOnClickListener(new View.OnClickListener() {
@@ -97,6 +99,7 @@ public class Contacts2 extends Fragment implements View.OnClickListener{
                         @Override
                         public void onClick(View v) {
                             //get the value of selected item
+
                             name = ((TextView)v).getText().toString();
                             number = UserInformation.contactNumber.get(position);
 
@@ -134,9 +137,8 @@ public class Contacts2 extends Fragment implements View.OnClickListener{
                                 Toast.makeText(getActivity(), "You have reached the maximum of 10 contacts.", Toast.LENGTH_SHORT).show();
                             }
                         }
-
                     });
-                    return v;
+                    ctv.setChecked(false);
                 }
                 return convertView;
             };

@@ -54,6 +54,7 @@ public class RegisterStep4 extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()){
+                                    finish();
                                     Intent i = new Intent(getApplicationContext(), AccountCreated.class);
                                     i.putExtra("info", info);
                                     startActivity(i);

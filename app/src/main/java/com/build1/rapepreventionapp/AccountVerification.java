@@ -63,11 +63,10 @@ public class AccountVerification extends AppCompatActivity {
     }
 
     public void btnOnClickLogout (View view){
-        Intent i = new Intent(getApplicationContext(), Login.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
         finish();
         mAuth.signOut();
+        Intent i = new Intent(getApplicationContext(), Login.class);
+        startActivity(i);
     }
 
 }

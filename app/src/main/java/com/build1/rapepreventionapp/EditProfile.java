@@ -98,7 +98,7 @@ public class EditProfile extends Fragment implements View.OnClickListener{
                 month = month + 1;
 
                 String date = month +"/"+ day + "/" + year;
-                editBirthdate.setText(UserInformation.details.get(1));
+                editBirthdate.setText(date);
             }
         };
 

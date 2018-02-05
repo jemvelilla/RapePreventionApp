@@ -56,9 +56,9 @@ public class AccountCreated extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
+                    finish();
                     Intent homeIntent = new Intent(AccountCreated.this, Slides.class);
                     startActivity(homeIntent);
-                    finish();
                 } else {
                     // Task failed with an exception
                     Exception exception = task.getException();
