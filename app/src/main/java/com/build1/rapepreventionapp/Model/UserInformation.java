@@ -75,14 +75,6 @@ public class UserInformation implements Serializable {
         this.currentAddress = currentAddress;
     }
 
-    public String getSchool() {
-        return school;
-    }
-
-    public void setSchool(String school) {
-        this.school = school;
-    }
-
     public String getContactPerson1() {
         return contactPerson1;
     }

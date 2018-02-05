@@ -166,7 +166,7 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <EditText
-        android:id="@+id/editText5"
+        android:id="@+id/editTextCP3Num"
         android:layout_width="121dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="144dp"

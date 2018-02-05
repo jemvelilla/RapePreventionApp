@@ -138,7 +138,6 @@ public class Contacts2 extends Fragment implements View.OnClickListener{
                             }
                         }
                     });
-                    ctv.setChecked(false);
                 }
                 return convertView;
             };
