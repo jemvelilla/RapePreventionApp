@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.service.carrier.CarrierMessagingService;
 import android.support.annotation.NonNull;
@@ -47,7 +48,13 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -288,11 +295,33 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
 
                     if (listPoints.size() == 1){
                         //add 1st marker
-                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE));
+                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+                        Geocoder geocoder = new Geocoder(getActivity().getApplicationContext());
+                        try {
+                            victimAddress = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+
+                            String addressVictim = victimAddress.get(0).getAddressLine(0);
+                            //String area = addresses.get(0).getLocality();
+                            Log.e(TAG, "onComplete: "+victimAddress );
+
+                            moveCamera(new LatLng(latLng.latitude, latLng.longitude), DEFAULT_ZOOM, ""+addressVictim+"");
+                            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        Log.e(TAG, "onMapLongClick: "+latLng );
+                        //moveCamera(new LatLng(latLng,DEFAULT_ZOOM, ""++"");
+
                     }else{
                         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
                     }
                     mMap.addMarker(markerOptions);
+                    /*if (listPoints.size() == 2){
+                        //url creation for request
+                        String url = getRequestUrl(listPoints.get(0), listPoints.get(1));
+
+                    }*/
                 }
             });
             //initMap();
@@ -302,6 +331,60 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
 
         Log.d(TAG, "onMapReady: Map is Ready");
         }
+
+    /*private String getRequestUrl(LatLng origin, LatLng destination) {
+        //value of origin
+        String stringOrigin = "origin=" +origin.latitude+ "," +origin.longitude;
+        //value of destination
+        String stringDestination = "destination="+destination+ ","+destination.longitude;
+        //Set value enable the sensor
+        String sensor = "sensor=false";
+        //mode for find direction
+        String mode = "mode=driving";
+        //Build the full param
+        String param = stringOrigin +"&" + stringDestination + "&" +sensor+ "&" +mode;
+        // output format
+        String output = "json";
+        //Create url to request
+        String url = "https://maps.googleapis.com/maps/directions/" +output + "?" +param;
+        return url;
+    }
+
+    private String requestDirection(String reqUrl) throws IOException {
+        String responseString = "";
+        InputStream inputStream = null;
+        HttpURLConnection httpURLConnection = null;
+        try{
+            URL url = new URL(reqUrl);
+            httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.connect();
+
+            //Get the response result
+            inputStream = httpURLConnection.getInputStream();
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+            StringBuffer stringBuffer = new StringBuffer();
+            String line = "";
+            while ((line = bufferedReader.readLine()) != null){
+                stringBuffer.append(line);
+
+            }
+
+            responseString = stringBuffer.toString();
+            bufferedReader.close();
+            inputStreamReader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (inputStream != null){
+                inputStream.close();
+            }
+            httpURLConnection.disconnect();
+        }
+        return responseString;
+
+    }*/
 
     public void getLocationPermission(){
             Log.d(TAG, "getLocationPermission: getting location permissions");
@@ -380,6 +463,25 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
 
 
 
+    /*public class TaskRequestDirections extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String responseString = "";
+            try {
+                responseString = requestDirection(String[0]);
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
+            return responseString;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            //
+        }
+    }*/
 
 }
 
