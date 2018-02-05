@@ -1,55 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.build1.rapepreventionapp.Profile"
     android:background="@color/background"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.build1.rapepreventionapp.Profile">
 
-    <RelativeLayout
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout3"
         android:layout_width="match_parent"
-        android:layout_height="175dp">
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/gradient_bg"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-                <TextView
-                    android:id="@+id/name"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textColor="#fff"
-                    android:textSize="30sp"
-                    android:layout_marginTop="125dp"/>
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="125dp"
+                android:text=""
+                android:textColor="#fff"
+                android:textSize="30sp" />
 
         </LinearLayout>
 
 
-
-    </RelativeLayout>
+    </android.support.constraint.ConstraintLayout>
 
     <ImageButton
         android:id="@+id/btnSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_settings"
         android:layout_gravity="right"
-        android:clickable="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
-        android:padding="10dp"/>
+        android:onClick="btnOnClickSettings"
+        android:padding="10dp"
+        android:src="@drawable/ic_settings"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
 
     <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_gravity="center"
-        android:layout_marginTop="5dp">
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="@+id/constraintLayout3"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -59,17 +76,17 @@
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/ic_person_black_24dp"/>
+                android:src="@drawable/ic_person_black_24dp" />
 
             <TextView
                 android:id="@+id/age"
-                android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:paddingLeft="25dp"
                 android:text=""
-                android:textStyle="bold"
-                android:textSize="15sp"/>
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -81,17 +98,17 @@
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/ic_cake_black_24dp"/>
+                android:src="@drawable/ic_cake_black_24dp" />
 
             <TextView
                 android:id="@+id/birthday"
-                android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:paddingLeft="25dp"
                 android:text=""
-                android:textStyle="bold"
-                android:textSize="15sp"/>
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -103,17 +120,17 @@
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/ic_home_black_24dp2"/>
+                android:src="@drawable/ic_home_black_24dp2" />
 
             <TextView
                 android:id="@+id/address"
-                android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:paddingLeft="25dp"
                 android:text=""
-                android:textStyle="bold"
-                android:textSize="15sp"/>
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -125,17 +142,17 @@
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/ic_phone_android_black_24dp"/>
+                android:src="@drawable/ic_phone_android_black_24dp" />
 
             <TextView
                 android:id="@+id/phoneNum"
-                android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:paddingLeft="25dp"
                 android:text=""
-                android:textStyle="bold"
-                android:textSize="15sp"/>
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -143,103 +160,111 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="15dp"
+        android:layout_marginStart="108dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/rectangle"
         android:padding="10dp"
-        android:textColor="#FFF"
         android:text="Contact Persons"
-        android:textSize="13sp" />
+        android:textColor="#FFF"
+        android:textSize="13sp"
+        app:layout_constraintStart_toStartOf="@+id/constraintLayout3"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
     <LinearLayout
-        android:layout_width="350dp"
+        android:id="@+id/linearLayout4"
+        android:layout_width="321dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
         android:orientation="vertical"
-        android:layout_gravity="center_horizontal">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/constraintLayout3"
+        app:layout_constraintTop_toBottomOf="@+id/button2">
 
         <LinearLayout
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/eContacts1"
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text=""
                 android:textColor="#4B4747"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/eContactsNum1"
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text=""
-                android:textStyle="bold"
-                android:textSize="17sp"
+                android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:textColor="@color/endpink"/>
+                android:text=""
+                android:textColor="@color/endpink"
+                android:textSize="17sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:gravity="center"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/eContacts2"
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:paddingTop="5dp"
                 android:text=""
                 android:textColor="#4B4747"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/eContactsNum2"
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text=""
-                android:textStyle="bold"
-                android:textSize="17sp"
+                android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:textColor="@color/endpink"/>
+                android:text=""
+                android:textColor="@color/endpink"
+                android:textSize="17sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:gravity="center"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/eContacts3"
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
                 android:text=""
                 android:textColor="#4B4747"
-                android:paddingTop="5dp"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/eContactsNum3"
-                android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text=""
-                android:textStyle="bold"
-                android:textSize="17sp"
+                android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:textColor="@color/endpink"/>
+                android:text=""
+                android:textColor="@color/endpink"
+                android:textSize="17sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

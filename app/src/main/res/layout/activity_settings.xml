@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.build1.rapepreventionapp.Settings">
+
+    <ImageView
+        android:id="@+id/icon2"
+        android:layout_width="100sp"
+        android:layout_height="100sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:background="@drawable/icon2" />
+
+    <TextView
+        android:id="@+id/titleSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="208dp"
+        android:layout_marginTop="32dp"
+        android:text="Settings"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/icon2"
+        app:layout_constraintTop_toTopOf="@+id/icon2"
+        tools:ignore="MissingConstraints" />
+
+    <RelativeLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="372dp"
+        android:layout_height="519dp"
+        android:gravity="center_horizontal"
+        app:layout_constraintTop_toBottomOf="@id/icon2"
+        tools:layout_editor_absoluteX="23dp"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:id="@+id/editProfileTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:onClick="textOnClickEditProfile"
+            android:text="Edit Profile"
+            android:textSize="20sp"
+            android:padding="15dp"/>
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#1f1f1f"
+            android:layout_below="@id/editProfileTxt" />
+
+        <TextView
+            android:id="@+id/confCallTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="textOnClickConfCall"
+            android:text="Configure Automated Call"
+            android:layout_below="@id/line"
+            android:textSize="20sp"
+            android:padding="15dp"/>
+
+        <View
+            android:id="@+id/line2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#1f1f1f"
+            android:layout_below="@id/confCallTxt" />
+
+        <TextView
+            android:id="@+id/changePassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Change Account Password"
+            android:layout_below="@id/line2"
+            android:textSize="20sp"
+            android:padding="15dp"/>
+
+        <View
+            android:id="@+id/line3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#1f1f1f"
+            android:layout_below="@id/changePassword" />
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnLogOut"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_marginBottom="16dp"
+        android:background="#FF3333"
+        android:onClick="btnOnClickLogOut"
+        android:text="Log Out"
+        android:textColor="#fff"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp" />
+
+</android.support.constraint.ConstraintLayout>

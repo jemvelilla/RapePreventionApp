@@ -186,28 +186,11 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <Button
-        android:id="@+id/btnChangePassword"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:layout_marginBottom="100dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginStart="8dp"
-        android:background="@drawable/rectangle"
-        android:onClick="btnOnClickChangePassword"
-        android:padding="10dp"
-        android:text="Change Password"
-        android:textColor="#fff"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.928"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
         android:id="@+id/btnSaveChanges"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
         android:layout_marginBottom="28dp"
-        android:layout_marginEnd="56dp"
+        android:layout_marginEnd="28dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/rectangle"
         android:onClick="btnOnClickSaveChanges"
@@ -216,14 +199,14 @@
         android:textColor="#fff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnChangePassword"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextCP3Num"
+        app:layout_constraintVertical_bias="0.098" />
 
     <Button
         android:id="@+id/btnCancel"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
-        android:layout_marginBottom="56dp"
+        android:layout_marginBottom="93dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/rectangle"
@@ -232,7 +215,7 @@
         android:text="Cancel"
         android:textColor="#fff"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnSaveChanges"
+        app:layout_constraintEnd_toEndOf="@+id/btnSaveChanges"
         app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

@@ -17,6 +17,8 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.build1.rapepreventionapp.Model.UserInformation;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +30,7 @@ public class Contacts2 extends Fragment implements View.OnClickListener{
 
     ListView contactList;
     String name, number;
+    Button btnAddContacts;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +54,7 @@ public class Contacts2 extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_contacts2, container, false);
-        Button btnAddContacts = (Button) v.findViewById(R.id.btnAddContacts);
+        btnAddContacts = (Button) v.findViewById(R.id.btnAddContacts);
         btnAddContacts.setOnClickListener(this);
 
         contactList = (ListView) v.findViewById(R.id.listView);

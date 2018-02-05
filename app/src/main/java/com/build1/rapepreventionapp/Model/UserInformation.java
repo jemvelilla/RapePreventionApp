@@ -1,4 +1,4 @@
-package com.build1.rapepreventionapp;
+package com.build1.rapepreventionapp.Model;
 
 import java.io.Serializable;
 import java.util.List;
