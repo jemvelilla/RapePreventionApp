@@ -1,21 +1,63 @@
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin">
+    android:background="@color/background"
+    tools:context="com.build1.rapepreventionapp.Contacts.Phonebook">
+
+    <ImageView
+        android:id="@+id/icon2"
+        android:layout_width="100sp"
+        android:layout_height="100sp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/icon2"
+        app:layout_constraintTop_toTopOf="@+id/listView" />
 
     <TextView
-        android:id="@+id/section_label"
+        android:id="@+id/titleContacts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/icon2"
+        android:layout_marginTop="35dp"
+        android:text="Phonebook"
         android:textSize="25sp"
-        android:text="Tab 1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        tools:ignore="MissingConstraints" />
 
-</android.support.constraint.ConstraintLayout>
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/icon2" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/background">
+
+        <Button
+            android:id="@+id/btnAddContacts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="ADD (0)"
+            android:padding="10dp"
+            android:background="@color/background"
+            android:textColor="@color/startpink" />
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="Cancel"
+            android:padding="10dp"
+            android:background="@color/background"
+            android:textColor="@color/startpink"/>
+
+    </RelativeLayout>
+</RelativeLayout>

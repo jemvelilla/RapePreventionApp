@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context="com.build1.rapepreventionapp.ConfCall">
+    tools:context="com.build1.rapepreventionapp.Profile.ConfCall">
 
     <ImageView
         android:id="@+id/icon2"
