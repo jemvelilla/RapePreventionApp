@@ -91,6 +91,8 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
     List<Address> addresses;
     List<Address> victimAddress;
     ArrayList<LatLng> listPoints;
+    int PROXIMITY_RADIUS = 1000;
+    double latitude,lontitude;
 
     GoogleMap mMap;
 
@@ -274,6 +276,7 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
 
         //BottomNavigation bottomNavigation = new BottomNavigation();
         mMap = googleMap;
+        getNearbyPoliceStation();
 
         if (mLocationPermissionGranted) {
             getDeviceLocation();
@@ -547,6 +550,31 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
                 Toast.makeText(getActivity().getApplicationContext(), "DIRECTION NOT FOUND", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    public void getNearbyPoliceStation(){
+        String police = "hospital";
+        String url = getUrl(latitude, lontitude, police);
+        Object dataTransfer[] = new Object[2];
+        dataTransfer[0] = mMap;
+        dataTransfer[1] = url;
+
+        GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
+        getNearbyPlacesData.execute(dataTransfer);
+        Toast.makeText(getActivity().getApplicationContext(), "Showing Nearby Plice Station", Toast.LENGTH_SHORT);
+        Log.e(TAG, "getNearbyPoliceStation: asasa");
+    }
+
+    private String getUrl(double latitude, double lontitude, String nearbyPlace){
+         StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+         googlePlaceUrl.append("location"+latitude+","+lontitude);
+         googlePlaceUrl.append("&radius="+PROXIMITY_RADIUS);
+         googlePlaceUrl.append("&type="+nearbyPlace);
+         googlePlaceUrl.append("&sensor=true");
+         googlePlaceUrl.append("&key="+"AIzaSyCuTUpBYWXg3DeUUwecjW4NuACBl3SFueE");
+        Log.e(TAG, "getUrl: "+googlePlaceUrl.toString());
+
+         return googlePlaceUrl.toString();
     }
 
 }
