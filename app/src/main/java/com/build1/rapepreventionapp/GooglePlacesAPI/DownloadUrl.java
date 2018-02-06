@@ -1,4 +1,4 @@
-package com.build1.rapepreventionapp;
+package com.build1.rapepreventionapp.GooglePlacesAPI;
 
 import java.io.BufferedReader;
 import java.io.IOException;
