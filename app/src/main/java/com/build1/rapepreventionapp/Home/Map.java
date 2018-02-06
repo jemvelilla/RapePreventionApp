@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -47,7 +48,12 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -57,6 +63,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -85,6 +92,8 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
     List<Address> addresses;
     List<Address> victimAddress;
     ArrayList<LatLng> listPoints;
+    int PROXIMITY_RADIUS = 1000;
+    double latitude,lontitude;
 
     GoogleMap mMap;
 
@@ -201,9 +210,12 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
                                 String address = addresses.get(0).getAddressLine(0);
                                 //String area = addresses.get(0).getLocality();
                                 Log.e(TAG, "onComplete: "+addresses );
+                                listPoints.add(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
 
                                 moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
                                         DEFAULT_ZOOM, ""+address+"");
+
+
 
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -265,6 +277,7 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
 
         //BottomNavigation bottomNavigation = new BottomNavigation();
         mMap = googleMap;
+        getNearbyPoliceStation();
 
         if (mLocationPermissionGranted) {
             getDeviceLocation();
@@ -284,7 +297,7 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
                 @Override
                 public void onMapLongClick(LatLng latLng) {
                     //reset when 2
-                    if (listPoints.size() == 1) {
+                    if (listPoints.size() == 2) {
                         listPoints.clear();
                         mMap.clear();
                     }
@@ -296,6 +309,12 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
 
                     if (listPoints.size() == 1){
                         //add 1st marker
+                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+                        Log.e(TAG, "onMapLongClick: " +listPoints);
+                        Log.e(TAG, "onMapLongClick: "+latLng );
+                        //moveCamera(new LatLng(latLng,DEFAULT_ZOOM, ""++"");
+                        Log.e(TAG, "onMapLongClick: " +listPoints);
+                    }else{
                         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
                         Geocoder geocoder = new Geocoder(getActivity().getApplicationContext());
                         try {
@@ -311,18 +330,16 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        Log.e(TAG, "onMapLongClick: "+latLng );
-                        //moveCamera(new LatLng(latLng,DEFAULT_ZOOM, ""++"");
 
-                    }else{
-                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
                     }
                     mMap.addMarker(markerOptions);
-                    /*if (listPoints.size() == 2){
+                    if (listPoints.size() == 2){
                         //url creation for request
                         String url = getRequestUrl(listPoints.get(0), listPoints.get(1));
-
-                    }*/
+                        TaskRequestDirections taskRequestDirections = new TaskRequestDirections();
+                        taskRequestDirections.execute(url);
+                        Log.e(TAG, "onMapLongClickasasa: " +listPoints);
+                    }
                 }
             });
             //initMap();
@@ -333,11 +350,12 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
         Log.d(TAG, "onMapReady: Map is Ready");
         }
 
-    /*private String getRequestUrl(LatLng origin, LatLng destination) {
+    private String getRequestUrl(LatLng origin, LatLng destination) {
         //value of origin
         String stringOrigin = "origin=" +origin.latitude+ "," +origin.longitude;
+        Log.e(TAG, "getRequestUrl: "+origin );
         //value of destination
-        String stringDestination = "destination="+destination+ ","+destination.longitude;
+        String stringDestination = "destination="+destination.latitude+ ","+destination.longitude;
         //Set value enable the sensor
         String sensor = "sensor=false";
         //mode for find direction
@@ -347,7 +365,7 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
         // output format
         String output = "json";
         //Create url to request
-        String url = "https://maps.googleapis.com/maps/directions/" +output + "?" +param;
+        String url = "https://maps.googleapis.com/maps/api/directions/" +output + "?" +param;
         return url;
     }
 
@@ -385,7 +403,7 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
         }
         return responseString;
 
-    }*/
+    }
 
     public void getLocationPermission(){
             Log.d(TAG, "getLocationPermission: getting location permissions");
@@ -464,13 +482,13 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
 
 
 
-    /*public class TaskRequestDirections extends AsyncTask<String, Void, String> {
+    public class TaskRequestDirections extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... strings) {
             String responseString = "";
             try {
-                responseString = requestDirection(String[0]);
+                responseString = requestDirection(strings[0]);
             }catch (IOException e) {
                 e.printStackTrace();
             }
@@ -481,8 +499,84 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             //
+            TaskParser taskParser = new TaskParser();
+            taskParser.execute(s);
         }
-    }*/
+    }
+    public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String, String>>>>{
+
+        @Override
+        protected List<List<HashMap<String, String>>> doInBackground(String... strings) {
+            JSONObject jsonObject = null;
+            List<List<HashMap<String, String>>> routes = null;
+            try {
+                jsonObject = new JSONObject(strings[0]);
+                DirectionsParser directionsParser = new DirectionsParser();
+                routes = directionsParser.parse(jsonObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return routes;
+        }
+
+        @Override
+        protected void onPostExecute(List<List<HashMap<String, String>>> lists) {
+            //Get list route and display it sa map
+
+            ArrayList points = null;
+
+            PolylineOptions polylineOptions = null;
+
+            for (List<HashMap<String, String>> path : lists){
+                points = new ArrayList();
+                polylineOptions = new PolylineOptions();
+
+                for (HashMap<String, String> point : path){
+                    double lat  = Double.parseDouble(point.get("lat"));
+                    double lon  = Double.parseDouble(point.get("lon"));
+
+                    points.add(new LatLng(lat, lon));
+
+                }
+                polylineOptions.addAll(points);
+                polylineOptions.width(15);
+                polylineOptions.color(Color.BLUE);
+                polylineOptions.geodesic(true);
+
+            }
+            if (polylineOptions!=null){
+                mMap.addPolyline(polylineOptions);
+
+            }else{
+                Toast.makeText(getActivity().getApplicationContext(), "DIRECTION NOT FOUND", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    public void getNearbyPoliceStation(){
+        String police = "hospital";
+        String url = getUrl(latitude, lontitude, police);
+        Object dataTransfer[] = new Object[2];
+        dataTransfer[0] = mMap;
+        dataTransfer[1] = url;
+
+        GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
+        getNearbyPlacesData.execute(dataTransfer);
+        Toast.makeText(getActivity().getApplicationContext(), "Showing Nearby Plice Station", Toast.LENGTH_SHORT);
+        Log.e(TAG, "getNearbyPoliceStation: asasa");
+    }
+
+    private String getUrl(double latitude, double lontitude, String nearbyPlace){
+         StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+         googlePlaceUrl.append("location"+latitude+","+lontitude);
+         googlePlaceUrl.append("&radius="+PROXIMITY_RADIUS);
+         googlePlaceUrl.append("&type="+nearbyPlace);
+         googlePlaceUrl.append("&sensor=true");
+         googlePlaceUrl.append("&key="+"AIzaSyCuTUpBYWXg3DeUUwecjW4NuACBl3SFueE");
+        Log.e(TAG, "getUrl: "+googlePlaceUrl.toString());
+
+         return googlePlaceUrl.toString();
+    }
 
 }
 
