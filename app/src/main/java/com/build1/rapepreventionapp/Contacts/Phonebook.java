@@ -16,6 +16,12 @@ import android.widget.Toast;
 
 import com.build1.rapepreventionapp.Model.UserModel;
 import com.build1.rapepreventionapp.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +38,7 @@ public class Phonebook extends Fragment implements View.OnClickListener{
     List<String> isChecked = new ArrayList<>();
     List<String> storedName = new ArrayList<>();
     List<String> storedNumber = new ArrayList<>();
-
+    List<UserModel> users;
     String name, number;
 
     @Override
@@ -72,7 +78,7 @@ public class Phonebook extends Fragment implements View.OnClickListener{
                         .CONTENT_URI, null,null,null,null);
         getActivity().startManagingCursor(cursor);
 
-         final List<UserModel> users = new ArrayList<>();
+        users = new ArrayList<>();
 
         if(cursor.getCount() > 0){
             int i = 0;
@@ -194,5 +200,25 @@ public class Phonebook extends Fragment implements View.OnClickListener{
                 }
                 break;
         }
+    }
+
+    public void queryContacts(){
+//        for (String phonenumber: phonenumbers) {
+//
+//            Query query = databaseUsers.orderByChild("phonenumber").equalTo(phonenumber);
+//
+//            query.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    User contactlists = postSnapshot.getValue(User.class);
+//                    users.add(contactlists);
+//                    adapter.notifyDataSetChanged();
+//                }
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//                    throw databaseError.toException(); // don't ignore erors
+//                }
+//            });
+//        }
     }
 }

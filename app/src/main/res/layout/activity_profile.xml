@@ -6,11 +6,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/background"
     tools:context="com.build1.rapepreventionapp.Profile.Profile" >
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"        >
+        android:orientation="vertical">
 
         <RelativeLayout
             android:id="@+id/constraintLayout3"
@@ -24,13 +23,23 @@
                 android:background="@drawable/gradient_bg"
                 android:orientation="vertical">
 
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profilePicture"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/default_profile"
+                    android:clickable="false"/>
+
                 <TextView
                     android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="125dp"
-                    android:text=""
+                    android:layout_marginTop="25dp"
+                    android:text="Loading..."
                     android:textColor="#fff"
                     android:textSize="30sp" />
 
@@ -47,7 +56,6 @@
             android:layout_marginEnd="16dp"
             android:layout_marginTop="8dp"
             android:background="@android:color/transparent"
-            android:onClick="btnOnClickSettings"
             android:padding="10dp"
             android:src="@drawable/ic_settings"
             android:layout_below="@id/constraintLayout3"
@@ -79,7 +87,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:paddingLeft="25dp"
-                    android:text=""
+                    android:text="Loading..."
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -101,7 +109,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:paddingLeft="25dp"
-                    android:text=""
+                    android:text="Loading..."
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -123,7 +131,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:paddingLeft="25dp"
-                    android:text=""
+                    android:text="Loading..."
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -145,7 +153,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:paddingLeft="25dp"
-                    android:text=""
+                    android:text="Loading..."
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -188,7 +196,7 @@
                     android:id="@+id/eContacts1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:text="Loading..."
                     android:textColor="#4B4747"
                     android:textSize="15sp" />
 
@@ -197,7 +205,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="5dp"
-                    android:text=""
+                    android:text="Loading..."
                     android:textColor="@color/endpink"
                     android:textSize="17sp"
                     android:textStyle="bold" />
@@ -215,7 +223,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="5dp"
-                    android:text=""
+                    android:text="Loading..."
                     android:textColor="#4B4747"
                     android:textSize="15sp" />
 
@@ -224,7 +232,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="5dp"
-                    android:text=""
+                    android:text="Loading..."
                     android:textColor="@color/endpink"
                     android:textSize="17sp"
                     android:textStyle="bold" />
@@ -242,7 +250,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="5dp"
-                    android:text=""
+                    android:text="Loading..."
                     android:textColor="#4B4747"
                     android:textSize="15sp" />
 
@@ -251,7 +259,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="5dp"
-                    android:text=""
+                    android:text="Loading..."
                     android:textColor="@color/endpink"
                     android:textSize="17sp"
                     android:textStyle="bold" />

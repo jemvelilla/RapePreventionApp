@@ -18,13 +18,13 @@ public class UserInformation implements Serializable {
     private String lastName;
     private String birthday;
     private String currentAddress;
-    private String school;
     private String contactPerson1;
     private String contactNumber1;
     private String contactPerson2;
     private String contactNumber2;
     private String contactPerson3;
     private String contactNumber3;
+    private String password;
     private int age;
 
     public String getEmail() {
@@ -33,6 +33,14 @@ public class UserInformation implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getMobileNumber() {

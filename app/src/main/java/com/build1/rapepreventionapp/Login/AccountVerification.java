@@ -45,7 +45,7 @@ public class AccountVerification extends AppCompatActivity {
 
     public void btnOnClickVerify (View view){
         Log.v("user", mAuth.getCurrentUser().getEmail());
-        mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+        mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(AccountVerification.this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()){
@@ -62,9 +62,9 @@ public class AccountVerification extends AppCompatActivity {
     }
 
     public void btnOnClickLogout (View view){
-        finish();
         mAuth.signOut();
         Intent i = new Intent(getApplicationContext(), Login.class);
+        finish();
         startActivity(i);
     }
 

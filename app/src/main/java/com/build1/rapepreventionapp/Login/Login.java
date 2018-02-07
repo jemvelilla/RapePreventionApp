@@ -22,18 +22,23 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class Login extends AppCompatActivity {
 
-    FirebaseDatabase database;
-    DatabaseReference myRef;
-
+    private FirebaseFirestore mFirestore;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
 
     private EditText email;
     private EditText password;
 
+    String username;
+    String passwordText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +49,7 @@ public class Login extends AppCompatActivity {
         password = (EditText) findViewById(R.id.editTextPassword);
 
         mAuth = FirebaseAuth.getInstance();
-        myRef = FirebaseDatabase.getInstance().getReference();
+        mFirestore = FirebaseFirestore.getInstance();
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -62,6 +67,8 @@ public class Login extends AppCompatActivity {
                 }
             }
         };
+
+
         Log.v("message","onCreate");
 
     }
@@ -75,21 +82,38 @@ public class Login extends AppCompatActivity {
 
     public void btnOnClickLogin(View v){
 
-        String emailText = email.getText().toString();
-        String passwordText = password.getText().toString();
+        username = email.getText().toString();
+        passwordText = password.getText().toString();
+        String pattern = "^(09|\\+639)\\d{9}$";
         if(isNetworkAvailable()){
-            if(TextUtils.isEmpty(emailText) || TextUtils.isEmpty(passwordText)){
+            if(TextUtils.isEmpty(username) || TextUtils.isEmpty(passwordText)){
                 Toast.makeText(this, "Enter both values", Toast.LENGTH_LONG).show();
-            } else{
-                mAuth.signInWithEmailAndPassword(emailText,passwordText).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+            } else if (username.matches(pattern)){
 
-                        if(!task.isSuccessful()){
+                CollectionReference usersRef = mFirestore.collection("Users");
+                Query query = usersRef.whereEqualTo("mobile_number", username);
+                query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            if(task.getResult().size() == 0){
+                                Toast.makeText(Login.this, "Incorrect username or password.", Toast.LENGTH_LONG).show();
+                            } else {
+                                for (DocumentSnapshot document : task.getResult()) {
+                                    username = document.getData().get("email").toString();
+                                    login();
+                                }
+
+                            }
+                        } else {
+                            Log.v("result", "Error getting documents: ", task.getException());
                             Toast.makeText(Login.this, "Incorrect username or password.", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
+            } else {
+                login();
             }
         } else {
             Toast.makeText(Login.this, "Slow or no internet connection.", Toast.LENGTH_LONG).show();
@@ -111,5 +135,17 @@ public class Login extends AppCompatActivity {
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public void login(){
+        mAuth.signInWithEmailAndPassword(username,passwordText).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        if(!task.isSuccessful()){
+                            Toast.makeText(Login.this, "Incorrect username or password.", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
     }
 }

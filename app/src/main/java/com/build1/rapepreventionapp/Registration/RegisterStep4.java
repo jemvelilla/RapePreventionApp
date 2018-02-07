@@ -17,6 +17,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class RegisterStep4 extends AppCompatActivity {
 
@@ -26,6 +28,9 @@ public class RegisterStep4 extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
 
+    private StorageReference mStorage;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +38,7 @@ public class RegisterStep4 extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
+        mStorage = FirebaseStorage.getInstance().getReference().child("images");
 
     }
     public void btnOnClickNextPassword(View v){
@@ -51,21 +57,11 @@ public class RegisterStep4 extends AppCompatActivity {
         if (pass.matches(pattern) && confpass.matches(pattern)){
             if (password.getText().toString().equals(confPassword.getText().toString())){
 
-                firebaseAuth.createUserWithEmailAndPassword(email,pass)
-                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()){
-                                    finish();
-                                    Intent i = new Intent(getApplicationContext(), AccountCreated.class);
-                                    i.putExtra("info", info);
-                                    startActivity(i);
-                                } else {
-                                    Toast.makeText(getApplicationContext(), "Registration failed. Please try again.", Toast.LENGTH_LONG).show();
-                                }
-                            }
-                        });
+                info.setPassword(pass);
+                Intent i = new Intent(getApplicationContext(), RegisterStep5.class);
 
+                i.putExtra("info", info);
+                startActivity(i);
             }else{
 
                 confPassword.setError("Passwords do not match.");

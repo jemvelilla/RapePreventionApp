@@ -7,6 +7,7 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
     -->
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -52,6 +53,9 @@
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".Registration.RegisterStep4"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Registration.RegisterStep5"
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".Registration.AccountCreated"
@@ -114,7 +118,7 @@
             </intent-filter>
 
         </activity>
-
+        <service android:name="com.build1.rapepreventionapp.Bluno.BluetoothLeService" android:enabled="true"/>
 
 
     </application>

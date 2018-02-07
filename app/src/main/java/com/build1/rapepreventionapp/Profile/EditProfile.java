@@ -13,42 +13,51 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.build1.rapepreventionapp.Home.BottomNavigation;
+import com.build1.rapepreventionapp.Model.EditInformation;
 import com.build1.rapepreventionapp.Model.UserInformation;
 import com.build1.rapepreventionapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class EditProfile extends Fragment implements View.OnClickListener{
 
     EditText editAge, editBirthdate, editContact1, editContactNumber1 ,editContact2, editContactNumber2, editContact3, editContactNumber3;
     EditText editAddress, editFirstName, editLastName;
-    Button btnSave, btnCancel, btnChangePassword;
+    Button btnSave, btnCancel;
 
-    String userKey;
-    FirebaseDatabase database;
-    DatabaseReference user;
+    private StorageReference mStorage;
+    private FirebaseFirestore mFirestore;
     FirebaseAuth mAuth;
+
     private DatePickerDialog.OnDateSetListener mDateSetListener;
+    private ProgressBar mProgressBar;
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
         mAuth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
-
-        userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        mFirestore = FirebaseFirestore.getInstance();
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_edit_profile, container, false);
+
+        UserInformation userInformation = new UserInformation();
 
         editAge = (EditText) v.findViewById(R.id.editTextAge);
         editBirthdate = (EditText) v.findViewById(R.id.editTextDOB);
@@ -62,18 +71,19 @@ public class EditProfile extends Fragment implements View.OnClickListener{
         editFirstName = (EditText) v.findViewById(R.id.editTextFN);
         editLastName = (EditText) v.findViewById(R.id.editTextLN);
 
+        mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar);
 
-        editAge.setText(UserInformation.details.get(0));
-        editBirthdate.setText(UserInformation.details.get(1));
-        editContactNumber1.setText(UserInformation.details.get(2));
-        editContactNumber2.setText(UserInformation.details.get(3));
-        editContactNumber3.setText(UserInformation.details.get(4));
-        editContact1.setText(UserInformation.details.get(5));
-        editContact2.setText(UserInformation.details.get(6));
-        editContact3.setText(UserInformation.details.get(7));
-        editAddress.setText(UserInformation.details.get(8));
-        editFirstName.setText(UserInformation.details.get(10));
-        editLastName.setText(UserInformation.details.get(11));
+        editAge.setText(Integer.toString(EditInformation.age));
+        editBirthdate.setText(EditInformation.birthday);
+        editContactNumber1.setText(EditInformation.contactNumber1);
+        editContactNumber2.setText(EditInformation.contactNumber2);
+        editContactNumber3.setText(EditInformation.contactNumber3);
+        editContact1.setText(EditInformation.contactPerson1);
+        editContact2.setText(EditInformation.contactPerson2);
+        editContact3.setText(EditInformation.contactPerson3);
+        editAddress.setText(EditInformation.currentAddress);
+        editFirstName.setText(EditInformation.firstName);
+        editLastName.setText(EditInformation.lastName);
 
         btnSave = (Button) v.findViewById(R.id.btnSaveChanges);
         btnCancel = (Button) v.findViewById(R.id.btnCancel);
@@ -112,9 +122,10 @@ public class EditProfile extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View view) {
-
         switch (view.getId()) {
             case R.id.btnSaveChanges:
+                mProgressBar.setVisibility(View.VISIBLE);
+
                 String mobileNumPattern = "^(09|\\+639)\\d{9}$";
 
                 if (editFirstName.getText().toString().trim().equals("")){
@@ -141,31 +152,29 @@ public class EditProfile extends Fragment implements View.OnClickListener{
                     editContactNumber3.setError("Invalid mobile number");
                 } else {
 
-                    user = database.getReference("Users").child(userKey);
+                    String user_id = mAuth.getCurrentUser().getUid();
 
-                    user.child("first_name").setValue(editFirstName.getText().toString());
-                    user.child("last_name").setValue(editLastName.getText().toString());
-                    user.child("age").setValue(editAge.getText().toString());
-                    user.child("birthdate").setValue(editBirthdate.getText().toString());
-                    user.child("current_address").setValue(editAddress.getText().toString());
-                    user.child("contact_person1").setValue(editContact1.getText().toString());
-                    user.child("contact_number_person1").setValue(editContactNumber1.getText().toString());
-                    user.child("contact_person2").setValue(editContact2.getText().toString());
-                    user.child("contact_number_person2").setValue(editContactNumber2.getText().toString());
-                    user.child("contact_person3").setValue(editContact3.getText().toString());
-                    user.child("contact_number_person3").setValue(editContactNumber3.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(getActivity(), " Profile updated successfully.", Toast.LENGTH_SHORT).show();
-                                Intent i = new Intent(getActivity().getApplicationContext(), BottomNavigation.class);
-                                startActivity(i);
-                            } else {
-                                // Task failed with an exception
-                                Exception exception = task.getException();
-                            }
-                        }
-                    });
+                    DocumentReference user = mFirestore.collection("Users").document(user_id);
+                    user.update("first_name", editFirstName.getText().toString());
+                    user.update("last_name", editLastName.getText().toString());
+                    user.update("age", editAge.getText().toString());
+                    user.update("birthdate", editBirthdate.getText().toString());
+                    user.update("current_address", editAddress.getText().toString());
+                    user.update("contact_person1", editContact1.getText().toString());
+                    user.update("contact_person2", editContact2.getText().toString());
+                    user.update("contact_person3", editContact3.getText().toString());
+                    user.update("contact_number1", editContactNumber1.getText().toString());
+                    user.update("contact_number2", editContactNumber2.getText().toString());
+                    user.update("contact_number3", editContactNumber3.getText().toString())
+                            .addOnSuccessListener(new OnSuccessListener < Void > () {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    mProgressBar.setVisibility(View.INVISIBLE);
+                                    Toast.makeText(getActivity(), "Updated Successfully",
+                                            Toast.LENGTH_SHORT).show();
+                                    redirectToProfile();
+                                }
+                            });
 
                 }
                 break;
@@ -181,6 +190,16 @@ public class EditProfile extends Fragment implements View.OnClickListener{
                 break;
         }
 
+    }
+    public void redirectToProfile(){
+        android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
+        if (fragmentManager != null) {
+            android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction();
+            if (ft != null) {
+                ft.replace(R.id.rootLayout, new Profile());
+                ft.commit();
+            }
+        }
     }
 
 }

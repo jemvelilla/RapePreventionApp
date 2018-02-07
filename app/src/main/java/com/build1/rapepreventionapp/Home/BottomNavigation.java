@@ -17,30 +17,27 @@ import com.build1.rapepreventionapp.Contacts.Contacts;
 import com.build1.rapepreventionapp.Model.UserInformation;
 import com.build1.rapepreventionapp.Profile.Profile;
 import com.build1.rapepreventionapp.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BottomNavigation extends AppCompatActivity {
 
-    String currentUser;
-    private FirebaseAuth mAuth;
-    DatabaseReference databaseUsers;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom_navigation);
 
-        //Map map = new Map();
-        //map.onMapReady();
-
-        //for link clicked
+        /**
         final Intent intent = getIntent();
         final String action = intent.getAction();
 
@@ -51,29 +48,7 @@ public class BottomNavigation extends AppCompatActivity {
                 Log.v("data", segments.get(i));
             }
         }
-        mAuth = FirebaseAuth.getInstance();
-        currentUser =  mAuth.getCurrentUser().getUid();
-        databaseUsers = FirebaseDatabase.getInstance().getReference("Users").child(currentUser);
-
-        UserInformation.details = new ArrayList();
-
-        databaseUsers.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()){
-
-                    String details = userSnapshot.getValue(String.class);
-                    UserInformation.details.add(details);
-                }
-                Toast.makeText(getApplicationContext(), "Successfully loaded.", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+         **/
 
         setupNavigationView();
     }

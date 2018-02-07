@@ -9,6 +9,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.build1.rapepreventionapp.Base.MainActivity;
+import com.build1.rapepreventionapp.Base.Welcome;
+import com.build1.rapepreventionapp.Bluno.BlunoLibrary;
+import com.build1.rapepreventionapp.Bluno.BlunoMain;
 import com.build1.rapepreventionapp.Login.Login;
 import com.build1.rapepreventionapp.Profile.ChangePassword;
 import com.build1.rapepreventionapp.Profile.ConfCall;
@@ -59,6 +63,8 @@ public class Settings extends Fragment {
         TextView txtEditProfile = (TextView) v.findViewById(R.id.editProfileTxt);
         TextView txtConfCall = (TextView) v.findViewById(R.id.confCallTxt);
         TextView txtChangePassword = (TextView) v.findViewById(R.id.changePassword);
+        TextView txtConnectToDevice = (TextView) v.findViewById(R.id.connectToDevice);
+
         Button btnLogOut = (Button) v.findViewById(R.id.btnLogOut);
 
         txtEditProfile.setOnClickListener(new View.OnClickListener() {
@@ -103,15 +109,25 @@ public class Settings extends Fragment {
             }
         });
 
+        txtConnectToDevice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().finish();
+                Intent intent = new Intent(getActivity(), BlunoMain.class);
+                startActivity(intent);
+            }
+        });
+
         btnLogOut.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 // Log out func
-                getActivity().finish();
+                mAuth.signOut();
                 Intent i = new Intent(getActivity().getApplicationContext(), Login.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
-                mAuth.signOut();
+                getActivity().finish();
+
             }
         });
 

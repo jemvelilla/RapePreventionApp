@@ -36,7 +36,6 @@ public class ChangePassword extends Fragment implements View.OnClickListener{
         super.onCreate(savedInstanceState);
 
         mAuth = FirebaseAuth.getInstance();
-        EditInformation.details = new ArrayList();
     }
 
     @Nullable
@@ -45,7 +44,7 @@ public class ChangePassword extends Fragment implements View.OnClickListener{
         View v = inflater.inflate(R.layout.activity_change_password, container, false);
 
         tvUsername = (TextView) v.findViewById(R.id.username);
-        tvUsername.setText(UserInformation.details.get(10) + " " + UserInformation.details.get(11));
+        tvUsername.setText(EditInformation.firstName + " " + EditInformation.lastName);
 
         currentPassword = (EditText) v.findViewById(R.id.editCurrentPassword);
         newPassword = (EditText) v.findViewById(R.id.editNewPassword);
