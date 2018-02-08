@@ -8,13 +8,16 @@ public class UserModel {
 
     boolean isSelected, isAppUser;
     String name, number;
+    String userId;
 
-    public UserModel(boolean isSelected, boolean isAppUser, String name, String number) {
+    public UserModel(boolean isSelected, boolean isAppUser,
+                     String name, String number, String userId) {
 
         this.isSelected = isSelected;
         this.isAppUser = isAppUser;
         this.name = name;
         this.number = number;
+        this.userId = userId;
     }
 
     public boolean isSelected() {
@@ -47,5 +50,13 @@ public class UserModel {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
