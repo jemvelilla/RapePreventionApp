@@ -1,8 +1,10 @@
 package com.build1.rapepreventionapp.Contacts;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
@@ -52,6 +54,9 @@ public class Phonebook extends Fragment implements View.OnClickListener{
     List<String> storedNumber = new ArrayList<>();
     List<UserModel> users;
     String name, number, phoneName, phoneNumber;
+
+    /**sending SMS**/
+    private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0;
 
     private FirebaseFirestore mFirestore;
     @Override
@@ -156,9 +161,8 @@ public class Phonebook extends Fragment implements View.OnClickListener{
                         Toast.makeText(getActivity(), "You have reached the maximum of 10 contacts.", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getActivity(), "Not app user.", Toast.LENGTH_SHORT).show();
+                    sendInvitation(model.getNumber().toString());
                 }
-
 
                 btnAddContacts.setText("ADD ("+contactName.size()+")");
 
@@ -228,23 +232,11 @@ public class Phonebook extends Fragment implements View.OnClickListener{
         }
     }
 
-    public void queryContacts(){
-//        for (String phonenumber: phonenumbers) {
-//
-//            Query query = databaseUsers.orderByChild("phonenumber").equalTo(phonenumber);
-//
-//            query.addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    User contactlists = postSnapshot.getValue(User.class);
-//                    users.add(contactlists);
-//                    adapter.notifyDataSetChanged();
-//                }
-//                @Override
-//                public void onCancelled(DatabaseError databaseError) {
-//                    throw databaseError.toException(); // don't ignore erors
-//                }
-//            });
-//        }
+    public void sendInvitation(String sendTo){
+        String message = "It can happen to ANYONE and ANYWHERE. Download TULONG: Rape Prevention App now.";
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + sendTo));
+        intent.putExtra("sms_body", message);
+        startActivity(intent);
     }
 }

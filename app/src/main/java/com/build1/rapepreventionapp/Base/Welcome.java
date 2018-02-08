@@ -60,6 +60,7 @@ public class Welcome extends AppCompatActivity {
 
         Intent i = new Intent(getApplicationContext(), RegisterStep1.class);
         startActivity(i);
+        finish();
     }
 
     public void btnOnClickLoginPage(View v){

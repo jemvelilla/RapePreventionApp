@@ -32,16 +32,18 @@ import java.util.List;
 
 
 public class Contacts extends Fragment implements View.OnClickListener{
+    int i; //counter
+    String contactName; //contact name preferences
+    String contactNumber; //contact number preferences
 
-    String contactName;
-    String contactNumber;
+    public static List<String> contactNumberId; //array of saved number id
+    public static List<String> numbersOfAppUsers; //array of app users
 
-    List<String> nameList = new ArrayList<>();
-    List<String> numList = new ArrayList<>();
-    public static List<String> numbersOfAppUsers;
-    String[] names;
-    String[] numbers;
-    String phoneName, phoneNumber;
+    List<String> nameList = new ArrayList<>(); //array of saved names
+    List<String> numList = new ArrayList<>(); //array of saved numbers
+    String[] names; //array where separated name preferences are stored
+    String[] numbers; //array where separated number preferences are stored
+    String phoneName, phoneNumber; //name and number in the phonebook
 
     private FirebaseFirestore mFirestore;
     @Override
@@ -53,9 +55,18 @@ public class Contacts extends Fragment implements View.OnClickListener{
         SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", 0);
         contactName = preferences.getString("contactNames", "");
         contactNumber = preferences.getString("contactNumbers", "");
+
         Log.v("view", "onCreate");
 
+        //load phonebook and app users
         loadContacts();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        //loadContactsToPreferences();
     }
 
     @Nullable
@@ -79,6 +90,8 @@ public class Contacts extends Fragment implements View.OnClickListener{
                 numList.add(numbers[i]);
             }
 
+            //get id of selected contact numbers
+            //getContactId();
 
             final ArrayAdapter<String> arrayAdapter =
                     new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_2, android.R.id.text1, nameList){
@@ -197,6 +210,42 @@ public class Contacts extends Fragment implements View.OnClickListener{
                 /**end**/
 
             }
+        }
+    }
+
+    public void loadContactsToPreferences(){
+
+        StringBuilder numberBuilder = new StringBuilder();
+        for (String numberId : contactNumberId){
+            numberBuilder.append(numberId);
+            numberBuilder.append(',');
+
+            SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("Emergency Contacts ID", numberBuilder.toString());
+            editor.commit();
+        }
+    }
+
+    public void getContactId(){
+        i = 0;
+        contactNumberId = new ArrayList<>();
+        while (i < numList.size()){
+            CollectionReference usersRef = mFirestore.collection("Users");
+            com.google.firebase.firestore.Query query = usersRef.whereEqualTo("mobile_number", phoneNumber);
+            query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (DocumentSnapshot document : task.getResult()) {
+                            contactNumberId.add(document.getId());
+                            i++;
+                        }
+                    } else {
+                        Log.v("result", "Error getting documents: ", task.getException());
+                    }
+                }
+            });
         }
     }
 }

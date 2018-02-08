@@ -45,7 +45,7 @@
         android:layout_marginTop="20dp"
         android:layout_centerHorizontal="true"
         android:background="@android:color/transparent"
-        android:src="@drawable/default_profile" />
+        android:src="@drawable/add_image" />
 
     <Button
         android:id="@+id/btnFinish"

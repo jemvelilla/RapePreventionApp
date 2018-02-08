@@ -15,6 +15,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.build1.rapepreventionapp.Contacts.Contacts;
 import com.build1.rapepreventionapp.R;
 
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class BlunoMain extends BlunoLibrary {
 
     String contactNumber;
     String[] numbers;
+    String contactId;
 
     @Override
     protected void onStart(){
@@ -40,6 +42,7 @@ public class BlunoMain extends BlunoLibrary {
 
         SharedPreferences preferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE);
         contactNumber = preferences.getString("contactNumbers", "");
+        contactId = preferences.getString("Emergency Contacts ID", "");
 
     }
 
@@ -47,8 +50,9 @@ public class BlunoMain extends BlunoLibrary {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluno);
-        onCreateProcess();														//onCreate Process by BlunoLibrary
 
+
+        onCreateProcess();														//onCreate Process by BlunoLibrary
 
         serialBegin(115200);													//set the Uart Baudrate on BLE chip to 115200
 
