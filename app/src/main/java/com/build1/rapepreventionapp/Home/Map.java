@@ -86,7 +86,7 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
     List<Address> addresses;
     List<Address> victimAddress;
     ArrayList<LatLng> listPoints;
-    int PROXIMITY_RADIUS = 10000000;
+    int PROXIMITY_RADIUS = 1000;
     double latitude,longtitude;
 
     GoogleMap mMap;
@@ -378,6 +378,7 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
         String output = "json";
         //Create url to request
         String url = "https://maps.googleapis.com/maps/api/directions/" +output + "?" +param;
+        Log.e(TAG, "getRequestUrl: "+url );
         return url;
     }
 
@@ -590,7 +591,7 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
          googlePlaceUrl.append("location="+latitude+","+longtitude);
          googlePlaceUrl.append("&radius="+PROXIMITY_RADIUS);
          googlePlaceUrl.append("&type="+nearbyPlace);
-         googlePlaceUrl.append("&sensor=true");
+         googlePlaceUrl.append("&sensor=false");
          googlePlaceUrl.append("&key="+"AIzaSyCuTUpBYWXg3DeUUwecjW4NuACBl3SFueE");
         Log.e(TAG, "getUrl: "+googlePlaceUrl.toString());
         Log.e(TAG, "getUrl: " +latitude );

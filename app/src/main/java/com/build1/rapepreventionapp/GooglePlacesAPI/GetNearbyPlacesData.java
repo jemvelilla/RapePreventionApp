@@ -1,7 +1,9 @@
 package com.build1.rapepreventionapp.GooglePlacesAPI;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
+import com.build1.rapepreventionapp.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -12,14 +14,16 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * Created by Darise on 06/02/2018.
  */
 
 public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
 
-    String googlePlacesData;
-    GoogleMap mMap;
+    private String googlePlacesData;
+    private GoogleMap mMap;
     String url;
     @Override
     protected String doInBackground(Object... objects) {
@@ -38,10 +42,10 @@ public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
 
     @Override
     protected void onPostExecute(String s) {
-        List<HashMap<String, String>> nearbyPlaceList = null;
+        List<HashMap<String, String>> nearbyPlaceList;
         DataParser parser = new DataParser();
         nearbyPlaceList = parser.parse(s);
-        
+        Log.d("nearbyplacesdata","called parse method");
         showNearbyPlaces(nearbyPlaceList);
     }
 
@@ -58,11 +62,12 @@ public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
             LatLng latLng = new LatLng(lat, lng);
             markerOptions.position(latLng);
             markerOptions.title(placeName +":" +vicinity);
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW));
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.police));
 
             mMap.addMarker(markerOptions);
             //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-            //mMap.animateCamera(CameraUpdateFactory.zoomTo(13));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(16));
+            Log.e(TAG, "showNearbyPlaces: " +latLng );
         }
     }
 }
