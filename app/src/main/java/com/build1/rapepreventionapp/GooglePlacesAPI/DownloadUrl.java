@@ -1,5 +1,7 @@
 package com.build1.rapepreventionapp.GooglePlacesAPI;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,6 +43,7 @@ public class DownloadUrl {
             urlConnection.disconnect();
         }
 
+        Log.d("DownloadURL","Returning data= "+data);
         return data;
     }
 }
