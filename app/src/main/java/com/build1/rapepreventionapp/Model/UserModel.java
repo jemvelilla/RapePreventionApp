@@ -6,12 +6,13 @@ package com.build1.rapepreventionapp.Model;
 
 public class UserModel {
 
-    boolean isSelected;
+    boolean isSelected, isAppUser;
     String name, number;
 
-    public UserModel(boolean isSelected, String name, String number) {
+    public UserModel(boolean isSelected, boolean isAppUser, String name, String number) {
 
         this.isSelected = isSelected;
+        this.isAppUser = isAppUser;
         this.name = name;
         this.number = number;
     }
@@ -22,6 +23,14 @@ public class UserModel {
 
     public void setSelected(boolean selected) {
         isSelected = selected;
+    }
+
+    public boolean isAppUser() {
+        return isAppUser;
+    }
+
+    public void setAppUser(boolean appUser) {
+        isAppUser = appUser;
     }
 
     public String getName() {

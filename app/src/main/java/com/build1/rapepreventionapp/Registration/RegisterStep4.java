@@ -53,23 +53,27 @@ public class RegisterStep4 extends AppCompatActivity {
         String confpass = confPassword.getText().toString().trim();
         String pattern = "((?=.*\\d)(?=.*[A-Z]).{6,20})";
 
+        if (!pass.equals("") && !confpass.equals("")){
+            if (pass.matches(pattern) && confpass.matches(pattern)){
+                if (password.getText().toString().equals(confPassword.getText().toString())){
 
-        if (pass.matches(pattern) && confpass.matches(pattern)){
-            if (password.getText().toString().equals(confPassword.getText().toString())){
+                    info.setPassword(pass);
+                    Intent i = new Intent(getApplicationContext(), RegisterStep5.class);
 
-                info.setPassword(pass);
-                Intent i = new Intent(getApplicationContext(), RegisterStep5.class);
+                    i.putExtra("info", info);
+                    startActivity(i);
+                }else{
 
-                i.putExtra("info", info);
-                startActivity(i);
+                    confPassword.setError("Passwords do not match.");
+
+                }
             }else{
-
-                confPassword.setError("Passwords do not match.");
-
+                Toast.makeText(getApplicationContext(), "Password must have 1 number, 1 uppercase letter and minimum of 6 characters", Toast.LENGTH_LONG).show();
             }
-        }else{
-            Toast.makeText(getApplicationContext(), "Password must have 1 number, 1 uppercase letter and minimum of 6 characters", Toast.LENGTH_LONG).show();
+        } else {
+            password.setError("Please enter a password");
         }
+
     }
 
     public void btnOnClickLoginPage(View v){

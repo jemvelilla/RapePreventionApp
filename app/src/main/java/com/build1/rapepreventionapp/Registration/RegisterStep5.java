@@ -167,9 +167,9 @@ public class RegisterStep5 extends AppCompatActivity {
     }
 
     private void sendToMain(){
-        Intent intent = new Intent(RegisterStep5.this, AccountCreated.class);
-        startActivity(intent);
         finish();
+        Intent intent = new Intent(getApplicationContext(), AccountCreated.class);
+        startActivity(intent);
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
