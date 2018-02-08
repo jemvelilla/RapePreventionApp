@@ -7,7 +7,10 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
     -->
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -24,7 +27,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
-            android:name=".MainActivity"
+            android:name=".Base.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,42 +37,48 @@
         </activity>
 
         <activity
-            android:name=".Welcome"
+            android:name=".Base.Welcome"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".RegisterStep1"
+            android:name=".Bluno.BlunoMain"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".RegisterStep2"
+            android:name=".Registration.RegisterStep1"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".RegisterStep3"
+            android:name=".Registration.RegisterStep2"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".RegisterStep4"
+            android:name=".Registration.RegisterStep3"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".AccountCreated"
+            android:name=".Registration.RegisterStep4"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".Login"
+            android:name=".Registration.RegisterStep5"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".Slides"
+            android:name=".Registration.AccountCreated"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".ForgotPassStep1"
+            android:name=".Login.Login"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".ForgotPassStep2"
+            android:name=".Registration.Slides"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".AccountVerification"
+            android:name=".Login.ForgotPassStep1"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Login.ForgotPassStep2"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Login.AccountVerification"
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".WebActivity"></activity>
         <activity
-            android:name=".ForgotPassStep3"
+            android:name=".Login.ForgotPassStep3"
             android:screenOrientation="portrait">
 
             <intent-filter android:autoVerify="true">
@@ -95,7 +104,7 @@
             android:value="AIzaSyDr1asme-e-xPsHFa7IvFiJIOZHZFmndac" />
 
         <activity
-            android:name=".BottomNavigation"
+            android:name=".Home.BottomNavigation"
             android:label="TULONG Rape Prevention">
 
             <intent-filter android:autoVerify="true">
@@ -109,7 +118,7 @@
             </intent-filter>
 
         </activity>
-
+        <service android:name="com.build1.rapepreventionapp.Bluno.BluetoothLeService" android:enabled="true"/>
 
 
     </application>

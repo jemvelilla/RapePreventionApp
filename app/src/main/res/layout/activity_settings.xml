@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.build1.rapepreventionapp.Settings">
+    tools:context="com.build1.rapepreventionapp.Profile.Settings">
 
     <ImageView
         android:id="@+id/icon2"
@@ -86,6 +86,22 @@
             android:background="#1f1f1f"
             android:layout_below="@id/changePassword" />
 
+        <TextView
+            android:id="@+id/connectToDevice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tulong: Rape Prevention Mode"
+            android:layout_below="@id/line3"
+            android:textSize="20sp"
+            android:padding="15dp"/>
+
+        <View
+            android:id="@+id/line4"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#1f1f1f"
+            android:layout_below="@id/connectToDevice" />
+
     </RelativeLayout>
 
     <Button
@@ -101,5 +117,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="0dp" />
+
+
 
 </android.support.constraint.ConstraintLayout>

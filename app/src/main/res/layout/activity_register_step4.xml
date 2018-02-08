@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.build1.rapepreventionapp.RegisterStep1">
+    tools:context="com.build1.rapepreventionapp.Registration.RegisterStep1">
 
 
     <ImageView
@@ -60,7 +60,7 @@
         android:layout_marginTop="68dp"
         android:background="@drawable/nextbutton"
         android:onClick="btnOnClickNextPassword"
-        android:text="Finish"
+        android:text="Next"
         android:textColor="#fff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
