@@ -39,7 +39,6 @@ public class Contacts extends Fragment implements View.OnClickListener{
     String contactId;
 
     public static List<String> numbersOfAppUsers; //array of app users
-    public static List<String> numbersOfAppUsersId; //array of app users
 
     List<String> nameList = new ArrayList<>(); //array of saved names
     List<String> numList = new ArrayList<>(); //array of saved numbers
@@ -68,7 +67,7 @@ public class Contacts extends Fragment implements View.OnClickListener{
         Log.v("view", "onCreate");
 
         //load phonebook and app users
-        loadContacts();
+        //loadContacts();
     }
 
     @Nullable
@@ -89,13 +88,15 @@ public class Contacts extends Fragment implements View.OnClickListener{
             ids = contactId.split(",");
 
             for(String id: ids){
-                Log.v("id", id);
+                idList.add(id);
+                Log.v("message", id);
             }
 
             for (int i=0; i < names.length; i++){
                 nameList.add(names[i]);
+                Log.v("message", names[i]);
                 numList.add(numbers[i]);
-
+                Log.v("message", numbers[i]);
             }
 
             //get id of selected contact numbers
@@ -196,45 +197,47 @@ public class Contacts extends Fragment implements View.OnClickListener{
         }
     }
 
-    public void loadContacts(){
-        Cursor cursor = getActivity().getContentResolver()
-                .query(ContactsContract.CommonDataKinds.Phone
-                        .CONTENT_URI, null,null,null,null);
-        getActivity().startManagingCursor(cursor);
-
-        if(cursor.getCount() > 0){
-            int i = 0;
-            while (cursor.moveToNext()){
-                phoneName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
-                numbersOfAppUsers = new ArrayList<>();
-                numbersOfAppUsersId = new ArrayList<>();
-                /** check if phone number exists in the app firebase**/
-                CollectionReference usersRef = mFirestore.collection("Users");
-                com.google.firebase.firestore.Query query = usersRef.whereEqualTo("mobile_number", phoneNumber);
-                query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            if(task.getResult().size() == 0){
-                                numbersOfAppUsersId.add("0");
-                                numbersOfAppUsers.add("");
-                            } else {
-                                for (DocumentSnapshot document : task.getResult()) {
-                                    Log.v("document", document.getId());
-                                    numbersOfAppUsersId.add(document.getId());
-                                    numbersOfAppUsers.add(document.getData().get("mobile_number").toString());
-                                }
-                            }
-                        } else {
-                            Log.v("result", "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-                /**end**/
-
-            }
-        }
-    }
+//    public void loadContacts(){
+//        Cursor cursor = getActivity().getContentResolver()
+//                .query(ContactsContract.CommonDataKinds.Phone
+//                        .CONTENT_URI, null,null,null,null);
+//        getActivity().startManagingCursor(cursor);
+//
+//        if(cursor.getCount() > 0){
+//            int i = 0;
+//            while (cursor.moveToNext()){
+//                phoneName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+//                phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+//
+//                numbersOfAppUsers = new ArrayList<>();
+//
+//                /** check if phone number exists in the app firebase**/
+//                CollectionReference usersRef = mFirestore.collection("Users");
+//                com.google.firebase.firestore.Query query = usersRef.whereEqualTo("mobile_number", phoneNumber);
+//                query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            if(task.getResult().size() == 0){
+//                                Log.v("message", "from contacts: 0");
+//                                numbersOfAppUsers.add("");
+//                            } else {
+//                                for (DocumentSnapshot document : task.getResult()) {
+//                                    String user_id = document.getId();
+//
+//                                    UserModel userModel = document.toObject(UserModel.class).withId(user_id);
+//
+//                                    numbersOfAppUsers.add(document.getData().get("mobile_number").toString());
+//                                }
+//                            }
+//                        } else {
+//                            Log.v("result", "Error getting documents: ", task.getException());
+//                        }
+//                    }
+//                });
+//                /**end**/
+//
+//            }
+//        }
+//    }
 }

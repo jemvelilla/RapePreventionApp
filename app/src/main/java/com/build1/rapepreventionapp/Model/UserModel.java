@@ -4,20 +4,18 @@ package com.build1.rapepreventionapp.Model;
  * Created by JEMYLA VELILLA on 05/02/2018.
  */
 
-public class UserModel {
+public class UserModel extends UserId {
 
     boolean isSelected, isAppUser;
     String name, number;
-    String userId;
 
     public UserModel(boolean isSelected, boolean isAppUser,
-                     String name, String number, String userId) {
+                     String name, String number) {
 
         this.isSelected = isSelected;
         this.isAppUser = isAppUser;
         this.name = name;
         this.number = number;
-        this.userId = userId;
     }
 
     public boolean isSelected() {

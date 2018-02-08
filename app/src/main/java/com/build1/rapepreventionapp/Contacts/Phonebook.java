@@ -85,6 +85,7 @@ public class Phonebook extends Fragment implements View.OnClickListener{
         }
     }
 
+    public voi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -105,23 +106,7 @@ public class Phonebook extends Fragment implements View.OnClickListener{
 
         users = new ArrayList<>();
 
-        if(cursor.getCount() > 0){
-            int i = 0;
-            while (cursor.moveToNext()){
-                phoneName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
-                if(Contacts.numbersOfAppUsers.contains(phoneNumber)){
-                    users.add(new UserModel(false, true, phoneName, phoneNumber, Contacts.numbersOfAppUsersId.get(i)));
-                } else {
-                    users.add(new UserModel(false, false, phoneName, phoneNumber, Contacts.numbersOfAppUsersId.get(i)));
-                }
-
-                i++;
-            }
-        }
-
-        final CustomAdapter adapter = new CustomAdapter(getActivity(), users);
+        final CustomAdapter adapter = new CustomAdapter(getContext(), users);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

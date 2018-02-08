@@ -12,9 +12,11 @@
         android:id="@+id/listView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/icon2" />
+        android:layout_below="@+id/icon2"
+        android:layout_above="@id/action_bar"/>
 
     <RelativeLayout
+        android:id="@+id/action_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
