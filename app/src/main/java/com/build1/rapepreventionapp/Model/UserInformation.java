@@ -10,9 +10,6 @@ import java.util.List;
 public class UserInformation implements Serializable {
     public static List<String> contactName;
     public static List<String> contactNumber;
-    public static List<String> numbersOfAppUsers; //array of app users
-    public static List<String> numbersOfAppUsersId; //array of app users
-    public static List<String> displayPhoneNumbers;
 
     public static List<String> details;
     private String email;

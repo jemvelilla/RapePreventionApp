@@ -1,7 +1,6 @@
 package com.build1.rapepreventionapp.Contacts;
 
 import android.app.Activity;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +19,19 @@ import java.util.List;
 
 public class CustomAdapter extends BaseAdapter {
 
+    Activity activity;
     List<UserModel> users;
     LayoutInflater inflater;
 
-    public CustomAdapter(Context context, List<UserModel> users){
+    public CustomAdapter(Activity activity) {
+        this.activity = activity;
+    }
+
+    public CustomAdapter(Activity activity, List<UserModel> users){
+        this.activity = activity;
         this.users = users;
+
+        inflater = activity.getLayoutInflater();
     }
 
 
@@ -48,7 +55,7 @@ public class CustomAdapter extends BaseAdapter {
         ViewHolder holder = null;
 
         if (view == null) {
-            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_view_contact, viewGroup, false);
+            view = inflater.inflate(R.layout.list_view_contact, viewGroup, false);
 
             holder = new ViewHolder();
 
@@ -61,8 +68,7 @@ public class CustomAdapter extends BaseAdapter {
         }
 
         UserModel model = users.get(i);
-        holder.tvName.setText(model.getName() + " / " + model.getUserId());
-        String user_id = users.get(i).userId;
+        holder.tvName.setText(model.getName());
 
         if (model.isSelected()){
             holder.ivCheckBox.setBackgroundResource(R.drawable.checkbox_checked);

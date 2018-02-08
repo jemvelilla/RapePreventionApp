@@ -9,12 +9,8 @@ public class UserModel extends UserId {
     boolean isSelected, isAppUser;
     String name, number;
 
-<<<<<<< HEAD
     public UserModel(boolean isSelected, boolean isAppUser,
                      String name, String number) {
-=======
-    public UserModel(boolean isSelected, boolean isAppUser, String name, String number) {
->>>>>>> parent of 73e5702... Get Contact Id
 
         this.isSelected = isSelected;
         this.isAppUser = isAppUser;
