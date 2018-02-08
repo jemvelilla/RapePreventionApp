@@ -50,6 +50,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.vision.face.LargestFaceFocusingProcessor;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -82,6 +83,8 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
     private Boolean mLocationPermissionGranted = false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private GeoDataClient mGeoDataClient;
+    Location currentLocation;
+    LatLng currentLocationLatlng;
     private PlaceDetectionClient mPlaceDetectionClient;
     private final float DEFAULT_ZOOM = 16f;
     private GoogleApiClient mGoogleApiClient;
@@ -91,8 +94,8 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
     List<Address> addresses;
     List<Address> victimAddress;
     ArrayList<LatLng> listPoints;
-    int PROXIMITY_RADIUS = 1000;
-    double latitude,lontitude;
+    int PROXIMITY_RADIUS = 10000000;
+    double latitude,longtitude;
 
     GoogleMap mMap;
 
@@ -153,6 +156,9 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
         fragment.getMapAsync(this);
         listPoints =new ArrayList<>();
 
+        double latitude;
+        double longitude;
+
 
     }
 
@@ -191,6 +197,9 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
     private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the device location");
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity().getApplicationContext());
+        //latitude = location.getLatitude();
+        //longtitude = location.getLongitude();
+        //lastlocation = location;
 
         try {
             if (mLocationPermissionGranted) {
@@ -200,26 +209,34 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
                     public void onComplete(@NonNull com.google.android.gms.tasks.Task<Location> task) {
                         //final String placeId = task.getPlaceId();
                         if (task.isSuccessful()) {
+
                             Log.d(TAG, "onComplete: found location");
-                            Location currentLocation = (Location) task.getResult();
+                            currentLocation = new Location(task.getResult());
+                            latitude = currentLocation.getLatitude();
+
+                            longtitude = currentLocation.getLongitude();
+                            currentLocationLatlng = new LatLng(latitude,longtitude);
                             Geocoder geocoder = new Geocoder(getActivity().getApplicationContext());
                             try {
-                                addresses = geocoder.getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(),1);
+                                addresses = geocoder.getFromLocation(currentLocation.getLatitude(), longtitude,1);
 
                                 String address = addresses.get(0).getAddressLine(0);
                                 //String area = addresses.get(0).getLocality();
                                 Log.e(TAG, "onComplete: "+addresses );
-                                listPoints.add(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+                                listPoints.add(new LatLng(latitude, longtitude));
 
-                                moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
+                                moveCamera(new LatLng(latitude, longtitude),
                                         DEFAULT_ZOOM, ""+address+"");
+
+                                getNearbyPoliceStation();
 
 
 
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            Log.e(TAG, "onComplete: " +currentLocation);
+                            Log.e(TAG, "onComplete: " +latitude);
+                            Log.e(TAG, "onComplete: " +longtitude);
 
                             //final String placeId = task.getResult();
 
@@ -276,10 +293,14 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
 
         //BottomNavigation bottomNavigation = new BottomNavigation();
         mMap = googleMap;
-        getNearbyPoliceStation();
+
 
         if (mLocationPermissionGranted) {
             getDeviceLocation();
+            //if (currentLocationLatlng != null){
+            //    getNearbyPoliceStation();
+            //}
+
 
             if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
@@ -552,9 +573,13 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
         }
     }
 
+
     public void getNearbyPoliceStation(){
-        String police = "hospital";
-        String url = getUrl(latitude, lontitude, police);
+
+        latitude = currentLocationLatlng.latitude;
+        longtitude = currentLocationLatlng.longitude;
+        String police = "police";
+        String url = getUrl(latitude, longtitude, police);
         Object dataTransfer[] = new Object[2];
         dataTransfer[0] = mMap;
         dataTransfer[1] = url;
@@ -562,17 +587,22 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
         GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
         getNearbyPlacesData.execute(dataTransfer);
         Toast.makeText(getActivity().getApplicationContext(), "Showing Nearby Plice Station", Toast.LENGTH_SHORT);
-        Log.e(TAG, "getNearbyPoliceStation: asasa");
+        Log.e(TAG, "getNearbyPoliceStation: asasa" +url);
     }
 
-    private String getUrl(double latitude, double lontitude, String nearbyPlace){
+    private String getUrl(double latitude , double longtitude, String nearbyPlace){
+
+        Log.e(TAG, "getUrlaaaaa: "+latitude );
+        Log.e(TAG, "getUrlbbbbb: "+longtitude );
          StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-         googlePlaceUrl.append("location"+latitude+","+lontitude);
+         googlePlaceUrl.append("location="+latitude+","+longtitude);
          googlePlaceUrl.append("&radius="+PROXIMITY_RADIUS);
          googlePlaceUrl.append("&type="+nearbyPlace);
          googlePlaceUrl.append("&sensor=true");
          googlePlaceUrl.append("&key="+"AIzaSyCuTUpBYWXg3DeUUwecjW4NuACBl3SFueE");
         Log.e(TAG, "getUrl: "+googlePlaceUrl.toString());
+        Log.e(TAG, "getUrl: " +latitude );
+        Log.e(TAG, "getUrl: " +longtitude );
 
          return googlePlaceUrl.toString();
     }
