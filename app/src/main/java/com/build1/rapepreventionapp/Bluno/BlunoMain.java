@@ -32,10 +32,9 @@ public class BlunoMain extends BlunoLibrary {
 
     List<String> numList = new ArrayList<>();
 
-    String contactNumber; //contact number preferences
-    String[] numbers;  //numbers to send
-    String[] contactIds; //number ids
-    String contactId; //contact Id preferences
+    String contactNumber;
+    String[] numbers;
+    String contactId;
 
     @Override
     protected void onStart(){
@@ -43,7 +42,7 @@ public class BlunoMain extends BlunoLibrary {
 
         SharedPreferences preferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE);
         contactNumber = preferences.getString("contactNumbers", "");
-        contactId = preferences.getString("contactIds", "");
+        contactId = preferences.getString("Emergency Contacts ID", "");
 
     }
 
@@ -52,11 +51,6 @@ public class BlunoMain extends BlunoLibrary {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluno);
 
-        contactIds = contactId.split(",");
-
-        for(String contacts: contactIds){
-            Log.v("contact numbers id", contacts);
-        }
 
         onCreateProcess();														//onCreate Process by BlunoLibrary
 
