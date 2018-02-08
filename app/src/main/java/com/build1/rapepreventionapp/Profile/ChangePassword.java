@@ -63,43 +63,50 @@ public class ChangePassword extends Fragment implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnSaveChanges:
-                //save changes for change password
-                AuthCredential credential = EmailAuthProvider.getCredential(mAuth.getCurrentUser().getEmail(), currentPassword.getText().toString());
-                FirebaseAuth.getInstance().getCurrentUser().reauthenticate(credential)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()){
-                                    if(newPassword.getText().toString().equals(confirmNewPassword.getText().toString())){
-                                        mAuth.getCurrentUser().updatePassword(newPassword.getText().toString())
-                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if (task.isSuccessful())
-                                                        {
-                                                            Toast.makeText(getActivity(), " Password updated successfully.", Toast.LENGTH_SHORT).show();
-                                                            android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
-                                                            if (fragmentManager != null) {
-                                                                android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction();
-                                                                if (ft != null) {
-                                                                    ft.replace(R.id.rootLayout, new Profile());
-                                                                    ft.commit();
+                if (currentPassword.getText().toString().equals("")){
+                    currentPassword.setError("Password cannot be empty.");
+                }  else if(newPassword.getText().toString().equals("")){
+                    newPassword.setError("Password cannot be empty.");
+                } else if(confirmNewPassword.getText().toString().equals("")){
+                    confirmNewPassword.setError("Password cannot be empty.");
+                } else {
+                    //save changes for change password
+                    AuthCredential credential = EmailAuthProvider.getCredential(mAuth.getCurrentUser().getEmail(), currentPassword.getText().toString());
+                    FirebaseAuth.getInstance().getCurrentUser().reauthenticate(credential)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()){
+                                        if(newPassword.getText().toString().equals(confirmNewPassword.getText().toString())){
+                                            mAuth.getCurrentUser().updatePassword(newPassword.getText().toString())
+                                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            if (task.isSuccessful())
+                                                            {
+                                                                Toast.makeText(getActivity(), " Password updated successfully.", Toast.LENGTH_SHORT).show();
+                                                                android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
+                                                                if (fragmentManager != null) {
+                                                                    android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction();
+                                                                    if (ft != null) {
+                                                                        ft.replace(R.id.rootLayout, new Profile());
+                                                                        ft.commit();
+                                                                    }
                                                                 }
                                                             }
                                                         }
-                                                    }
-                                                });
+                                                    });
 
-                                    } else {
-                                        newPassword.setError("Passwords do not match.");
-                                        confirmNewPassword.setError("Passwords do not match.");
+                                        } else {
+                                            newPassword.setError("Passwords do not match.");
+                                            confirmNewPassword.setError("Passwords do not match.");
+                                        }
+                                    } else{
+                                        currentPassword.setError("Incorrect password.");
                                     }
-                                } else{
-                                    currentPassword.setError("Incorrect password.");
                                 }
-                            }
-                        });
-
+                            });
+                }
 
                 //
                 break;

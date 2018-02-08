@@ -5,7 +5,9 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +16,24 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.build1.rapepreventionapp.Login.Login;
 import com.build1.rapepreventionapp.Model.UserModel;
 import com.build1.rapepreventionapp.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,11 +51,14 @@ public class Phonebook extends Fragment implements View.OnClickListener{
     List<String> storedName = new ArrayList<>();
     List<String> storedNumber = new ArrayList<>();
     List<UserModel> users;
-    String name, number;
+    String name, number, phoneName, phoneNumber;
 
+    private FirebaseFirestore mFirestore;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mFirestore = FirebaseFirestore.getInstance();
 
         SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
         String tempName = preferences.getString("contactNames", "");
@@ -83,10 +98,14 @@ public class Phonebook extends Fragment implements View.OnClickListener{
         if(cursor.getCount() > 0){
             int i = 0;
             while (cursor.moveToNext()){
-                String phoneName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                String phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                phoneName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-                users.add(new UserModel(false, phoneName, phoneNumber));
+                if(Contacts.numbersOfAppUsers.contains(phoneNumber)){
+                    users.add(new UserModel(false, true, phoneName, phoneNumber));
+                } else {
+                    users.add(new UserModel(false, false, phoneName, phoneNumber));
+                }
             }
         }
 
@@ -100,39 +119,46 @@ public class Phonebook extends Fragment implements View.OnClickListener{
 
                 name = model.getName();
                 number = model.getNumber();
+                boolean isAppUser = model.isAppUser();
 
+                if(isAppUser){
 
-                //check if the stored named and number are less than 10
-                if(storedName.size() < 10 && storedNumber.size() < 10){
-                    //check if the stored name and number already contain the selected item
-                    if(!storedName.contains(name) && !storedNumber.contains(number)){
-                        //
-                        if(contactName.size() < (10 - storedName.size()) && contactNumber.size() < (10 - storedNumber.size())){
-                            //for checking and unchecking on the current view
-                            if(!contactName.contains(name) && !contactNumber.contains(number)){
-                                contactName.add(name);
-                                contactNumber.add(number);
-                                model.setSelected(true);
-                            } else {
-                                contactName.remove(name);
-                                contactNumber.remove(number);
-                                model.setSelected(false);
+                    model.setAppUser(true);
+                    //check if the stored named and number are less than 10
+                    if(storedName.size() < 10 && storedNumber.size() < 10){
+                        //check if the stored name and number already contain the selected item
+                        if(!storedName.contains(name) && !storedNumber.contains(number)){
+                            //
+                            if(contactName.size() < (10 - storedName.size()) && contactNumber.size() < (10 - storedNumber.size())){
+                                //for checking and unchecking on the current view
+                                if(!contactName.contains(name) && !contactNumber.contains(number)){
+                                    contactName.add(name);
+                                    contactNumber.add(number);
+                                    model.setSelected(true);
+                                } else {
+                                    contactName.remove(name);
+                                    contactNumber.remove(number);
+                                    model.setSelected(false);
+                                }
+                            } else{
+                                if(model.isSelected()){
+                                    contactName.remove(name);
+                                    contactNumber.remove(number);
+                                    model.setSelected(false);
+                                } else {
+                                    Toast.makeText(getActivity(), "You have reached the maximum of 10 contacts.", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        } else{
-                            if(model.isSelected()){
-                                contactName.remove(name);
-                                contactNumber.remove(number);
-                                model.setSelected(false);
-                            } else {
-                                Toast.makeText(getActivity(), "You have reached the maximum of 10 contacts.", Toast.LENGTH_SHORT).show();
-                            }
+                        } else {
+                            Toast.makeText(getActivity(), name+" is already added.", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(getActivity(), name+" is already added.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "You have reached the maximum of 10 contacts.", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(getActivity(), "You have reached the maximum of 10 contacts.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Not app user.", Toast.LENGTH_SHORT).show();
                 }
+
 
                 btnAddContacts.setText("ADD ("+contactName.size()+")");
 

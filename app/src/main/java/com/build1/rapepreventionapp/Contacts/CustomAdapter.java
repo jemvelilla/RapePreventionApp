@@ -72,6 +72,10 @@ public class CustomAdapter extends BaseAdapter {
 
         if (model.isSelected()){
             holder.ivCheckBox.setBackgroundResource(R.drawable.checkbox_checked);
+            holder.ivCheckBox.getLayoutParams().width = 50;
+        } else if (!model.isAppUser()){
+            holder.ivCheckBox.setBackgroundResource(R.drawable.invite_button2);
+            holder.ivCheckBox.getLayoutParams().width = 120;
         } else {
             holder.ivCheckBox.setBackgroundResource(R.drawable.checkbox_unchecked);
         }

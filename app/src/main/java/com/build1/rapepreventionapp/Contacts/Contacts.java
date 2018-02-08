@@ -1,6 +1,9 @@
 package com.build1.rapepreventionapp.Contacts;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,6 +20,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.build1.rapepreventionapp.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,17 +38,24 @@ public class Contacts extends Fragment implements View.OnClickListener{
 
     List<String> nameList = new ArrayList<>();
     List<String> numList = new ArrayList<>();
-
+    public static List<String> numbersOfAppUsers;
     String[] names;
     String[] numbers;
+    String phoneName, phoneNumber;
+
+    private FirebaseFirestore mFirestore;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mFirestore = FirebaseFirestore.getInstance();
 
         SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", 0);
         contactName = preferences.getString("contactNames", "");
         contactNumber = preferences.getString("contactNumbers", "");
         Log.v("view", "onCreate");
+
+        loadContacts();
     }
 
     @Nullable
@@ -142,6 +158,44 @@ public class Contacts extends Fragment implements View.OnClickListener{
             if (ft != null) {
                 ft.replace(R.id.rootLayout, new Phonebook());
                 ft.commit();
+            }
+        }
+    }
+
+    public void loadContacts(){
+        Cursor cursor = getActivity().getContentResolver()
+                .query(ContactsContract.CommonDataKinds.Phone
+                        .CONTENT_URI, null,null,null,null);
+        getActivity().startManagingCursor(cursor);
+
+        if(cursor.getCount() > 0){
+            int i = 0;
+            while (cursor.moveToNext()){
+                phoneName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+                numbersOfAppUsers = new ArrayList<>();
+                /** check if phone number exists in the app firebase**/
+                CollectionReference usersRef = mFirestore.collection("Users");
+                com.google.firebase.firestore.Query query = usersRef.whereEqualTo("mobile_number", phoneNumber);
+                query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            if(task.getResult().size() == 0){
+                                numbersOfAppUsers.add("");
+                            } else {
+                                for (DocumentSnapshot document : task.getResult()) {
+                                    numbersOfAppUsers.add(document.getData().get("mobile_number").toString());
+                                }
+                            }
+                        } else {
+                            Log.v("result", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+                /**end**/
+
             }
         }
     }
