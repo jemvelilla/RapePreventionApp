@@ -16,9 +16,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.build1.rapepreventionapp.Login.ForgotPassStep2;
 import com.build1.rapepreventionapp.Model.UserModel;
 import com.build1.rapepreventionapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,28 +31,30 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
 public class Contacts extends Fragment implements View.OnClickListener{
+    public static HashMap<String, String> usersMap;
 
     String contactName; //contact name preferences
     String contactNumber; //contact number preferences
     String contactId;
 
-    public static List<String> numbersOfAppUsers; //array of app users
-
     List<String> nameList = new ArrayList<>(); //array of saved names
     List<String> numList = new ArrayList<>(); //array of saved numbers
-   // List<String> idList = new ArrayList<>(); //array of saved numbers
+    List<String> idList = new ArrayList<>(); //array of saved numbers
 
     String[] names; //array where separated name preferences are stored
     String[] numbers; //array where separated number preferences are stored
-    //String[] ids; //array where separated number preferences are stored
+    String[] ids; //array where separated number preferences are stored
 
     String phoneName, phoneNumber; //name and number in the phonebook
 
-    UserModel userModel;
+    private ProgressBar mProgressBar;
+    private Button btnContacts;
+    private Button btnAdd;
 
     private FirebaseFirestore mFirestore;
     @Override
@@ -65,9 +69,9 @@ public class Contacts extends Fragment implements View.OnClickListener{
         contactId = preferences.getString("contactIds", "");
 
         Log.v("view", "onCreate");
-
         //load phonebook and app users
         loadContacts();
+
     }
 
     @Nullable
@@ -75,32 +79,29 @@ public class Contacts extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.activity_contacts, container, false);
-        Button btnContacts = (Button) v.findViewById(R.id.connBtn);
+        btnContacts = (Button) v.findViewById(R.id.connBtn);
         btnContacts.setOnClickListener(this);
+        mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+
+        mProgressBar.setVisibility(View.VISIBLE);
 
         if(!contactName.isEmpty() && !contactNumber.isEmpty()){
             v = inflater.inflate(R.layout.activity_contactlist, container, false);
-            Button btnAdd = (Button) v.findViewById(R.id.addBtn);
+            btnAdd = (Button) v.findViewById(R.id.addBtn);
             btnAdd.setOnClickListener(this);
 
             names = contactName.split(",");
             numbers = contactNumber.split(",");
-           // ids = contactId.split(",");
-
-//            for(String id: ids){
-//                idList.add(id);
-//                Log.v("message", id);
-//            }
+            ids = contactId.split(",");
 
             for (int i=0; i < names.length; i++){
                 nameList.add(names[i]);
                 Log.v("message", names[i]);
                 numList.add(numbers[i]);
                 Log.v("message", numbers[i]);
+                idList.add(ids[i]);
+                Log.v("message", ids[i]);
             }
-
-            //get id of selected contact numbers
-            //getContactId();
 
             final ArrayAdapter<String> arrayAdapter =
                     new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_2, android.R.id.text1, nameList){
@@ -130,12 +131,12 @@ public class Contacts extends Fragment implements View.OnClickListener{
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.remove("contactNames");
                     editor.remove("contactNumbers");
-                    //editor.remove("contactIds");
+                    editor.remove("contactIds");
                     editor.commit();
 
                     nameList.remove(nameList.get(position));
                     numList.remove(numList.get(position));
-//                    idList.remove(idList.get(position));
+                    idList.remove(idList.get(position));
                     arrayAdapter.notifyDataSetChanged();
 
                     StringBuilder nameBuilder = new StringBuilder();
@@ -160,16 +161,16 @@ public class Contacts extends Fragment implements View.OnClickListener{
                         editor.commit();
                     }
 
-//                    StringBuilder idBuilder = new StringBuilder();
-//                    for (String ids : idList){
-//                        numberBuilder.append(ids);
-//                        numberBuilder.append(',');
-//
-//                        preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
-//                        editor = preferences.edit();
-//                        editor.putString("contactIds", idBuilder.toString());
-//                        editor.commit();
-//                    }
+                    StringBuilder idBuilder = new StringBuilder();
+                    for (String ids : idList){
+                        idBuilder.append(ids);
+                        idBuilder.append(',');
+
+                        preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
+                        editor = preferences.edit();
+                        editor.putString("contactIds", idBuilder.toString());
+                        editor.commit();
+                    }
 
                     return true;
                 }
@@ -203,27 +204,34 @@ public class Contacts extends Fragment implements View.OnClickListener{
                         .CONTENT_URI, null,null,null,null);
         getActivity().startManagingCursor(cursor);
 
+        usersMap = new HashMap<String, String>();
+
         if(cursor.getCount() > 0){
-            int i = 0;
             while (cursor.moveToNext()){
-                phoneName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+
                 phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                phoneName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
 
-                numbersOfAppUsers = new ArrayList<>();
-
-                /** check if phone number exists in the app firebase**/
+                 /** check if phone number exists in the app firebase**/
                 CollectionReference usersRef = mFirestore.collection("Users");
                 com.google.firebase.firestore.Query query = usersRef.whereEqualTo("mobile_number", phoneNumber);
                 query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        mProgressBar.setVisibility(View.INVISIBLE);
+
+                        if(btnAdd != null) btnAdd.setEnabled(true);
+                        else btnContacts.setEnabled(true);
+
                         if (task.isSuccessful()) {
+
                             if(task.getResult().size() == 0){
-                                Log.v("message", "from contacts: 0");
-                                numbersOfAppUsers.add("");
+                                    usersMap.put("number", "no id");
                             } else {
                                 for (DocumentSnapshot document : task.getResult()) {
-                                    numbersOfAppUsers.add(document.getData().get("mobile_number").toString());
+                                    String phone_number = document.getData().get("mobile_number").toString();
+                                    String user_id = document.getId();
+                                    usersMap.put(phone_number, user_id);
                                 }
                             }
                         } else {
@@ -232,7 +240,6 @@ public class Contacts extends Fragment implements View.OnClickListener{
                     }
                 });
                 /**end**/
-
             }
         }
     }

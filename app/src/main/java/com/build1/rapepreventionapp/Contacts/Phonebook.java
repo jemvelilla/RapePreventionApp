@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,25 +17,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.build1.rapepreventionapp.Login.Login;
 import com.build1.rapepreventionapp.Model.UserModel;
 import com.build1.rapepreventionapp.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,11 +32,11 @@ public class Phonebook extends Fragment implements View.OnClickListener{
 
     List<String> contactName = new ArrayList<>(); //
     List<String> contactNumber = new ArrayList<>();
-   // List<String> contactUserId = new ArrayList<>();
+    List<String> contactUserId = new ArrayList<>();
 
     List<String> storedName = new ArrayList<>();
     List<String> storedNumber = new ArrayList<>();
-   // List<String> storedId = new ArrayList<>();
+    List<String> storedId = new ArrayList<>();
     List<UserModel> users;
     String name, number, user_id, phoneName, phoneNumber;
 
@@ -70,17 +53,17 @@ public class Phonebook extends Fragment implements View.OnClickListener{
         SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
         String tempName = preferences.getString("contactNames", "");
         String tempNumber = preferences.getString("contactNumbers", "");
-    //    String tempId = preferences.getString("contactIds", "");
+        String tempId = preferences.getString("contactIds", "");
 
-        if(!tempName.isEmpty() && !tempNumber.isEmpty()){
+        if(!tempName.isEmpty() && !tempNumber.isEmpty() && !tempId.isEmpty()){
             String[] tempContactName = tempName.split(",");
             String[] tempContactNumber = tempNumber.split(",");
-           // String[] tempContactId = tempId.split(",");
+            String[] tempContactId = tempId.split(",");
 
             for (int i=0; i < tempContactName.length; i++){
                 storedName.add(tempContactName[i]);
                 storedNumber.add(tempContactNumber[i]);
-//                storedId.add(tempContactId[i]);
+                storedId.add(tempContactId[i]);
             }
         }
     }
@@ -110,13 +93,16 @@ public class Phonebook extends Fragment implements View.OnClickListener{
                 phoneName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                 phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-                if(Contacts.numbersOfAppUsers.contains(phoneNumber)){
-                    users.add(new UserModel(false, true, phoneName, phoneNumber));
+                String id =  Contacts.usersMap.get(phoneNumber);
+
+                if(Contacts.usersMap.containsKey(phoneNumber)){
+                    users.add(new UserModel(false, true, phoneName, phoneNumber, id));
                 } else {
-                    users.add(new UserModel(false, false, phoneName, phoneNumber));
+                    users.add(new UserModel(false, false, phoneName, phoneNumber, id));
                 }
             }
         }
+
         final CustomAdapter adapter = new CustomAdapter(getActivity(), users);
         listView.setAdapter(adapter);
 
@@ -127,6 +113,7 @@ public class Phonebook extends Fragment implements View.OnClickListener{
 
                 name = model.getName();
                 number = model.getNumber();
+                user_id = model.getId();
 
                 boolean isAppUser = model.isAppUser();
 
@@ -143,19 +130,19 @@ public class Phonebook extends Fragment implements View.OnClickListener{
                                 if(!contactName.contains(name) && !contactNumber.contains(number)){
                                     contactName.add(name);
                                     contactNumber.add(number);
-  //                                  contactUserId.add(user_id);
+                                    contactUserId.add(user_id);
                                     model.setSelected(true);
                                 } else {
                                     contactName.remove(name);
                                     contactNumber.remove(number);
-    //                                contactUserId.remove(user_id);
+                                    contactUserId.remove(user_id);
                                     model.setSelected(false);
                                 }
                             } else{
                                 if(model.isSelected()){
                                     contactName.remove(name);
                                     contactNumber.remove(number);
-      //                              contactUserId.remove(user_id);
+                                    contactUserId.remove(user_id);
                                     model.setSelected(false);
                                 } else {
                                     Toast.makeText(getActivity(), "You have reached the maximum of 10 contacts.", Toast.LENGTH_SHORT).show();
@@ -191,7 +178,7 @@ public class Phonebook extends Fragment implements View.OnClickListener{
                 for (int i=0; i < contactName.size(); i++){
                     storedName.add(contactName.get(i));
                     storedNumber.add(contactNumber.get(i));
-        //            storedId.add(contactUserId.get(i));
+                    storedId.add(contactUserId.get(i));
                 }
 
                 StringBuilder nameBuilder = new StringBuilder();
@@ -216,16 +203,16 @@ public class Phonebook extends Fragment implements View.OnClickListener{
                     editor.commit();
                 }
 
-//                StringBuilder idBuilder = new StringBuilder();
-//                for (String ids : storedId){
-//                    numberBuilder.append(ids);
-//                    numberBuilder.append(',');
-//
-//                    SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
-//                    SharedPreferences.Editor editor = preferences.edit();
-//                    editor.putString("contactIds", idBuilder.toString());
-//                    editor.commit();
-//                }
+                StringBuilder idBuilder = new StringBuilder();
+                for (String ids : storedId){
+                    idBuilder.append(ids);
+                    idBuilder.append(',');
+
+                    SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("contactIds", idBuilder.toString());
+                    editor.commit();
+                }
 
                 Toast.makeText(getActivity(), contactName.size() + " contact(s) added.", Toast.LENGTH_SHORT).show();
 
@@ -259,26 +246,4 @@ public class Phonebook extends Fragment implements View.OnClickListener{
         startActivity(intent);
     }
 
-//    public void getContactId(){
-//        i = 0;
-//        contactNumberId = new ArrayList<>();
-//
-//        while (i < storedNumber.size()){
-//            CollectionReference usersRef = mFirestore.collection("Users");
-//            com.google.firebase.firestore.Query query = usersRef.whereEqualTo("mobile_number", phoneNumber);
-//            query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                    if (task.isSuccessful()) {
-//                        for (DocumentSnapshot document : task.getResult()) {
-//                            contactNumberId.add(document.getId());
-//                            i++;
-//                        }
-//                    } else {
-//                        Log.v("result", "Error getting documents: ", task.getException());
-//                    }
-//                }
-//            });
-//        }
-//    }
 }
