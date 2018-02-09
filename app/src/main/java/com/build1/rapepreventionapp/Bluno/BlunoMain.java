@@ -33,24 +33,27 @@ public class BlunoMain extends BlunoLibrary {
     List<String> numList = new ArrayList<>();
 
     String contactNumber;
-    String[] numbers;
+    String[] numbers, ids;
     String contactId;
 
-    @Override
-    protected void onStart(){
-        super.onStart();
-
-        SharedPreferences preferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE);
-        contactNumber = preferences.getString("contactNumbers", "");
-        contactId = preferences.getString("Emergency Contacts ID", "");
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluno);
 
+        SharedPreferences preferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE);
+        contactNumber = preferences.getString("contactNumbers", "");
+        contactId = preferences.getString("contactIds", "");
+
+        ids = contactId.split(",");
+        numbers = contactNumber.split(",");
+        for(String id: ids){
+            Log.v("message", id);
+        }
+        for (String number : numbers){
+            Log.v("message", number);
+        }
 
         onCreateProcess();														//onCreate Process by BlunoLibrary
 

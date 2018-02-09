@@ -62,7 +62,7 @@ public class Profile extends Fragment implements View.OnClickListener{
         mProfilePicture = (CircleImageView) v.findViewById(R.id.profilePicture);
         btnLogout.setOnClickListener(this);
 
-        mFirestore.collection("Users").document(currentUserId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        mFirestore.collection("Users").document(currentUserId).get().addOnSuccessListener(getActivity(), new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
 
@@ -81,7 +81,7 @@ public class Profile extends Fragment implements View.OnClickListener{
                 RequestOptions placeHolderOptions = new RequestOptions();
                 placeHolderOptions.placeholder(R.drawable.default_profile);
 
-                Glide.with(container.getContext()).setDefaultRequestOptions(placeHolderOptions).load(documentSnapshot.getString("image")).into(mProfilePicture);
+                Glide.with(getActivity().getApplicationContext()).setDefaultRequestOptions(placeHolderOptions).load(documentSnapshot.getString("image")).into(mProfilePicture);
 
                 EditInformation editInformation = new EditInformation();
 

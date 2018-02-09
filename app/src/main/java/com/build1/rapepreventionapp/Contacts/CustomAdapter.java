@@ -71,13 +71,11 @@ public class CustomAdapter extends BaseAdapter {
         holder.tvName.setText(model.getName());
 
         if (model.isSelected()){
-            holder.ivCheckBox.setBackgroundResource(R.drawable.checkbox_checked);
-            holder.ivCheckBox.getLayoutParams().width = 50;
+            holder.ivCheckBox.setBackgroundResource(R.drawable.deselect_button);
         } else if (!model.isAppUser()){
             holder.ivCheckBox.setBackgroundResource(R.drawable.invite_button2);
-            holder.ivCheckBox.getLayoutParams().width = 120;
         } else {
-            holder.ivCheckBox.setBackgroundResource(R.drawable.checkbox_unchecked);
+            holder.ivCheckBox.setBackgroundResource(R.drawable.select_button);
         }
 
         return view;

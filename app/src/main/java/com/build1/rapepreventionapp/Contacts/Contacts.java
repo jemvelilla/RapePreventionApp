@@ -187,7 +187,6 @@ public class Contacts extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View view) {
-
         android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
         if (fragmentManager != null) {
             android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction();

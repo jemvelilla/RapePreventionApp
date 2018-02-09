@@ -13,12 +13,12 @@
         android:layout_marginLeft="15dp"/>
     
     <ImageView
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="60dp"
+        android:layout_height="30dp"
         android:id="@+id/iv_check_box"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
         android:layout_centerVertical="true"
-        android:background="@drawable/checkbox_unchecked" />
+        android:background="@drawable/select_button" />
     
 </RelativeLayout>
