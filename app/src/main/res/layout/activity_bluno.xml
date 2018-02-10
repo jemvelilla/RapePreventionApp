@@ -10,6 +10,15 @@
     android:focusable="true"
     android:focusableInTouchMode="true">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:indeterminate="true"
+        android:visibility="invisible" />
+
     <TextView
         android:id="@+id/serialReceivedText"
         android:layout_width="wrap_content"
@@ -62,5 +71,13 @@
         android:layout_alignLeft="@+id/serialSendText"
         android:layout_alignParentTop="true"
         android:text="Scan" />
+
+    <Button
+        android:id="@+id/buttonSendNotification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="Send Notification" />
 
 </RelativeLayout>

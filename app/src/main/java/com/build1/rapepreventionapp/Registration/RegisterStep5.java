@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -122,6 +123,8 @@ public class RegisterStep5 extends AppCompatActivity {
                                     if (uploadTask.isSuccessful()){
                                         String download_url = uploadTask.getResult().getDownloadUrl().toString();
 
+                                        String token_id = FirebaseInstanceId.getInstance().getToken();
+
                                         Map<String, Object> userMap = new HashMap<>();
                                         userMap.put("email", email);
                                         userMap.put("first_name", firstName);
@@ -137,6 +140,7 @@ public class RegisterStep5 extends AppCompatActivity {
                                         userMap.put("contact_number3", contactNumber3);
                                         userMap.put("mobile_number", mobileNumber);
                                         userMap.put("image", download_url);
+                                        userMap.put("token_id", token_id);
 
                                         mFirestore. collection("Users").document(user_id).set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override

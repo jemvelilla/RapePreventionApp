@@ -17,6 +17,7 @@ import com.build1.rapepreventionapp.Home.BottomNavigation;
 import com.build1.rapepreventionapp.R;
 import com.build1.rapepreventionapp.Registration.RegisterStep1;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,6 +28,10 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Login extends AppCompatActivity {
 
@@ -139,13 +144,38 @@ public class Login extends AppCompatActivity {
 
     public void login(){
         mAuth.signInWithEmailAndPassword(username,passwordText).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
 
-                        if(!task.isSuccessful()){
-                            Toast.makeText(Login.this, "Incorrect username or password.", Toast.LENGTH_LONG).show();
+                    String token_id = FirebaseInstanceId.getInstance().getToken();
+                    String current_id = mAuth.getCurrentUser().getUid();
+
+                    Map<String, Object> tokenMap = new HashMap<>();
+                    tokenMap.put("token_id", token_id);
+
+                    mFirestore.collection("Users").document(current_id).update(tokenMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            sendToMain();
                         }
-                    }
-                });
+                    });
+                } else {
+                    Toast.makeText(Login.this, "Incorrect username or password.", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    public void sendToMain(){
+        if(!mAuth.getCurrentUser().isEmailVerified()){
+            Intent intent = new Intent(getApplicationContext(), AccountVerification.class);
+            startActivity(intent);
+            finish();
+        } else{
+            Intent intent = new Intent(getApplicationContext(), BottomNavigation.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }
