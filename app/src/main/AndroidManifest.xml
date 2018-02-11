@@ -91,6 +91,17 @@
             </intent-filter>
 
         </activity>
+
+        <activity
+            android:name=".PushNotif.LocationTracking"
+            android:screenOrientation="portrait">
+
+            <intent-filter>
+                <action android:name="com.build1.rapepreventionapp.TARGETNOTIFICATION"></action>
+                <category android:name="android.intent.category.DEFAULT"></category>
+            </intent-filter>
+
+        </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -106,19 +117,19 @@
         <activity
             android:name=".Home.BottomNavigation"
             android:label="TULONG Rape Prevention">
-
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http" />
-                <data android:scheme="https" />
-                <data android:host="rapepreventionapp.com" />
-                <data android:pathPrefix="/?mode=verifyEmail" />
-            </intent-filter>
-
         </activity>
+
         <service android:name="com.build1.rapepreventionapp.Bluno.BluetoothLeService" android:enabled="true"/>
+        <service
+            android:name=".PushNotif.FirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id"/>
+
 
 
     </application>
