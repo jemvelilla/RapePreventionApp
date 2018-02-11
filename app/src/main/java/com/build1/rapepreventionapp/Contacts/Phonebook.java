@@ -92,6 +92,7 @@ public class Phonebook extends Fragment implements View.OnClickListener{
             while (cursor.moveToNext()){
                 phoneName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                 phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                phoneNumber = phoneNumber.replace("+63", "0");
 
                 String id =  Contacts.usersMap.get(phoneNumber);
 

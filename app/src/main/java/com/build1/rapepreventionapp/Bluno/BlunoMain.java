@@ -107,6 +107,7 @@ public class BlunoMain extends BlunoLibrary {
                         }
                     });
                 }
+                sendNotification();
             }
         });
         /**end**/
@@ -220,11 +221,11 @@ public class BlunoMain extends BlunoLibrary {
 
         for (int i=0; i < numbers.length; i++){
             numList.add(numbers[i]);
-            Log.v("preferences", numbers[1]);
         }
 
         String call = "09491036631";
-        String message = "Jemyla is in danger.";
+        String message = EditInformation.firstName + " " + EditInformation.lastName + " needs your help!" +
+                " Check this link to view the location. <<Insert link here>>";
 
         try {
             SmsManager smsManager = SmsManager.getDefault();

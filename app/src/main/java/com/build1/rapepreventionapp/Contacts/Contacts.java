@@ -211,6 +211,9 @@ public class Contacts extends Fragment implements View.OnClickListener{
                 phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                 phoneName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
 
+                phoneNumber = phoneNumber.replace("+63", "0");
+                Log.v("phone", phoneNumber);
+
                  /** check if phone number exists in the app firebase**/
                 CollectionReference usersRef = mFirestore.collection("Users");
                 com.google.firebase.firestore.Query query = usersRef.whereEqualTo("mobile_number", phoneNumber);
