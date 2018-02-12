@@ -47,9 +47,8 @@ public class BlunoMain extends BlunoLibrary {
 
     List<String> numList = new ArrayList<>();
 
-    String contactNumber;
+    String contactNumber, contactId, automatedCallState, automatedCall;
     String[] numbers, ids;
-    String contactId;
 
     Button buttonSendNotification;
 
@@ -61,6 +60,8 @@ public class BlunoMain extends BlunoLibrary {
         SharedPreferences preferences = getSharedPreferences("PREFS", Context.MODE_PRIVATE);
         contactNumber = preferences.getString("contactNumbers", "");
         contactId = preferences.getString("contactIds", "");
+        automatedCall = preferences.getString("automatedCall", "");
+        automatedCallState = preferences.getString("automatedCallState", "");
 
         mFirestore = FirebaseFirestore.getInstance(); //instantiate firestore
         mCurrentId = FirebaseAuth.getInstance().getUid();
@@ -79,37 +80,36 @@ public class BlunoMain extends BlunoLibrary {
 
 
         /**test notification sending**/
-        final String message = EditInformation.firstName + " " + EditInformation.lastName + " needs help.";
-
-        buttonSendNotification = (Button) findViewById(R.id.buttonSendNotification);
-        buttonSendNotification.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                progressBar.setVisibility(View.VISIBLE);
-
-                Map<String, Object> notificationMessage = new HashMap<>();
-                notificationMessage.put("message", message);
-                notificationMessage.put("from", mCurrentId);
-
-                for(String id: ids){
-                    mFirestore.collection("Users/" + id + "/Notifications").add(notificationMessage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            Toast.makeText(BlunoMain.this, "Notification sent.", Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.INVISIBLE);
-
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(BlunoMain.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.INVISIBLE);
-                        }
-                    });
-                }
-                sendNotification();
-            }
-        });
+//
+//        buttonSendNotification = (Button) findViewById(R.id.buttonSendNotification);
+//        buttonSendNotification.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                progressBar.setVisibility(View.VISIBLE);
+//
+//                Map<String, Object> notificationMessage = new HashMap<>();
+//                notificationMessage.put("message", message);
+//                notificationMessage.put("from", mCurrentId);
+//
+//                for(String id: ids){
+//                    mFirestore.collection("Users/" + id + "/Notifications").add(notificationMessage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                        @Override
+//                        public void onSuccess(DocumentReference documentReference) {
+//                            Toast.makeText(BlunoMain.this, "Notification sent.", Toast.LENGTH_SHORT).show();
+//                            progressBar.setVisibility(View.INVISIBLE);
+//
+//                        }
+//                    }).addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            Toast.makeText(BlunoMain.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                            progressBar.setVisibility(View.INVISIBLE);
+//                        }
+//                    });
+//                }
+//                sendNotification();
+//            }
+//        });
         /**end**/
 
         serialReceivedText=(TextView) findViewById(R.id.serialReceivedText);	//initial the EditText of the received data
@@ -208,9 +208,32 @@ public class BlunoMain extends BlunoLibrary {
     @Override
     public void onSerialReceived(String theString) {							//Once connection data received, this function will be called
         // TODO Auto-generated method stub
-        serialReceivedText.append(theString);							//append the text into the EditText
+        Log.v("message", theString);
+        final String message = EditInformation.firstName + " " + EditInformation.lastName + " needs help.";
 
-        if (theString.equals("TulongActivated")){
+        if (theString.contains("Pq")){
+            progressBar.setVisibility(View.VISIBLE);
+
+            Map<String, Object> notificationMessage = new HashMap<>();
+            notificationMessage.put("message", message);
+            notificationMessage.put("from", mCurrentId);
+
+            for(String id: ids){
+                mFirestore.collection("Users/" + id + "/Notifications").add(notificationMessage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Toast.makeText(BlunoMain.this, "Notification sent.", Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.INVISIBLE);
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(BlunoMain.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+                });
+            }
             sendNotification();
         }
     }
@@ -223,7 +246,7 @@ public class BlunoMain extends BlunoLibrary {
             numList.add(numbers[i]);
         }
 
-        String call = "09491036631";
+        String call = automatedCall;
         String message = EditInformation.firstName + " " + EditInformation.lastName + " needs your help!" +
                 " Check this link to view the location. <<Insert link here>>";
 
@@ -235,10 +258,11 @@ public class BlunoMain extends BlunoLibrary {
                     smsManager.sendTextMessage(numList.get(counter), null, message, null, null);
                 }
 
-                Intent intent = new Intent(Intent.ACTION_CALL);
-                intent.setData(Uri.parse("tel:" + call));
-
-                startActivity(intent);
+                if(automatedCallState.equals("on")){
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+                    intent.setData(Uri.parse("tel:" + call));
+                    startActivity(intent);
+                }
             }
 
             return;
