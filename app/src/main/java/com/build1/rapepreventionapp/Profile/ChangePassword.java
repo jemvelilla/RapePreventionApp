@@ -15,33 +15,47 @@ import android.widget.Toast;
 import com.build1.rapepreventionapp.Model.EditInformation;
 import com.build1.rapepreventionapp.Model.UserInformation;
 import com.build1.rapepreventionapp.R;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChangePassword extends Fragment implements View.OnClickListener{
 
     private FirebaseAuth mAuth;
+    String currentUserId;
+    private FirebaseFirestore mFirestore;
 
     EditText currentPassword, newPassword, confirmNewPassword;
     Button btnSave, btnCancel;
     TextView tvUsername;
+    private CircleImageView mProfilePicture;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mAuth = FirebaseAuth.getInstance();
+        mFirestore = FirebaseFirestore.getInstance();
+        currentUserId =  mAuth.getCurrentUser().getUid();
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_change_password, container, false);
+
+        mProfilePicture = (CircleImageView) v.findViewById(R.id.profilePicture);
 
         tvUsername = (TextView) v.findViewById(R.id.username);
         tvUsername.setText(EditInformation.firstName + " " + EditInformation.lastName);
@@ -55,6 +69,18 @@ public class ChangePassword extends Fragment implements View.OnClickListener{
 
         btnSave.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
+
+        mFirestore.collection("Users").document(currentUserId).get().addOnSuccessListener(getActivity(), new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                RequestOptions placeHolderOptions = new RequestOptions();
+                placeHolderOptions.placeholder(R.drawable.default_profile);
+
+                Glide.with(container.getContext()).setDefaultRequestOptions(placeHolderOptions).load(documentSnapshot.getString("image")).into(mProfilePicture);
+
+            }
+        });
 
         return v;
     }

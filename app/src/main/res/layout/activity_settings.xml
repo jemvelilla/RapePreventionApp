@@ -1,47 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context="com.build1.rapepreventionapp.Profile.Settings">
 
     <ImageView
-        android:id="@+id/icon2"
-        android:layout_width="100sp"
-        android:layout_height="100sp"
-        android:layout_alignParentTop="true"
-        android:layout_centerInParent="true"
-        android:background="@drawable/icon2" />
-
-    <TextView
-        android:id="@+id/titleSettings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="208dp"
-        android:layout_marginTop="32dp"
-        android:text="Settings"
-        android:textSize="25sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/icon2"
-        app:layout_constraintTop_toTopOf="@+id/icon2"
-        tools:ignore="MissingConstraints" />
+        android:id="@+id/imageView"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/logotypeafinal" />
 
     <RelativeLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="372dp"
-        android:layout_height="519dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        app:layout_constraintTop_toBottomOf="@id/icon2"
-        tools:layout_editor_absoluteX="23dp"
-        tools:ignore="MissingConstraints">
+        android:layout_below="@id/imageView"
+        app:layout_constraintTop_toBottomOf="@id/imageView">
 
         <TextView
             android:id="@+id/editProfileTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:onClick="textOnClickEditProfile"
             android:text="Edit Profile"
             android:textSize="20sp"
             android:padding="15dp"/>
@@ -57,7 +45,6 @@
             android:id="@+id/confCallTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="textOnClickConfCall"
             android:text="Configure Automated Call"
             android:layout_below="@id/line"
             android:textSize="20sp"
@@ -104,20 +91,18 @@
 
     </RelativeLayout>
 
+
+
     <Button
         android:id="@+id/btnLogOut"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_marginBottom="16dp"
         android:background="@drawable/rectangle"
         android:text="Log Out"
         android:textColor="#fff"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="0dp" />
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"/>
 
-
-
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

@@ -37,7 +37,6 @@ public class Profile extends Fragment implements View.OnClickListener{
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
-        mAuth = FirebaseAuth.getInstance();
         mFirestore = FirebaseFirestore.getInstance();
         currentUserId =  mAuth.getCurrentUser().getUid();
     }
@@ -81,7 +80,7 @@ public class Profile extends Fragment implements View.OnClickListener{
                 RequestOptions placeHolderOptions = new RequestOptions();
                 placeHolderOptions.placeholder(R.drawable.default_profile);
 
-                Glide.with(getActivity().getApplicationContext()).setDefaultRequestOptions(placeHolderOptions).load(documentSnapshot.getString("image")).into(mProfilePicture);
+                Glide.with(container.getContext()).setDefaultRequestOptions(placeHolderOptions).load(documentSnapshot.getString("image")).into(mProfilePicture);
 
                 EditInformation editInformation = new EditInformation();
 

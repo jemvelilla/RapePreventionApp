@@ -1,83 +1,108 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.build1.rapepreventionapp.Bluno.BlunoMain"
-    android:focusable="true"
-    android:focusableInTouchMode="true">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/background"
+    tools:context="com.build1.rapepreventionapp.Bluno.BlunoMain">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:indeterminate="true"
-        android:visibility="invisible" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/serialReceivedText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:textSize="10sp"
-        android:layout_below="@+id/editText2"
-        android:layout_alignStart="@+id/editText2"
-        android:layout_alignEnd="@+id/serialSendText"
-        android:layout_alignParentBottom="true" />
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:src="@drawable/logotypeafinal" />
 
-    <Button
-        android:id="@+id/buttonSerialSend"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/serialSendText"
-        android:layout_alignRight="@+id/serialSendText"
-        android:text="Send Data" />
+        <TextView
+            android:id="@+id/tvTulongRapePreventionMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tulong: Rape Prevention Mode"
+            android:textSize="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_below="@id/imageView"
+            android:layout_marginTop="15dp"
+            android:textStyle="bold"/>
 
-    <TextView
-        android:id="@+id/editText2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/serialSendText"
-        android:layout_below="@+id/serialSendText"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:text="Received Data:"
-        android:textSize="25sp" />
+        <RelativeLayout
+            android:layout_below="@id/tvTulongRapePreventionMode"
+            android:layout_width="match_parent"
+            android:layout_marginTop="15dp"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/desc"
+                android:layout_marginTop="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:textSize="15dp"
+                android:text="How To Use:"
+                android:textStyle="bold"/>
 
-    <EditText
-        android:id="@+id/serialSendText"
-        android:layout_width="310dp"
-        android:layout_height="40dp"
-        android:layout_below="@+id/buttonScan"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="22dp"
-        android:background="#555555"
-        android:bufferType="editable"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Data sending Area"
-        android:textColor="#999999"
-        android:textSize="20dip" />
+            <TextView
+                android:id="@+id/instruction1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/desc"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="5dp"
+                android:text="1. Turn on your Tulong: Rape Alarm Device."
+                android:textSize="15dp" />
 
-    <Button
-        android:id="@+id/buttonScan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/serialSendText"
-        android:layout_alignParentTop="true"
-        android:text="Scan" />
+            <TextView
+                android:id="@+id/instruction2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/instruction1"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:text="2. Click the Connect button below and select 'Bluno' from the list."
+                android:textSize="15dp" />
 
-    <Button
-        android:id="@+id/buttonSendNotification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:text="Send Notification" />
+            <TextView
+                android:id="@+id/instruction3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/instruction2"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="5dp"
+                android:text="3. To continue using this mode, you can either minimize the app by clicking on the Home button of your phone or keep this screen active."
+                android:textSize="15dp" />
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/instruction4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/instruction3"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:text="Don't worry! This mode will still work even your phone is locked."
+                android:textSize="11dp" />
+            <Button
+                android:id="@+id/buttonScan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CONNECT"
+                android:background="@drawable/nextbutton"
+                android:textColor="#fff"
+                android:layout_marginTop="20dp"
+                android:layout_below="@id/instruction4"
+                android:layout_centerHorizontal="true"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+</ScrollView>

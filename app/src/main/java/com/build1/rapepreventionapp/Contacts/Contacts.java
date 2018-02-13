@@ -52,7 +52,6 @@ public class Contacts extends Fragment implements View.OnClickListener{
 
     String phoneName, phoneNumber; //name and number in the phonebook
 
-    private ProgressBar mProgressBar;
     private Button btnContacts;
     private Button btnAdd;
 
@@ -81,9 +80,6 @@ public class Contacts extends Fragment implements View.OnClickListener{
         View v = inflater.inflate(R.layout.activity_contacts, container, false);
         btnContacts = (Button) v.findViewById(R.id.connBtn);
         btnContacts.setOnClickListener(this);
-        mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar);
-
-        mProgressBar.setVisibility(View.VISIBLE);
 
         if(!contactName.isEmpty() && !contactNumber.isEmpty()){
             v = inflater.inflate(R.layout.activity_contactlist, container, false);
@@ -220,7 +216,6 @@ public class Contacts extends Fragment implements View.OnClickListener{
                 query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        mProgressBar.setVisibility(View.INVISIBLE);
 
                         if(btnAdd != null) btnAdd.setEnabled(true);
                         else btnContacts.setEnabled(true);

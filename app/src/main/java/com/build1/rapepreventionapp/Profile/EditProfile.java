@@ -20,6 +20,8 @@ import com.build1.rapepreventionapp.Home.BottomNavigation;
 import com.build1.rapepreventionapp.Model.EditInformation;
 import com.build1.rapepreventionapp.Model.UserInformation;
 import com.build1.rapepreventionapp.R;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -27,6 +29,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.StorageReference;
 
@@ -34,31 +37,39 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class EditProfile extends Fragment implements View.OnClickListener{
 
     EditText editAge, editBirthdate, editContact1, editContactNumber1 ,editContact2, editContactNumber2, editContact3, editContactNumber3;
     EditText editAddress, editFirstName, editLastName;
     Button btnSave, btnCancel;
 
+    String currentUserId;
+
     private StorageReference mStorage;
     private FirebaseFirestore mFirestore;
     FirebaseAuth mAuth;
 
     private DatePickerDialog.OnDateSetListener mDateSetListener;
-    private ProgressBar mProgressBar;
+    private CircleImageView mProfilePicture;
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
         mAuth = FirebaseAuth.getInstance();
         mFirestore = FirebaseFirestore.getInstance();
+
+        currentUserId =  mAuth.getCurrentUser().getUid();
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_edit_profile, container, false);
 
         UserInformation userInformation = new UserInformation();
 
+
+        mProfilePicture = (CircleImageView) v.findViewById(R.id.profilePicture);
         editAge = (EditText) v.findViewById(R.id.editTextAge);
         editBirthdate = (EditText) v.findViewById(R.id.editTextDOB);
         editContact1 = (EditText) v.findViewById(R.id.editTextCP1);
@@ -70,8 +81,6 @@ public class EditProfile extends Fragment implements View.OnClickListener{
         editAddress = (EditText) v.findViewById(R.id.editTextCAdd);
         editFirstName = (EditText) v.findViewById(R.id.editTextFN);
         editLastName = (EditText) v.findViewById(R.id.editTextLN);
-
-        mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar);
 
         editAge.setText(Integer.toString(EditInformation.age));
         editBirthdate.setText(EditInformation.birthday);
@@ -87,6 +96,18 @@ public class EditProfile extends Fragment implements View.OnClickListener{
 
         btnSave = (Button) v.findViewById(R.id.btnSaveChanges);
         btnCancel = (Button) v.findViewById(R.id.btnCancel);
+
+        mFirestore.collection("Users").document(currentUserId).get().addOnSuccessListener(getActivity(), new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                RequestOptions placeHolderOptions = new RequestOptions();
+                placeHolderOptions.placeholder(R.drawable.default_profile);
+
+                Glide.with(container.getContext()).setDefaultRequestOptions(placeHolderOptions).load(documentSnapshot.getString("image")).into(mProfilePicture);
+
+            }
+        });
 
         editBirthdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,7 +145,6 @@ public class EditProfile extends Fragment implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnSaveChanges:
-                mProgressBar.setVisibility(View.VISIBLE);
 
                 String mobileNumPattern = "^(09|\\+639)\\d{9}$";
 
@@ -169,7 +189,6 @@ public class EditProfile extends Fragment implements View.OnClickListener{
                             .addOnSuccessListener(new OnSuccessListener < Void > () {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    mProgressBar.setVisibility(View.INVISIBLE);
                                     Toast.makeText(getActivity(), "Updated Successfully",
                                             Toast.LENGTH_SHORT).show();
                                     redirectToProfile();

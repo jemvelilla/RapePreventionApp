@@ -33,10 +33,6 @@ import java.util.Map;
 
 public class BlunoMain extends BlunoLibrary {
     private Button buttonScan;
-    private Button buttonSerialSend;
-    private EditText serialSendText;
-    private TextView serialReceivedText;
-    private ProgressBar progressBar;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFirestore;
@@ -65,7 +61,6 @@ public class BlunoMain extends BlunoLibrary {
 
         mFirestore = FirebaseFirestore.getInstance(); //instantiate firestore
         mCurrentId = FirebaseAuth.getInstance().getUid();
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         ids = contactId.split(",");
         numbers = contactNumber.split(",");
@@ -111,20 +106,6 @@ public class BlunoMain extends BlunoLibrary {
 //            }
 //        });
         /**end**/
-
-        serialReceivedText=(TextView) findViewById(R.id.serialReceivedText);	//initial the EditText of the received data
-        serialSendText=(EditText) findViewById(R.id.serialSendText);			//initial the EditText of the sending data
-
-        buttonSerialSend = (Button) findViewById(R.id.buttonSerialSend);		//initial the button for sending the data
-        buttonSerialSend.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-
-                serialSend(serialSendText.getText().toString());				//send the data to the BLUNO
-            }
-        });
 
         buttonScan = (Button) findViewById(R.id.buttonScan);					//initial the button for scanning the BLE device
         buttonScan.setOnClickListener(new OnClickListener() {
@@ -186,19 +167,19 @@ public class BlunoMain extends BlunoLibrary {
     public void onConectionStateChange(connectionStateEnum theConnectionState) {//Once connection state changes, this function will be called
         switch (theConnectionState) {											//Four connection state
             case isConnected:
-                buttonScan.setText("Connected");
+                buttonScan.setText("CONNECTED");
                 break;
             case isConnecting:
-                buttonScan.setText("Connecting");
+                buttonScan.setText("CONNECTING");
                 break;
             case isToScan:
-                buttonScan.setText("Scan");
+                buttonScan.setText("CONNECT");
                 break;
             case isScanning:
-                buttonScan.setText("Scanning");
+                buttonScan.setText("SCANNING");
                 break;
             case isDisconnecting:
-                buttonScan.setText("isDisconnecting");
+                buttonScan.setText("DISCONNECTING");
                 break;
             default:
                 break;
@@ -212,7 +193,6 @@ public class BlunoMain extends BlunoLibrary {
         final String message = EditInformation.firstName + " " + EditInformation.lastName + " needs help.";
 
         if (theString.contains("Pq")){
-            progressBar.setVisibility(View.VISIBLE);
 
             Map<String, Object> notificationMessage = new HashMap<>();
             notificationMessage.put("message", message);
@@ -223,14 +203,12 @@ public class BlunoMain extends BlunoLibrary {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Toast.makeText(BlunoMain.this, "Notification sent.", Toast.LENGTH_SHORT).show();
-                        progressBar.setVisibility(View.INVISIBLE);
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(BlunoMain.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
             }

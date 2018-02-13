@@ -11,7 +11,7 @@
         android:id="@+id/icon"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:background="@drawable/icon"
+        android:background="@drawable/logotypebfinalfinal"
         tools:layout_constraintTop_creator="1"
         tools:layout_constraintRight_creator="1"
         tools:layout_constraintBottom_creator="1"

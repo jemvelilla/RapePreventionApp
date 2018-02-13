@@ -18,7 +18,7 @@ public class ConfCall extends Fragment implements View.OnClickListener{
 
     Switch switchAutomatedCall;
     EditText editPhoneNumber;
-    Button btnSaveChanges, btnCancel;
+    Button btnSaveChanges, btnCancel, btnEditNumber;
 
     String automatedCall;
     String automatedCallState;
@@ -40,16 +40,16 @@ public class ConfCall extends Fragment implements View.OnClickListener{
         editPhoneNumber = (EditText) v.findViewById(R.id.editTextConfCall);
         btnSaveChanges = (Button) v.findViewById(R.id.btnSaveChanges);
         btnCancel = (Button) v.findViewById(R.id.btnCancel);
+        btnEditNumber = (Button) v.findViewById(R.id.btnEditNumber);
 
         btnSaveChanges.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
+        btnEditNumber.setOnClickListener(this);
         switchAutomatedCall.setOnClickListener(this);
 
         if(automatedCallState.equals("on")){
-            editPhoneNumber.setEnabled(true);
             switchAutomatedCall.setChecked(true);
         } else {
-            editPhoneNumber.setEnabled(false);
             switchAutomatedCall.setChecked(false);
         }
 
@@ -64,6 +64,15 @@ public class ConfCall extends Fragment implements View.OnClickListener{
     public void onClick(View view) {
         switch(view.getId()){
 
+            case R.id.btnEditNumber:
+
+                editPhoneNumber.setEnabled(true);
+                btnEditNumber.setVisibility(View.INVISIBLE);
+                btnSaveChanges.setVisibility(View.VISIBLE);
+                btnCancel.setVisibility(View.VISIBLE);
+
+                break;
+
             case R.id.btnSaveChanges:
 
                 if(!editPhoneNumber.getText().toString().equals("")){
@@ -74,6 +83,8 @@ public class ConfCall extends Fragment implements View.OnClickListener{
 
                     Toast.makeText(getActivity(), "SUCCESSFULLY UPDATED.", Toast.LENGTH_SHORT).show();
 
+                } else {
+                    editPhoneNumber.setError("Phone number cannot be empty.");
                 }
 
                 android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
@@ -88,27 +99,22 @@ public class ConfCall extends Fragment implements View.OnClickListener{
                 break;
             case R.id.btnCancel:
 
-                fragmentManager = getFragmentManager();
-                if (fragmentManager != null) {
-                    android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction();
-                    if (ft != null) {
-                        ft.replace(R.id.rootLayout, new Profile());
-                        ft.commit();
-                    }
-                }
+                editPhoneNumber.setEnabled(false);
+                btnEditNumber.setVisibility(View.VISIBLE);
+                btnSaveChanges.setVisibility(View.INVISIBLE);
+                btnCancel.setVisibility(View.INVISIBLE);
+
                 break;
 
             case R.id.switch1:
 
                 if(switchAutomatedCall.isChecked()){
-                    editPhoneNumber.setEnabled(true);
                     SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                      editor.putString("automatedCallState", "on");
                     editor.commit();
                 }
                 else {
-                    editPhoneNumber.setEnabled(false);
                     SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString("automatedCallState", "off");

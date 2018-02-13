@@ -9,50 +9,73 @@
     tools:context="com.build1.rapepreventionapp.Profile.ConfCall">
 
     <ImageView
-        android:id="@+id/icon2"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:background="@drawable/icon2"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/imageView"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/logotypeafinal" />
 
     <TextView
-        android:id="@+id/titleConf"
+        android:id="@+id/tvConfigureAutomatedCall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/icon2"
-        android:layout_marginBottom="28dp"
-        android:layout_toRightOf="@id/icon2"
+        android:layout_below="@+id/imageView"
+        android:layout_marginTop="30dp"
         android:text="Configure automated call"
-        android:textSize="22sp" />
-
-    <EditText
-        android:id="@+id/editTextConfCall"
-        android:layout_width="220dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/icon2"
-        android:layout_marginEnd="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="33dp"
-        android:layout_toLeftOf="@+id/switch1"
-        android:layout_toStartOf="@+id/switch1"
-        android:hint="Mobile Number"
-        android:editable="false"
-        android:inputType="phone" />
+        android:layout_marginLeft="20dp"
+        android:textSize="20dp"/>
 
     <Switch
         android:id="@+id/switch1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/editTextConfCall"
-        android:layout_alignBottom="@+id/editTextConfCall"
-        android:layout_alignEnd="@+id/titleConf"
-        android:layout_alignRight="@+id/titleConf"
-        android:layout_marginEnd="29dp"
-        android:layout_marginRight="29dp"
+        android:layout_below="@id/imageView"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentRight="true"
         android:checked="false" />
+
+    <EditText
+        android:id="@+id/editTextConfCall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvConfigureAutomatedCall"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:hint="Mobile Number"
+        android:enabled="false"
+        android:inputType="phone" />
+
+    <Button
+        android:id="@+id/btnEditNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rectangle_wborder"
+        android:clickable="true"
+        android:text="edit number"
+        android:textSize="10dp"
+        android:textColor="@color/colorAccent"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/editTextConfCall"
+        android:layout_alignParentRight="true"/>
+
+
+    <Button
+        android:id="@+id/btnSaveChanges"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rectangle"
+        android:clickable="false"
+        android:padding="10dp"
+        android:text="Save Changes"
+        android:textColor="#fff"
+        android:layout_below="@id/btnEditNumber"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="25dp"
+        android:visibility="invisible"/>
 
     <Button
         android:id="@+id/btnCancel"
@@ -65,22 +88,8 @@
         android:textColor="#fff"
         android:layout_marginTop="25dp"
         android:layout_marginRight="15dp"
-        android:layout_below="@id/switch1"
+        android:layout_below="@id/btnEditNumber"
         android:layout_toLeftOf="@id/btnSaveChanges"
-        />
+        android:visibility="invisible" />
 
-    <Button
-        android:id="@+id/btnSaveChanges"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/rectangle"
-        android:clickable="false"
-        android:padding="10dp"
-        android:text="Save Changes"
-        android:textColor="#fff"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="25dp"
-        android:layout_marginRight="30dp"
-        android:layout_below="@id/switch1"
-        />
 </RelativeLayout>

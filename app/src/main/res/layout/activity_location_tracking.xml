@@ -28,12 +28,13 @@
         app:layout_constraintTop_toTopOf="@+id/map">
 
         <ImageView
-            android:id="@+id/icon2"
-            android:layout_width="100sp"
-            android:layout_height="100sp"
-            android:layout_alignParentTop="true"
-            android:layout_centerInParent="true"
-            android:background="@drawable/icon2"/>
+            android:id="@+id/imageView"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/logotypeafinal" />
 
     </RelativeLayout>
 

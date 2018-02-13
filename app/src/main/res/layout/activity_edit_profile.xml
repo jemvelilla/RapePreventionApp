@@ -1,229 +1,232 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context="com.build1.rapepreventionapp.Profile.EditProfile">
+    tools:context="com.build1.rapepreventionapp.Profile.EditProfile" >
 
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:indeterminate="true"
-        android:visibility="invisible" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="106dp"
-        android:layout_height="103dp"
-        android:src="@drawable/icon2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/editProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="Edit Profile"
-        android:textSize="23sp"
-        app:layout_constraintHorizontal_bias="0.427"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/editTextFN"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="124dp"
-        android:hint="First Name*          "
-        android:inputType="textPersonName"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/editTextLN"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="124dp"
-        android:hint="Last Name*          "
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/editTextFN"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/editTextAge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:hint="Age*                       "
-        android:inputType="number"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextFN" />
-
-    <EditText
-        android:id="@+id/editTextDOB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:hint="Birthday*              "
-        android:inputType="date"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/editTextAge"
-        app:layout_constraintTop_toBottomOf="@+id/editTextLN" />
-
-    <EditText
-        android:id="@+id/editTextCAdd"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:hint="Current Address*"
-        android:inputType="textLongMessage"
-        app:layout_constraintBottom_toTopOf="@+id/editTextCP1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextAge" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/editTextCP1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="248dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:hint="Contact Person 1*     "
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/logotypeafinal" />
 
-    <EditText
-        android:id="@+id/editTextCP1Num"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="248dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="8dp"
-        android:hint="Number*          "
-        android:inputType="phone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/editTextCP1" />
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/gradient_bg"
+            android:layout_below="@id/imageView"
+            android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/editTextCP2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="184dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:hint="Contact Person 2*     "
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextCP1"
-        app:layout_constraintVertical_bias="0.0" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profilePicture"
+                android:layout_width="180sp"
+                android:layout_height="180sp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="25dp"
+                android:background="@android:color/transparent"
+                android:clickable="false"
+                android:paddingBottom="25dp"
+                android:src="@drawable/default_profile" />
+        </LinearLayout>
 
-    <EditText
-        android:id="@+id/editTextCP2Num"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="188dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:hint="Number*          "
-        android:inputType="phone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/editTextCP2"
-        app:layout_constraintTop_toBottomOf="@+id/editTextCP1Num"
-        app:layout_constraintVertical_bias="0.0" />
+        <RelativeLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_below="@id/linearLayout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/editTextCP3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="144dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:hint="Contact Person 3*     "
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextCP2"
-        app:layout_constraintVertical_bias="1.0" />
+            <EditText
+                android:id="@+id/editTextFN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:hint="First Name*       "
+                android:imeOptions="actionNext"
+                android:nextFocusForward="@+id/editTextLN"
+                android:inputType="textPersonName" />
 
-    <EditText
-        android:id="@+id/editTextCP3Num"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="144dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:hint="Number*          "
-        android:inputType="phone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/editTextCP3"
-        app:layout_constraintTop_toBottomOf="@+id/editTextCP2Num"
-        app:layout_constraintVertical_bias="1.0" />
+            <EditText
+                android:id="@+id/editTextLN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="20dp"
+                android:layout_toRightOf="@id/editTextFN"
+                android:hint="Last Name*       "
+                android:nextFocusForward="@+id/editTextAge"
+                android:imeOptions="actionNext"
+                android:inputType="textPersonName" />
 
-    <Button
-        android:id="@+id/btnSaveChanges"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="92dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/rectangle"
-        android:onClick="btnOnClickSaveChanges"
-        android:padding="10dp"
-        android:text="Save Changes"
-        android:textColor="#fff"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextCP3Num" />
+            <EditText
+                android:id="@+id/editTextAge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/editTextFN"
+                android:layout_marginTop="8dp"
+                android:hint="Age*                    "
+                android:nextFocusForward="@+id/editTextDOB"
+                android:imeOptions="actionNext"
+                android:inputType="number" />
 
-    <Button
-        android:id="@+id/btnCancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="92dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/rectangle"
-        android:onClick="btnOnClickCancel"
-        android:text="Cancel"
-        android:padding="10dp"
-        android:textColor="#fff"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnSaveChanges"
-        app:layout_constraintHorizontal_bias="0.882"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextCP3" />
+            <EditText
+                android:id="@+id/editTextDOB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/editTextFN"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="8dp"
+                android:layout_toRightOf="@id/editTextAge"
+                android:hint="Birthday*              "
+                android:nextFocusForward="@+id/editTextCAdd"
+                android:imeOptions="actionNext"
+                android:inputType="date" />
+        </RelativeLayout>
 
-</android.support.constraint.ConstraintLayout>
+        <RelativeLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_below="@id/linearLayout2"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/editTextCAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Current Address*                               "
+                android:nextFocusForward="@+id/editTextCP1"
+                android:imeOptions="actionNext"
+                android:layout_centerHorizontal="true"
+                android:inputType="textLongMessage" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/linearLayout4"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_below="@id/linearLayout3"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:orientation="vertical">
+
+
+            <EditText
+                android:id="@+id/editTextCP1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Contact Person 1*"
+                android:nextFocusForward="@+id/editTextCP1Num"
+                android:imeOptions="actionNext"
+                android:inputType="textPersonName"/>
+
+            <EditText
+                android:id="@+id/editTextCP1Num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Number*          "
+                android:inputType="phone"
+                android:layout_marginTop="8dp"
+                android:layout_toRightOf="@id/editTextCP1"
+                android:nextFocusForward="@+id/editTextCP2"
+                android:imeOptions="actionNext"
+                android:layout_marginLeft="5dp"/>
+
+            <EditText
+                android:id="@+id/editTextCP2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Contact Person 2*"
+                android:nextFocusForward="@+id/editTextCP2Num"
+                android:imeOptions="actionNext"
+                android:inputType="textPersonName"
+                android:layout_below="@id/editTextCP1"/>
+
+            <EditText
+                android:id="@+id/editTextCP2Num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Number*          "
+                android:inputType="phone"
+                android:layout_below="@id/editTextCP1"
+                android:layout_toRightOf="@id/editTextCP2"
+                android:nextFocusForward="@+id/editTextCP3"
+                android:imeOptions="actionNext"
+                android:layout_marginLeft="5dp"/>
+
+            <EditText
+                android:id="@+id/editTextCP3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Contact Person 3*"
+                android:inputType="textPersonName"
+                android:imeOptions="actionNext"
+                android:nextFocusForward="@+id/editTextCP3Num"
+                android:layout_below="@id/editTextCP2"/>
+
+            <EditText
+                android:id="@+id/editTextCP3Num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Number*          "
+                android:imeOptions="actionDone"
+                android:inputType="phone"
+                android:layout_below="@id/editTextCP2"
+                android:layout_toRightOf="@id/editTextCP3"
+                android:layout_marginLeft="5dp"/>
+        </RelativeLayout>
+
+
+        <Button
+            android:id="@+id/btnSaveChanges"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/rectangle"
+            android:padding="10dp"
+            android:text="Save Changes"
+            android:textColor="#fff"
+            android:layout_below="@id/linearLayout4"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"/>
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/rectangle"
+            android:text="Cancel"
+            android:padding="10dp"
+            android:textColor="#fff"
+            android:layout_below="@id/linearLayout4"
+            android:layout_toLeftOf="@id/btnSaveChanges"
+            android:layout_marginRight="15dp"/>
+    </RelativeLayout>
+</ScrollView>
