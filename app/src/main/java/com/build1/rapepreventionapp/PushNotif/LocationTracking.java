@@ -100,7 +100,6 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
         String dataMessage = getIntent().getStringExtra("dataMessage");
         String dataFrom = getIntent().getStringExtra("dataFrom");
 
-
         Log.v("message", dataMessage);
         Log.v("message", dataFrom);
 

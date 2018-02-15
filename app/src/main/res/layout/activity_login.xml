@@ -8,6 +8,7 @@
     android:background="@color/background"
     tools:context="com.build1.rapepreventionapp.Login.Login">
 
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="65dp"
@@ -48,19 +49,6 @@
         android:layout_marginRight="20dp"
         android:layout_below="@id/editTextUserName"/>
 
-    <Button
-        android:id="@+id/buttonLogin"
-        android:layout_width="145dp"
-        android:layout_height="43dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginRight="20dp"
-        android:background="@drawable/nextbutton"
-        android:onClick="btnOnClickLogin"
-        android:text="Login"
-        android:textColor="#fff"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/editTextPassword"/>
-
     <TextView
         android:id="@+id/textViewForgotPass"
         android:layout_width="wrap_content"
@@ -71,6 +59,20 @@
         android:layout_marginRight="20dp"
         android:layout_below="@id/buttonLogin"
         android:layout_alignParentRight="true"/>
+
+
+    <Button
+        android:id="@+id/buttonLogin"
+        android:layout_width="145dp"
+        android:layout_height="43dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/editTextPassword"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/nextbutton"
+        android:onClick="btnOnClickLogin"
+        android:text="Login"
+        android:textColor="#fff" />
 
     <TextView
         android:id="@+id/textView3"
@@ -96,4 +98,5 @@
         android:layout_marginBottom="15dp"
         android:layout_marginRight="5dp"
         android:layout_toLeftOf="@id/textView3"/>
+
 </RelativeLayout>

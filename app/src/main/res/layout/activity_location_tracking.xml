@@ -38,4 +38,152 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        android:layout_alignParentBottom="true">
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:id="@+id/place_info"
+            android:src="@drawable/ic_info"
+            />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_below="@id/place_info"
+            android:id="@+id/profilePicture"
+            android:layout_width="40sp"
+            android:layout_height="40sp"
+            android:layout_toLeftOf="@id/name"
+            android:layout_marginTop="5dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/default_profile"
+            android:clickable="false"/>
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name Name"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:layout_below="@id/place_info"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:textAllCaps="true"/>
+        <TextView
+            android:id="@+id/tvNeedsHelp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="needs your help!!!"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:layout_below="@id/name"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/profilePicture"/>
+
+        <Button
+            android:id="@+id/btnViewProfile"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/tvNeedsHelp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/rectangle"
+            android:text="View Profile"
+            android:textColor="#fff" />
+
+            <RelativeLayout
+                android:id="@+id/linearLayoutLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@id/btnViewProfile"
+                android:layout_centerHorizontal="true">
+
+                <TextView
+                    android:id="@+id/tvLocationDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Location:"/>
+
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cactus Street, Taguig City"
+                    android:layout_marginLeft="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_toRightOf="@id/tvLocationDesc"
+                    android:textStyle="bold"/>
+            </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/linearLayoutEta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_below="@id/linearLayoutLocation"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:id="@+id/tvEta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ETA:"/>
+
+            <TextView
+                android:id="@+id/eta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 minutes"
+                android:layout_marginLeft="10dp"
+                android:layout_centerHorizontal="true"
+                android:layout_toRightOf="@id/tvEta"
+                android:textStyle="bold"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/linearLayoutKilometers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_below="@id/linearLayoutEta"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:id="@+id/tvKmsAway"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kms away:"/>
+
+            <TextView
+                android:id="@+id/kmsAway"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3.6 km"
+                android:layout_marginLeft="10dp"
+                android:layout_centerHorizontal="true"
+                android:layout_toRightOf="@id/tvKmsAway"
+                android:textStyle="bold"/>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/btnStop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linearLayoutKilometers"
+            android:layout_alignParentRight="true"
+            android:text="STOP"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="5dp"/>
+
+    </RelativeLayout>
+
 </RelativeLayout>

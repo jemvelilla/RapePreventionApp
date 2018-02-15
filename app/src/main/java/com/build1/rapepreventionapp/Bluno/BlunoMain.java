@@ -75,36 +75,7 @@ public class BlunoMain extends BlunoLibrary {
 
 
         /**test notification sending**/
-//
-//        buttonSendNotification = (Button) findViewById(R.id.buttonSendNotification);
-//        buttonSendNotification.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                progressBar.setVisibility(View.VISIBLE);
-//
-//                Map<String, Object> notificationMessage = new HashMap<>();
-//                notificationMessage.put("message", message);
-//                notificationMessage.put("from", mCurrentId);
-//
-//                for(String id: ids){
-//                    mFirestore.collection("Users/" + id + "/Notifications").add(notificationMessage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                        @Override
-//                        public void onSuccess(DocumentReference documentReference) {
-//                            Toast.makeText(BlunoMain.this, "Notification sent.", Toast.LENGTH_SHORT).show();
-//                            progressBar.setVisibility(View.INVISIBLE);
-//
-//                        }
-//                    }).addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-//                            Toast.makeText(BlunoMain.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-//                            progressBar.setVisibility(View.INVISIBLE);
-//                        }
-//                    });
-//                }
-//                sendNotification();
-//            }
-//        });
+
         /**end**/
 
         buttonScan = (Button) findViewById(R.id.buttonScan);					//initial the button for scanning the BLE device
@@ -113,8 +84,28 @@ public class BlunoMain extends BlunoLibrary {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
+                final String message = EditInformation.firstName + " " + EditInformation.lastName + " needs help.";
 
-                buttonScanOnClickProcess();										//Alert Dialog for selecting the BLE device
+                Map<String, Object> notificationMessage = new HashMap<>();
+                notificationMessage.put("message", message);
+                notificationMessage.put("from", mCurrentId);
+
+                for(String id: ids){
+                    mFirestore.collection("Users/" + id + "/Notifications").add(notificationMessage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Toast.makeText(BlunoMain.this, "Notification sent.", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(BlunoMain.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+                sendNotification();
+//                buttonScanOnClickProcess();										//Alert Dialog for selecting the BLE device
             }
         });
         Log.v("message", "onCreate");
