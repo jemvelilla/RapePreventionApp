@@ -206,7 +206,7 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
         mPlaceDetectionClient = Places.getPlaceDetectionClient(getActivity().getApplicationContext(), null);
     }
 
-    private void getDeviceLocation() {
+    public void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the device location");
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity().getApplicationContext());
         //latitude = location.getLatitude();
