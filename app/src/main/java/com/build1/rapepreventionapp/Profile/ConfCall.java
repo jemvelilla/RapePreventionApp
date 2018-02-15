@@ -83,17 +83,17 @@ public class ConfCall extends Fragment implements View.OnClickListener{
 
                     Toast.makeText(getActivity(), "SUCCESSFULLY UPDATED.", Toast.LENGTH_SHORT).show();
 
+                    android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
+                    if (fragmentManager != null) {
+                        android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction();
+                        if (ft != null) {
+                            ft.replace(R.id.rootLayout, new Profile());
+                            ft.commit();
+                        }
+                    }
+
                 } else {
                     editPhoneNumber.setError("Phone number cannot be empty.");
-                }
-
-                android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
-                if (fragmentManager != null) {
-                    android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction();
-                    if (ft != null) {
-                        ft.replace(R.id.rootLayout, new Profile());
-                        ft.commit();
-                    }
                 }
 
                 break;
