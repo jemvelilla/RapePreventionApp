@@ -25,6 +25,7 @@ import android.Manifest;
 import com.build1.rapepreventionapp.GooglePlacesAPI.DirectionsParser;
 import com.build1.rapepreventionapp.GooglePlacesAPI.GetNearbyPlacesData;
 import com.build1.rapepreventionapp.Model.PlaceInfo;
+import com.build1.rapepreventionapp.Model.UserInformation;
 import com.build1.rapepreventionapp.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -43,7 +44,15 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.vision.face.LargestFaceFocusingProcessor;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,6 +77,12 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+    private FirebaseAuth mAuth;
+    private StorageReference mStorage;
+    private FirebaseFirestore mFirestore;
+    private UserInformation info;
+    FirebaseDatabase database;
+    DatabaseReference user;
     private static final String TAG = "Map";
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -107,6 +122,11 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
         //SupportMapFragment fragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         //fragment.getMapAsync(this);
         //Log.e(TAG, "onViewCreated: asasa" );
+
+        database = FirebaseDatabase.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        mStorage = FirebaseStorage.getInstance().getReference().child("images");
+        mFirestore = FirebaseFirestore.getInstance();
         getLocationPermission();
     }
 
@@ -207,7 +227,12 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
                             latitude = currentLocation.getLatitude();
 
                             longtitude = currentLocation.getLongitude();
+
+
+
                             currentLocationLatlng = new LatLng(latitude,longtitude);
+
+
                             Geocoder geocoder = new Geocoder(getActivity().getApplicationContext());
                             try {
                                 addresses = geocoder.getFromLocation(currentLocation.getLatitude(), longtitude,1);

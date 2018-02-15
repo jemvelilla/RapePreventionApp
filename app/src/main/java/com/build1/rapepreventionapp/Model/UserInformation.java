@@ -25,6 +25,8 @@ public class UserInformation implements Serializable {
     private String contactPerson3;
     private String contactNumber3;
     private String password;
+    private String lat;
+    private String lng;
     private int age;
 
     public String getEmail() {
@@ -139,6 +141,11 @@ public class UserInformation implements Serializable {
         this.age = age;
     }
 
+    public String getLat() {return lat;}
 
+    public void setLat(String lat) {this.lat = lat;}
 
+    public String getLng() {return lng;}
+
+    public void setLng(String lng) {this.lng = lng;}
 }
