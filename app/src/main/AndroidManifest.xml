@@ -119,6 +119,11 @@
             android:label="TULONG Rape Prevention">
         </activity>
 
+        <activity
+            android:name=".PushNotif.ViewProfile"
+            android:label="TULONG Rape Prevention">
+        </activity>
+
         <service android:name="com.build1.rapepreventionapp.Bluno.BluetoothLeService" android:enabled="true"/>
         <service
             android:name=".PushNotif.FirebaseMessagingService">

@@ -50,8 +50,8 @@ public class BottomNavigation extends AppCompatActivity {
             }
         }
          **/
-
-        map.getDeviceLocation();
+//
+//        map.getDeviceLocation();
         setupNavigationView();
     }
 

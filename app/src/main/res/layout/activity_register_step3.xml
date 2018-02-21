@@ -47,8 +47,8 @@
                 android:layout_marginTop="10dp"
                 android:hint="First Name*       "
                 android:imeOptions="actionNext"
-                android:nextFocusForward="@+id/editTextLN"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:nextFocusForward="@+id/editTextLN" />
 
             <EditText
                 android:id="@+id/editTextLN"
@@ -58,9 +58,9 @@
                 android:layout_marginTop="10dp"
                 android:layout_toRightOf="@id/editTextFN"
                 android:hint="Last Name*       "
-                android:nextFocusForward="@+id/editTextAge"
                 android:imeOptions="actionNext"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:nextFocusForward="@+id/editTextAge" />
 
             <EditText
                 android:id="@+id/editTextAge"
@@ -68,9 +68,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/editTextFN"
                 android:hint="Age*                    "
-                android:nextFocusForward="@+id/editTextDOB"
                 android:imeOptions="actionNext"
-                android:inputType="number" />
+                android:inputType="number"
+                android:nextFocusForward="@+id/editTextDOB" />
 
             <EditText
                 android:id="@+id/editTextDOB"
@@ -80,9 +80,9 @@
                 android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@id/editTextAge"
                 android:hint="Birthday*              "
-                android:nextFocusForward="@+id/editTextCAdd"
                 android:imeOptions="actionNext"
-                android:inputType="date" />
+                android:inputType="date"
+                android:nextFocusForward="@+id/editTextCAdd" />
         </RelativeLayout>
 
         <RelativeLayout

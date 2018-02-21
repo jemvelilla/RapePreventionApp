@@ -93,6 +93,7 @@
             android:layout_marginTop="15dp"
             android:background="@drawable/rectangle"
             android:text="View Profile"
+            android:onClick="btnOnClickViewProfile"
             android:textColor="#fff" />
 
             <RelativeLayout

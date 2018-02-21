@@ -35,7 +35,7 @@ import android.widget.Toast;
 
 import com.build1.rapepreventionapp.R;
 
-public abstract class BlunoLibrary extends AppCompatActivity{
+public abstract class BlunoLibrary extends AppCompatActivity {
 
     private Context mainContext=this;
 

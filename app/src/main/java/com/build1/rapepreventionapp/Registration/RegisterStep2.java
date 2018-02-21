@@ -1,12 +1,15 @@
 package com.build1.rapepreventionapp.Registration;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.build1.rapepreventionapp.Login.Login;
 import com.build1.rapepreventionapp.Model.UserInformation;
@@ -19,15 +22,32 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class RegisterStep2 extends AppCompatActivity {
+    private Button btnNext;
+    private ImageView loading;
+    AnimationDrawable animation;
+
     private UserInformation info;
     private FirebaseFirestore mFirestore;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_step2);
+
+        btnNext = (Button) findViewById(R.id.buttonNexttwo);
+
+        loading = (ImageView) findViewById(R.id.loading);
+        loading.setVisibility(View.INVISIBLE);
+        loading.bringToFront();
+        animation = (AnimationDrawable) loading.getDrawable();
+
         mFirestore = FirebaseFirestore.getInstance();
     }
     public void btnOnClickMobNum(View v){
+
+        animation.start();
+        loading.setVisibility(View.VISIBLE);
+        btnNext.setVisibility(View.INVISIBLE);
+
         final EditText mobNum = (EditText) findViewById(R.id.editTextMobNum);
         final String mobileNum = mobNum.getText().toString().trim();
         String mobileNumPattern = "^(09|\\+639)\\d{9}$";
@@ -40,6 +60,11 @@ public class RegisterStep2 extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
+
+                        loading.setVisibility(View.INVISIBLE);
+                        animation.stop();
+                        btnNext.setVisibility(View.VISIBLE);
+
                         if(task.getResult().size() == 0){
                             info = (UserInformation) getIntent().getSerializableExtra("info");
                             info.setMobileNumber(mobileNum);

@@ -2,6 +2,7 @@ package com.build1.rapepreventionapp.PushNotif;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
@@ -19,14 +20,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.build1.rapepreventionapp.GooglePlacesAPI.DirectionsParser;
 import com.build1.rapepreventionapp.GooglePlacesAPI.GetNearbyPlacesData;
+import com.build1.rapepreventionapp.Model.EditInformation;
 import com.build1.rapepreventionapp.PushNotif.LocationTracking;
 import com.build1.rapepreventionapp.Model.PlaceInfo;
 import com.build1.rapepreventionapp.R;
+import com.build1.rapepreventionapp.Registration.RegisterStep3;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -44,9 +51,13 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -58,6 +69,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * Created by JEMYLA VELILLA on 11/02/2018.
  */
@@ -68,6 +81,9 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+    TextView name, location, eta, kms_away;
+    private CircleImageView mProfilePicture;
+
     private static final String TAG = "Map";
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -83,6 +99,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
     private PlaceInfo mPlace;
     private Marker mMarker;
     private ImageButton mInfo;
+    private String addressVictim;
     List<Address> addresses;
     List<Address> victimAddress;
     ArrayList<LatLng> listPoints;
@@ -90,6 +107,8 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
     double latitude,longtitude;
 
     GoogleMap mMap;
+    private FirebaseFirestore mFirestore;
+    String dataFrom;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -97,18 +116,43 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
         setContentView(R.layout.activity_location_tracking);
         getLocationPermission();
 
-        String dataMessage = getIntent().getStringExtra("dataMessage");
-        String dataFrom = getIntent().getStringExtra("dataFrom");
+        mFirestore = FirebaseFirestore.getInstance();
+
+        String dataMessage = getIntent().getStringExtra("message");
+        dataFrom = getIntent().getStringExtra("from_user_id");
 
         Log.v("message", dataMessage);
         Log.v("message", dataFrom);
+
+        name = (TextView) findViewById(R.id.name);
+        location = (TextView) findViewById(R.id.location);
+        eta = (TextView) findViewById(R.id.eta);
+        kms_away = (TextView) findViewById(R.id.kmsAway);
+        mProfilePicture = (CircleImageView) findViewById(R.id.profilePicture);
 
         SupportMapFragment fragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         fragment.getMapAsync(this);
         listPoints =new ArrayList<>();
 
-        double latitude;
-        double longitude;
+    }
+
+    public void onStart(){
+        super.onStart();
+        mFirestore.collection("Users").document(dataFrom).get().addOnSuccessListener(this, new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                RequestOptions placeHolderOptions = new RequestOptions();
+                placeHolderOptions.placeholder(R.drawable.default_profile);
+
+                Glide.with(getApplicationContext()).setDefaultRequestOptions(placeHolderOptions).load(documentSnapshot.getString("image")).into(mProfilePicture);
+
+                name.setText(documentSnapshot.getString("first_name") + " " + documentSnapshot.getString("last_name"));
+                double latitude = Double.parseDouble(documentSnapshot.getString("latitude"));
+                double longitude = Double.parseDouble(documentSnapshot.getString("longitude"));
+                location.setText(getLocation(latitude, longitude));
+
+            }
+        });
     }
 
 
@@ -556,5 +600,28 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
         Log.e(TAG, "getUrl: " +longtitude );
 
         return googlePlaceUrl.toString();
+    }
+
+    private String getLocation(double latitude, double longitude){
+        Geocoder geocoder = new Geocoder(getApplicationContext());
+        try {
+            victimAddress = geocoder.getFromLocation(latitude, longitude, 1);
+
+            addressVictim = victimAddress.get(0).getAddressLine(0);
+            //String area = addresses.get(0).getLocality();
+            Log.e(TAG, "onComplete: "+victimAddress );
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return addressVictim;
+    }
+
+    public void btnOnClickViewProfile(View v) {
+
+        Intent i = new Intent(getApplicationContext(), ViewProfile.class);
+        i.putExtra("user_id", dataFrom);
+        startActivity(i);
+
     }
 }

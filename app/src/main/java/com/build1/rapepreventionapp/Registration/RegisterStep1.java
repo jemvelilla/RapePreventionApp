@@ -2,13 +2,16 @@ package com.build1.rapepreventionapp.Registration;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.build1.rapepreventionapp.Login.Login;
@@ -20,6 +23,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.ProviderQueryResult;
 
 public class RegisterStep1 extends AppCompatActivity {
+    private Button btnNext;
+    private ImageView loading;
+    AnimationDrawable animation;
 
     FirebaseAuth auth;
     EditText emailAdd;
@@ -31,10 +37,21 @@ public class RegisterStep1 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_step1);
 
+        btnNext = (Button) findViewById(R.id.buttonNextone);
+
+        loading = (ImageView) findViewById(R.id.loading);
+        loading.setVisibility(View.INVISIBLE);
+        loading.bringToFront();
+        animation = (AnimationDrawable) loading.getDrawable();
+
         auth = FirebaseAuth.getInstance();
 
     }
     public void btnOnClickOne(View v){
+        animation.start();
+        loading.setVisibility(View.VISIBLE);
+        btnNext.setVisibility(View.INVISIBLE);
+
         final EditText emailAdd = (EditText) findViewById(R.id.editTextEmailAdd);
 
         final String email = emailAdd.getText().toString().trim();
@@ -48,6 +65,10 @@ public class RegisterStep1 extends AppCompatActivity {
                 auth.fetchProvidersForEmail(email).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
                     @Override
                     public void onComplete(@NonNull Task<ProviderQueryResult> task) {
+
+                        loading.setVisibility(View.INVISIBLE);
+                        animation.stop();
+                        btnNext.setVisibility(View.VISIBLE);
 
                         boolean check = !task.getResult().getProviders().isEmpty();
 

@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.build1.rapepreventionapp.R;
 import com.google.firebase.messaging.RemoteMessage;
@@ -28,7 +29,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         String dataFrom = remoteMessage.getData().get("from_user_id");
 
         final String packageName = getPackageName();
-        Uri sound = Uri.parse("android.resource://" + packageName + "R.raw.notification");
+        Log.v("message", "package name: " + packageName);
+        Uri sound = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.notification);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this, getString(R.string.default_notification_channel_id))
@@ -38,8 +40,9 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                         .setContentText(messageBody);
 
         Intent resultIntent = new Intent(click_action);
-        resultIntent.putExtra("dataMessage", dataMessage);
-        resultIntent.putExtra("dataFrom", dataFrom);
+        resultIntent.putExtra("message", dataMessage);
+        resultIntent.putExtra("from_user_id", dataFrom);
+        startActivity(resultIntent);
 
         PendingIntent resultPendingIntent =
                 PendingIntent.getActivity(

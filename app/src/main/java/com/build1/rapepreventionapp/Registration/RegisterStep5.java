@@ -1,13 +1,16 @@
 package com.build1.rapepreventionapp.Registration;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -39,6 +42,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class RegisterStep5 extends AppCompatActivity {
+    private Button btnFinish;
+    private ImageView loading;
+    AnimationDrawable animation;
 
     private UserInformation info;
     FirebaseDatabase database;
@@ -50,16 +56,21 @@ public class RegisterStep5 extends AppCompatActivity {
     private CircleImageView mImageButton;
     private static final int PICK_IMAGE = 1;
     private Uri imageUri;
-    private ProgressBar mProgressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_step5);
 
+        btnFinish = (Button) findViewById(R.id.btnFinish);
+
+        loading = (ImageView) findViewById(R.id.loading);
+        loading.setVisibility(View.INVISIBLE);
+        loading.bringToFront();
+        animation = (AnimationDrawable) loading.getDrawable();
+
         imageUri = null;
 
         mImageButton = (CircleImageView) findViewById(R.id.profilePicture);
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         database = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -82,7 +93,9 @@ public class RegisterStep5 extends AppCompatActivity {
 
         if (imageUri != null){
 
-            mProgressBar.setVisibility(View.VISIBLE);
+            animation.start();
+            loading.setVisibility(View.VISIBLE);
+            btnFinish.setVisibility(View.INVISIBLE);
 
             info = (UserInformation) getIntent().getSerializableExtra("info");
 
@@ -108,7 +121,7 @@ public class RegisterStep5 extends AppCompatActivity {
                     && !TextUtils.isEmpty(contactNumber3) && !TextUtils.isEmpty(mobileNumber)
                     && !TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
 
-                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
@@ -145,19 +158,26 @@ public class RegisterStep5 extends AppCompatActivity {
                                         mFirestore. collection("Users").document(user_id).set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                mProgressBar.setVisibility(View.INVISIBLE);
-                                                sendToMain();
+                                                loading.setVisibility(View.INVISIBLE);
+                                                animation.stop();
+                                                btnFinish.setVisibility(View.VISIBLE);
+
+                                                sendToAccountCreated();
                                             }
                                         });
                                     } else {
                                         Toast.makeText(RegisterStep5.this, "Error" + uploadTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                        mProgressBar.setVisibility(View.INVISIBLE);
+
+                                        loading.setVisibility(View.INVISIBLE);
+                                        animation.stop();
                                     }
                                 }
                             });
                         } else {
                             Toast.makeText(RegisterStep5.this, "Error" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            mProgressBar.setVisibility(View.INVISIBLE);
+
+                            loading.setVisibility(View.INVISIBLE);
+                            animation.stop();
                         }
                     }
                 });
@@ -170,10 +190,11 @@ public class RegisterStep5 extends AppCompatActivity {
         startActivity(i);
     }
 
-    private void sendToMain(){
-        finish();
-        Intent intent = new Intent(getApplicationContext(), AccountCreated.class);
+    private void sendToAccountCreated(){
+        Intent intent = new Intent(getApplicationContext(), Slides.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+        finish();
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
