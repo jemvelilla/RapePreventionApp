@@ -118,11 +118,22 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 
         mFirestore = FirebaseFirestore.getInstance();
 
-        String dataMessage = getIntent().getStringExtra("message");
-        dataFrom = getIntent().getStringExtra("from_user_id");
+        final Intent intent = getIntent();
+        final String action = intent.getAction();
 
-        Log.v("message", dataMessage);
-        Log.v("message", dataFrom);
+        if (getIntent().getStringExtra("message") != null
+                && getIntent().getStringExtra("from_user_id") != null){
+            String dataMessage = getIntent().getStringExtra("message");
+            dataFrom = getIntent().getStringExtra("from_user_id");
+        } else {
+            if (Intent.ACTION_VIEW.equals(action)) {
+                final List<String> segments = intent.getData().getPathSegments();
+                for (int i=0; i< segments.size(); i++) {
+                    dataFrom = segments.get(i);
+                }
+            }
+        }
+
 
         name = (TextView) findViewById(R.id.name);
         location = (TextView) findViewById(R.id.location);
