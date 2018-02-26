@@ -105,6 +105,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
     ArrayList<LatLng> listPoints;
     int PROXIMITY_RADIUS = 1000;
     double latitude,longtitude;
+    double latDB, lonDB;
 
     GoogleMap mMap;
     private FirebaseFirestore mFirestore;
@@ -149,6 +150,8 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                 name.setText(documentSnapshot.getString("first_name") + " " + documentSnapshot.getString("last_name"));
                 double latitude = Double.parseDouble(documentSnapshot.getString("latitude"));
                 double longitude = Double.parseDouble(documentSnapshot.getString("longitude"));
+                latDB = latitude;
+                lonDB = longitude;
                 location.setText(getLocation(latitude, longitude));
 
             }
@@ -307,38 +310,37 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                 return;
             }
             mMap.setMyLocationEnabled(true);
-            mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
                 @Override
-                public void onMapLongClick(LatLng latLng) {
-                    //reset when 2
+                public void onMapLoaded() {
                     if (listPoints.size() == 2) {
                         listPoints.clear();
                         mMap.clear();
                     }
                     //save first marker
-                    listPoints.add(latLng);
+                    listPoints.add(new LatLng(latDB,lonDB));
                     //marker
                     MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(latLng);
+                    markerOptions.position(new LatLng(latDB,lonDB));
 
                     if (listPoints.size() == 1){
                         //add 1st marker
                         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-                        Log.e(TAG, "onMapLongClick: " +listPoints);
-                        Log.e(TAG, "onMapLongClick: "+latLng );
+                        //Log.e(TAG, "onMapLongClick: " +listPoints);
+                        //Log.e(TAG, "onMapLongClick: "+latLng );
                         //moveCamera(new LatLng(latLng,DEFAULT_ZOOM, ""++"");
-                        Log.e(TAG, "onMapLongClick: " +listPoints);
+                        //Log.e(TAG, "onMapLongClick: " +listPoints);
                     }else{
                         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
                         Geocoder geocoder = new Geocoder(getApplicationContext());
                         try {
-                            victimAddress = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                            victimAddress = geocoder.getFromLocation(latDB, lonDB, 1);
 
                             String addressVictim = victimAddress.get(0).getAddressLine(0);
                             //String area = addresses.get(0).getLocality();
                             Log.e(TAG, "onComplete: "+victimAddress );
 
-                            moveCamera(new LatLng(latLng.latitude, latLng.longitude), DEFAULT_ZOOM, ""+addressVictim+"");
+                            moveCamera(new LatLng(latDB, lonDB), DEFAULT_ZOOM, ""+addressVictim+"");
                             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
 
                         } catch (IOException e) {
@@ -354,8 +356,11 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                         taskRequestDirections.execute(url);
                         Log.e(TAG, "onMapLongClickasasa: " +listPoints);
                     }
+
+
                 }
             });
+
             //initMap();
 
 
@@ -363,6 +368,13 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 
         Log.d(TAG, "onMapReady: Map is Ready");
     }
+
+    private void twoPointsMarker(LatLng latLng) {
+
+    }
+
+
+
 
     private String getRequestUrl(LatLng origin, LatLng destination) {
         //value of origin
@@ -557,6 +569,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                 polylineOptions.width(15);
                 polylineOptions.color(Color.BLUE);
                 polylineOptions.geodesic(true);
+
 
             }
             if (polylineOptions!=null){
