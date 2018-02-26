@@ -265,7 +265,7 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
 
         String call = automatedCall;
         String message = EditInformation.firstName + " " + EditInformation.lastName + " needs your help!" +
-                " Check this link to view the location. <<Insert link here>>";
+                " Check this link to view the location. https://tulongrapepreventionapp.dev/"+current_id;
 
         try {
             SmsManager smsManager = SmsManager.getDefault();
