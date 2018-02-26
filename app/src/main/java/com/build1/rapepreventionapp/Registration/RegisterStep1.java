@@ -79,14 +79,26 @@ public class RegisterStep1 extends AppCompatActivity {
                             i.putExtra("info", info);
                             startActivity(i);
                         } else {
+                            loading.setVisibility(View.INVISIBLE);
+                            animation.stop();
+                            btnNext.setVisibility(View.VISIBLE);
+
                             emailAdd.setError("Email address already exists.");
                         } //end check
                     } //end on complete
                 }); //end fetch
             } else{
+                loading.setVisibility(View.INVISIBLE);
+                animation.stop();
+                btnNext.setVisibility(View.VISIBLE);
+
                 Toast.makeText(RegisterStep1.this, "Slow or no internet connection.", Toast.LENGTH_LONG).show();
             }//end network available
         }else {
+            loading.setVisibility(View.INVISIBLE);
+            animation.stop();
+            btnNext.setVisibility(View.VISIBLE);
+
             emailAdd.setError("Invalid Email Address");
         } //end check email address format
     }

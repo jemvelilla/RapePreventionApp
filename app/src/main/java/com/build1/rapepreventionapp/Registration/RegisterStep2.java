@@ -78,12 +78,18 @@ public class RegisterStep2 extends AppCompatActivity {
                             }
                         }
                     } else {
+                        loading.setVisibility(View.INVISIBLE);
+                        animation.stop();
+                        btnNext.setVisibility(View.VISIBLE);
                         Log.v("result", "Error getting documents: ", task.getException());
                     }
                 }
             });
 
         }else{
+            loading.setVisibility(View.INVISIBLE);
+            animation.stop();
+            btnNext.setVisibility(View.VISIBLE);
             mobNum.setError("Invalid Mobile Number");
         }
     }
