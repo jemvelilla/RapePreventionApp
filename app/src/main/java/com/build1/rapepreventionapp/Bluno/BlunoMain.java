@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.content.Intent;
@@ -34,7 +35,7 @@ import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationListener;
+import android.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
@@ -146,19 +147,34 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
 //                            }
 //                        });
 //                    }
+<<<<<<< HEAD
                     //sendNotification();
 //                    getDeviceLocation();
 
                 buttonScanOnClickProcess();										//Alert Dialog for selecting the BLE device                 //Alert Dialog for selecting the BLE device
+=======
+               //     sendNotification();
+                    //getDeviceLocation();
+
+               buttonScanOnClickProcess();										//Alert Dialog for selecting the BLE device                 //Alert Dialog for selecting the BLE device
+>>>>>>> e27ecefa42002c8f23fb92ba78e7fa7db5559429
             }
         });
         Log.v("message", "onCreate");
+        //getDeviceLocation();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //getDeviceLocation();
     }
 
     protected void onResume() {
         super.onResume();
         System.out.println("BlUNOActivity onResume");
         onResumeProcess();
+        //getDeviceLocation();
         //onResume Process by BlunoLibrary
 
         Log.v("message", "onResume");
@@ -167,6 +183,7 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
     @Override
     protected void onPause() {
         super.onPause();
+        //getDeviceLocation();
         //onPauseProcess();
         //onPause Process by BlunoLibrary
 
@@ -175,6 +192,7 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
 
     protected void onStop() {
         super.onStop();
+        //getDeviceLocation();
         //onStopProcess();														//onStop Process by BlunoLibrary
 
         Log.v("message", "onStop");
@@ -238,7 +256,9 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
                 });
             }
             sendNotification();
+            Log.d(TAG, "onSerialReceived: notif lang");
             getDeviceLocation();
+            Log.d(TAG, "onSerialReceived: umabot");
         }
     }
 
@@ -297,32 +317,64 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
                 final com.google.android.gms.tasks.Task<Location> location = mFusedLocationProviderClient.getLastLocation();
                 location.addOnCompleteListener(new OnCompleteListener<Location>() {
                     @Override
-                    public void onComplete(@NonNull com.google.android.gms.tasks.Task<Location> task) {
+                    public void onComplete(@NonNull final com.google.android.gms.tasks.Task<Location> task) {
                         //final String placeId = task.getPlaceId();
                         if (task.isSuccessful()) {
 
-                            Log.v("message", "onComplete: found location");
-                            currentLocation = new Location(task.getResult());
-                            latitude = String.valueOf(currentLocation.getLatitude());
-
-                            longtitude = String.valueOf(currentLocation.getLongitude());
-
-                            Map<String, Object> locationMap = new HashMap<>();
-                            locationMap.put("latitude", latitude);
-                            locationMap.put("longitude", longtitude);
-
-                            mFirestore.collection("Users").document(current_id).update(locationMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            final LocationListener listener = new LocationListener() {
                                 @Override
-                                public void onSuccess(Void aVoid) {
+                                public void onLocationChanged(Location location) {
+                                    mylocation = location;
+                                    if (mylocation != null) {
+                                        //Double latitude=mylocation.getLatitude();
+                                        //Double longitude=mylocation.getLongitude();
+                                        //Or Do whatever you want with your location
+                                        Log.v("message", "onComplete: found locationasd");
+                                        currentLocation = new Location(task.getResult());
+                                        latitude = String.valueOf(currentLocation.getLatitude());
 
-                                   Log.d("message", "location stored.");
+                                        longtitude = String.valueOf(currentLocation.getLongitude());
+
+                                        Map<String, Object> locationMap = new HashMap<>();
+                                        locationMap.put("latitude", latitude);
+                                        locationMap.put("longitude", longtitude);
+
+                                        mFirestore.collection("Users").document(current_id).update(locationMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+
+                                                Log.d("message", "location stored.");
+                                            }
+                                        });
+
+                                        Log.v("message", "onComplete: " +latitude);
+                                        Log.v("message", "onComplete: " +longtitude);
+
+                                        //final String placeId = task.getResult();
+                                    }
                                 }
-                            });
 
-                            Log.v("message", "onComplete: " +latitude);
-                            Log.v("message", "onComplete: " +longtitude);
+                                @Override
+                                public void onStatusChanged(String provider, int status, Bundle extras) {
 
-                            //final String placeId = task.getResult();
+                                }
+
+                                @Override
+                                public void onProviderEnabled(String provider) {
+
+                                }
+
+                                @Override
+                                public void onProviderDisabled(String provider) {
+
+                                }
+
+                            };
+                            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+                            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 1, (android.location.LocationListener) listener);
+
+
 
 
 
@@ -351,15 +403,7 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
         googleApiClient.connect();
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        mylocation = location;
-        if (mylocation != null) {
-            Double latitude=mylocation.getLatitude();
-            Double longitude=mylocation.getLongitude();
-            //Or Do whatever you want with your location
-        }
-    }
+
 
     @Override
     public void onConnected(Bundle bundle) {
@@ -392,7 +436,7 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
                             .addLocationRequest(locationRequest);
                     builder.setAlwaysShow(true);
                     LocationServices.FusedLocationApi
-                            .requestLocationUpdates(googleApiClient, locationRequest, this);
+                            .requestLocationUpdates(googleApiClient, locationRequest, (com.google.android.gms.location.LocationListener) this);
                     PendingResult<LocationSettingsResult> result =
                             LocationServices.SettingsApi
                                     .checkLocationSettings(googleApiClient, builder.build());
@@ -482,4 +526,28 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
         }
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
 }
