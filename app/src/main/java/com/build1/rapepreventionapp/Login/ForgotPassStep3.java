@@ -28,10 +28,10 @@ public class ForgotPassStep3 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password_step3);
         TextView user = (TextView) findViewById(R.id.tvName);
-        user.setText("");
 
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
         mAuth = FirebaseAuth.getInstance();
+//
+//        user.setText(currentUser.getEmail());
 
         newPassword = (EditText) findViewById(R.id.editTextNewPassword);
         confirmPassword = (EditText) findViewById(R.id.editTextConfirmPassword);

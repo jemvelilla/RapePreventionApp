@@ -158,10 +158,6 @@ public class RegisterStep5 extends AppCompatActivity {
                                         mFirestore. collection("Users").document(user_id).set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                loading.setVisibility(View.INVISIBLE);
-                                                animation.stop();
-                                                btnFinish.setVisibility(View.VISIBLE);
-
                                                 sendToAccountCreated();
                                             }
                                         });
@@ -170,6 +166,7 @@ public class RegisterStep5 extends AppCompatActivity {
 
                                         loading.setVisibility(View.INVISIBLE);
                                         animation.stop();
+                                        btnFinish.setVisibility(View.VISIBLE);
                                     }
                                 }
                             });
@@ -178,6 +175,7 @@ public class RegisterStep5 extends AppCompatActivity {
 
                             loading.setVisibility(View.INVISIBLE);
                             animation.stop();
+                            btnFinish.setVisibility(View.VISIBLE);
                         }
                     }
                 });
@@ -201,8 +199,10 @@ public class RegisterStep5 extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == PICK_IMAGE){
-            imageUri = data.getData();
-            mImageButton.setImageURI(imageUri);
+            if(data.getData() != null){
+                imageUri = data.getData();
+                mImageButton.setImageURI(imageUri);
+            }
         }
     }
 }
