@@ -232,6 +232,8 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
 
                             currentLocationLatlng = new LatLng(latitude,longtitude);
 
+                            Log.d(TAG, "onCompletemoto: " +currentLocationLatlng);
+
 
                             Geocoder geocoder = new Geocoder(getActivity().getApplicationContext());
                             try {

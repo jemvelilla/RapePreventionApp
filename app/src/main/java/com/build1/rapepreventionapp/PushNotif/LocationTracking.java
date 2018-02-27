@@ -619,7 +619,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
     //////// NEW GOOGLE DIRECTION WITH ETA AND DISTANCE
     private void sendRequest() {
         //private static final String TAG = "MapsActivity";
-        origin = currentLocationLatlng;
+        origin = new LatLng(latitude,longtitude);
         destination = new LatLng(latDB,lonDB);
 
         try {
