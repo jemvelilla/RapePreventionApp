@@ -49,6 +49,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -63,6 +64,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -71,11 +73,15 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import Modules.DirectionFinder;
+import Modules.DirectionFinderListener;
+import Modules.Route;
+
 /**
  * Created by JEMYLA VELILLA on 11/02/2018.
  */
 
-public class LocationTracking extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener {
+public class LocationTracking extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, DirectionFinderListener {
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -106,10 +112,15 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
     int PROXIMITY_RADIUS = 1000;
     double latitude,longtitude;
     double latDB, lonDB;
+    LatLng origin, destination;
 
     GoogleMap mMap;
     private FirebaseFirestore mFirestore;
     String dataFrom;
+
+    private List<Marker> originMarkers = new ArrayList<>();
+    private List<Marker> destinationMarkers = new ArrayList<>();
+    private List<Polyline> polylinePaths = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -138,13 +149,15 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 
         name = (TextView) findViewById(R.id.name);
         location = (TextView) findViewById(R.id.location);
-        eta = (TextView) findViewById(R.id.eta);
-        kms_away = (TextView) findViewById(R.id.kmsAway);
+        //eta = (TextView) findViewById(R.id.eta);
+        //kms_away = (TextView) findViewById(R.id.kmsAway);
         mProfilePicture = (CircleImageView) findViewById(R.id.profilePicture);
 
         SupportMapFragment fragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         fragment.getMapAsync(this);
         listPoints =new ArrayList<>();
+
+        sendRequest();
 
     }
 
@@ -321,56 +334,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                 return;
             }
             mMap.setMyLocationEnabled(true);
-            mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-                @Override
-                public void onMapLoaded() {
-                    if (listPoints.size() == 2) {
-                        listPoints.clear();
-                        mMap.clear();
-                    }
-                    //save first marker
-                    listPoints.add(new LatLng(latDB,lonDB));
-                    //marker
-                    MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(new LatLng(latDB,lonDB));
 
-                    if (listPoints.size() == 1){
-                        //add 1st marker
-                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-                        //Log.e(TAG, "onMapLongClick: " +listPoints);
-                        //Log.e(TAG, "onMapLongClick: "+latLng );
-                        //moveCamera(new LatLng(latLng,DEFAULT_ZOOM, ""++"");
-                        //Log.e(TAG, "onMapLongClick: " +listPoints);
-                    }else{
-                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
-                        Geocoder geocoder = new Geocoder(getApplicationContext());
-                        try {
-                            victimAddress = geocoder.getFromLocation(latDB, lonDB, 1);
-
-                            String addressVictim = victimAddress.get(0).getAddressLine(0);
-                            //String area = addresses.get(0).getLocality();
-                            Log.e(TAG, "onComplete: "+victimAddress );
-
-                            moveCamera(new LatLng(latDB, lonDB), DEFAULT_ZOOM, ""+addressVictim+"");
-                            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                    mMap.addMarker(markerOptions);
-                    if (listPoints.size() == 2){
-                        //url creation for request
-                        String url = getRequestUrl(listPoints.get(0), listPoints.get(1));
-                        LocationTracking.TaskRequestDirections taskRequestDirections = new LocationTracking.TaskRequestDirections();
-                        taskRequestDirections.execute(url);
-                        Log.e(TAG, "onMapLongClickasasa: " +listPoints);
-                    }
-
-
-                }
-            });
 
             //initMap();
 
@@ -488,6 +452,8 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
             }
         }
     }
+
+
 
     /*private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback = new ResultCallback<PlaceBuffer>() {
         @Override
@@ -646,6 +612,81 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
         Intent i = new Intent(getApplicationContext(), ViewProfile.class);
         i.putExtra("user_id", dataFrom);
         startActivity(i);
+
+    }
+
+
+    //////// NEW GOOGLE DIRECTION WITH ETA AND DISTANCE
+    private void sendRequest() {
+        //private static final String TAG = "MapsActivity";
+        origin = currentLocationLatlng;
+        destination = new LatLng(latDB,lonDB);
+
+        try {
+            new DirectionFinder(this, origin, destination).execute();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onDirectionFinderStart() {
+
+        if (originMarkers != null) {
+            for (Marker marker : originMarkers) {
+                marker.remove();
+            }
+        }
+
+        if (destinationMarkers != null) {
+            for (Marker marker : destinationMarkers) {
+                marker.remove();
+            }
+        }
+
+        if (polylinePaths != null) {
+            for (Polyline polyline:polylinePaths ) {
+                polyline.remove();
+            }
+        }
+    }
+
+    @Override
+    public void onDirectionFinderSuccess(List<Route> routes) {
+
+        polylinePaths = new ArrayList<>();
+        originMarkers = new ArrayList<>();
+        destinationMarkers = new ArrayList<>();
+
+
+        for (Route route : routes) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
+            ((TextView) findViewById(R.id.eta)).setText(route.duration.text);
+            ((TextView) findViewById(R.id.kmsAway)).setText(route.distance.text);
+
+            originMarkers.add(mMap.addMarker(new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.hp))
+                    .title(route.startAddress)
+                    .position(route.startLocation)));
+            destinationMarkers.add(mMap.addMarker(new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.hp))
+                    .title(route.endAddress)
+                    .position(route.endLocation)));
+
+            PolylineOptions polylineOptions = new PolylineOptions().
+                    geodesic(true).
+                    color(Color.BLUE).
+                    width(10);
+
+            for (int i = 0; i < route.points.size(); i++)
+                polylineOptions.add(route.points.get(i));
+
+            polylinePaths.add(mMap.addPolyline(polylineOptions));
+        }
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
 }
