@@ -176,8 +176,9 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                 name.setText(documentSnapshot.getString("first_name") + " " + documentSnapshot.getString("last_name"));
                 double latitude = Double.parseDouble(documentSnapshot.getString("latitude"));
                 double longitude = Double.parseDouble(documentSnapshot.getString("longitude"));
-                latDB = 14.612584;
-                lonDB = 120.98239;
+//                latDB = latitude;
+//                lonDB = longitude;
+                listPoints.add(new LatLng(latitude,longitude));
                 location.setText(getLocation(latitude, longitude));
                 victimLocation = new LatLng(latDB,lonDB);
                 Log.d(TAG, "onSuccess:lat " +latitude);
@@ -347,7 +348,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 
         }
 
-        Log.d(TAG, "onMapReady: Map is Ready");
+        Log.d(TAG, "onMapReady: Map is Readyasasa" +latitude+","+longtitude);
     }
 
     private void twoPointsMarker(LatLng latLng) {
@@ -623,29 +624,48 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 
 
     //////// NEW GOOGLE DIRECTION WITH ETA AND DISTANCE
+//    private void sendRequest() {
+//        //private static final String TAG = "MapsActivity";
+////        origin = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
+////        destination = new LatLng(latDB,lonDB);
+//        //latDB= currentLocationLatlng.latitude;
+//        //lonDB= currentLocationLatlng.longitude;
+//        origin = new LatLng(14.6184447,120.9873903);
+//        destination = new LatLng(latDB,lonDB);
+////        double originLat = currentLocationLatlng.latitude;
+////        double originLon = currentLocationLatlng.longitude;
+//        double originLat = currentLocation.getLatitude();
+//        double originLon = 120.9873903;
+//        double destLat = 14.6184447;
+//        double destLon = 120.9873903;
+//
+//        Log.d(TAG, "sendRequest: origin"+latDB);
+//        Log.d(TAG, "sendRequest: destination"+victimLocation);
+//
+//        try {
+//            new DirectionFinder(this, originLat, originLon, destLat, destLon).execute();
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
     private void sendRequest() {
         //private static final String TAG = "MapsActivity";
-//        origin = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-//        destination = new LatLng(latDB,lonDB);
-        //latDB= currentLocationLatlng.latitude;
-        //lonDB= currentLocationLatlng.longitude;
-        origin = new LatLng(14.6184447,120.9873903);
-        destination = new LatLng(latDB,lonDB);
-//        double originLat = currentLocationLatlng.latitude;
-//        double originLon = currentLocationLatlng.longitude;
-        double originLat = 14.6184447;
-        double originLon = 120.9873903;
-        double destLat = 14.6184447;
-        double destLon = 120.9873903;
 
-        Log.d(TAG, "sendRequest: origin"+latDB);
-        Log.d(TAG, "sendRequest: destination"+victimLocation);
-
-        try {
-            new DirectionFinder(this, originLat, originLon, destLat, destLon).execute();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+        if (listPoints.size() == 2){
+            destination = listPoints.get(0);
+            origin = listPoints.get(1);
         }
+        else{
+            Log.d(TAG, "sendRequest: TANGINA WALANG LAMAN ARRAY");
+        }
+        
+
+//        try {
+//            new DirectionFinder(this, origin, destination).execute();
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override

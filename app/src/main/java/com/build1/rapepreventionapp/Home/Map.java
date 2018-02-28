@@ -377,10 +377,11 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
                     mMap.addMarker(markerOptions);
                     if (listPoints.size() == 2){
                         //url creation for request
+                        String test = listPoints.get(0).toString();
                         String url = getRequestUrl(listPoints.get(0), listPoints.get(1));
                         TaskRequestDirections taskRequestDirections = new TaskRequestDirections();
                         taskRequestDirections.execute(url);
-                        Log.e(TAG, "onMapLongClickasasa: " +listPoints);
+                        Log.e(TAG, "onMapLongClickasasa: " +test);
                     }
                 }
             });
@@ -389,7 +390,7 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
 
         }
 
-        Log.d(TAG, "onMapReady: Map is Ready");
+        Log.d(TAG, "onMapReady: Map is Ready" +latitude+ "," +longtitude);
         }
 
     private String getRequestUrl(LatLng origin, LatLng destination) {
