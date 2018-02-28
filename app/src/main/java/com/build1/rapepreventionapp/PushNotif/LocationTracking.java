@@ -158,7 +158,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
         fragment.getMapAsync(this);
         listPoints =new ArrayList<>();
 
-        sendRequest();
+
         Log.d(TAG, "onCreate: pumasok ba?");
 
     }
@@ -176,17 +176,19 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                 name.setText(documentSnapshot.getString("first_name") + " " + documentSnapshot.getString("last_name"));
                 double latitude = Double.parseDouble(documentSnapshot.getString("latitude"));
                 double longitude = Double.parseDouble(documentSnapshot.getString("longitude"));
-//                latDB = latitude;
-//                lonDB = longitude;
+                latDB = latitude;
+                lonDB = longitude;
                 listPoints.add(new LatLng(latitude,longitude));
                 location.setText(getLocation(latitude, longitude));
                 victimLocation = new LatLng(latDB,lonDB);
                 Log.d(TAG, "onSuccess:lat " +latitude);
                 Log.d(TAG, "onSuccess:lon " +longitude);
-                Log.d(TAG, "onSuccess: " +victimLocation);
+                Log.d(TAG, "onSuccess: " +listPoints);
+                sendRequest();
 
             }
         });
+
     }
 
 
@@ -253,8 +255,9 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                                 Log.e(TAG, "onComplete: "+addresses );
                                 listPoints.add(new LatLng(latitude, longtitude));
 
-                                moveCamera(new LatLng(latitude, longtitude),
-                                        DEFAULT_ZOOM, ""+address+"");
+                                Log.d(TAG, "onComplete twyla: "+listPoints);
+//                                moveCamera(new LatLng(latitude, longtitude),
+//                                        DEFAULT_ZOOM, ""+address+"");
 
                                 getNearbyPoliceStation();
 
@@ -649,23 +652,28 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 //        }
 //    }
 
-    private void sendRequest() {
+    public void sendRequest() {
         //private static final String TAG = "MapsActivity";
 
+        Log.d(TAG, "sendRequest: LISTPOINTS" +listPoints);
         if (listPoints.size() == 2){
             destination = listPoints.get(0);
             origin = listPoints.get(1);
+            Log.d(TAG, "sendRequest: " +listPoints);
+            Log.d(TAG, "sendRequest: " +origin);
         }
         else{
             Log.d(TAG, "sendRequest: TANGINA WALANG LAMAN ARRAY");
+            Log.d(TAG, "sendRequest: " +destination);
+            Log.d(TAG, "sendRequest: " +listPoints);
         }
         
 
-//        try {
-//            new DirectionFinder(this, origin, destination).execute();
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            new DirectionFinder(this, origin, destination).execute();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -704,11 +712,11 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
             ((TextView) findViewById(R.id.kmsAway)).setText(route.distance.text);
 
             originMarkers.add(mMap.addMarker(new MarkerOptions()
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.hp))
                     .title(route.startAddress)
                     .position(route.startLocation)));
+
             destinationMarkers.add(mMap.addMarker(new MarkerOptions()
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.hp))
+                    //.icon(BitmapDescriptorFactory.fromResource(R.drawable.victimmarker))
                     .title(route.endAddress)
                     .position(route.endLocation)));
 

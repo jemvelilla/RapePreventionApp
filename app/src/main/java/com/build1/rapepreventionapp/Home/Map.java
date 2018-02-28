@@ -246,6 +246,7 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
                                 //String area = addresses.get(0).getLocality();
                                 Log.e(TAG, "onComplete: "+addresses );
                                 listPoints.add(new LatLng(latitude, longtitude));
+                                Log.d(TAG, "onComplete twyla: "+listPoints);
 
                                 moveCamera(new LatLng(latitude, longtitude),
                                         DEFAULT_ZOOM, ""+address+"");
