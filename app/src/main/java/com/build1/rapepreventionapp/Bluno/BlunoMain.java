@@ -126,65 +126,30 @@ public class BlunoMain extends BlunoLibrary {
                 // TODO Auto-generated method stub
                 //setUpGClient();
 
-//                final String message = EditInformation.firstName + " " + EditInformation.lastName + " needs help.";
-//
-//                    Map<String, Object> notificationMessage = new HashMap<>();
-//                    notificationMessage.put("message", message);
-//                    notificationMessage.put("from", mCurrentId);
-//
-//                    for (String id : ids) {
-//                        mFirestore.collection("Users/" + id + "/Notifications").add(notificationMessage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                            @Override
-//                            public void onSuccess(DocumentReference documentReference) {
-//                                Toast.makeText(BlunoMain.this, "Notification sent.", Toast.LENGTH_SHORT).show();
-//
-//                            }
-//                        }).addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//                                Toast.makeText(BlunoMain.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-//                            }
-//                        });
-//                    }
-                    //sendNotification();
-//                    getDeviceLocation();
-
-                buttonScanOnClickProcess();										//Alert Dialog for selecting the BLE device                 //Alert Dialog for selecting the BLE device
-
-               //     sendNotification();
-                    //getDeviceLocation();
-
-               buttonScanOnClickProcess();										//Alert Dialog for selecting the BLE device
-
                 final String message = EditInformation.firstName + " " + EditInformation.lastName + " needs help.";
 
-                    Map<String, Object> notificationMessage = new HashMap<>();
-                    notificationMessage.put("message", message);
-                    notificationMessage.put("from", mCurrentId);
+                Map<String, Object> notificationMessage = new HashMap<>();
+                notificationMessage.put("message", message);
+                notificationMessage.put("from", mCurrentId);
 
-                    for (String id : ids) {
-                        mFirestore.collection("Users/" + id + "/Notifications").add(notificationMessage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Toast.makeText(BlunoMain.this, "Notification sent.", Toast.LENGTH_SHORT).show();
+                for (String id : ids) {
+                    mFirestore.collection("Users/" + id + "/Notifications").add(notificationMessage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Toast.makeText(BlunoMain.this, "Notification sent.", Toast.LENGTH_SHORT).show();
 
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(BlunoMain.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-//                    sendNotification(); //send text and call
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(BlunoMain.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+                //sendNotification(); //send text and call
+                getDeviceLocation(); //store on database onlocationchanged
 
-                    getDeviceLocation(); //store to database latitude and longitude on location changed
-//               buttonScanOnClickProcess();										//Alert Dialog for selecting the BLE device                 //Alert Dialog for selecting the BLE device
-<<<<<<< HEAD
-=======
-                getDeviceLocation();
->>>>>>> edfb4b667706100a62847ad441ebc490da91086d
-
+                //buttonScanOnClickProcess();                                        //Alert Dialog for selecting the BLE device                 //Alert Dialog for selecting the BLE device
             }
         });
 
