@@ -37,7 +37,9 @@ public class AccountVerification extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        Log.v("user", String.valueOf(mAuth.getCurrentUser().isEmailVerified()));
+        if (mAuth == null){
+            return;
+        }
 
         tvUser = (TextView) findViewById(R.id.email);
         tvUser.setText(mAuth.getCurrentUser().getEmail());

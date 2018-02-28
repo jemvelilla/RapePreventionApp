@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context="com.build1.rapepreventionapp.Login.LogIn2">
+
+    <ImageView
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimary"
+        app:srcCompat="@drawable/loading" />
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/icon"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/textTap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:padding="20dp"
+        android:text="Tap in to login"
+        android:textSize="15sp"
+        android:layout_below="@id/icon"/>
+
+    <RelativeLayout
+        android:id="@+id/btn1"
+        android:layout_width="340dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/textTap">
+
+        <Button
+            android:id="@+id/btnName"
+            android:background="@drawable/bg_login_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="RAY-ANN MEDRANO"
+            android:textAlignment="center"
+            android:textColor="#000"
+            android:textSize="15sp"
+            android:onClick="btnOnClickLogIn"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/btn2"
+        android:layout_width="340dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/btn1"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="10dp">
+
+        <Button
+            android:id="@+id/btnLogIn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_login_box"
+            android:drawableLeft="@drawable/ic_add_black_24dp"
+            android:paddingLeft="20dp"
+            android:text="Log into another account."
+            android:onClick="btnOnClickLogInAnotherAccnt"/>
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnCreateAccount"
+        android:onClick="btnOnClickCreateAccnt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:background="@drawable/rectangle"
+        android:text="create account"
+        android:textColor="#fff"
+        android:textStyle="bold"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

@@ -13,6 +13,7 @@ import com.build1.rapepreventionapp.Base.MainActivity;
 import com.build1.rapepreventionapp.Base.Welcome;
 import com.build1.rapepreventionapp.Bluno.BlunoLibrary;
 import com.build1.rapepreventionapp.Bluno.BlunoMain;
+import com.build1.rapepreventionapp.Login.LogIn2;
 import com.build1.rapepreventionapp.Login.Login;
 import com.build1.rapepreventionapp.Profile.ChangePassword;
 import com.build1.rapepreventionapp.Profile.ConfCall;
@@ -32,6 +33,7 @@ public class Settings extends Fragment {
         super.onCreate(savedInstanceState);
 
         mAuth = FirebaseAuth.getInstance();
+
 //
 //        userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
 //        user = FirebaseDatabase.getInstance().getReference("Users").child(userKey);
@@ -121,12 +123,10 @@ public class Settings extends Fragment {
         btnLogOut.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                // Log out func
                 mAuth.signOut();
-                Intent i = new Intent(getActivity().getApplicationContext(), Login.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
+                Intent i = new Intent(getActivity(), LogIn2.class);
                 getActivity().finish();
+                startActivity(i);
 
             }
         });

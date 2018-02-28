@@ -77,12 +77,12 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-    private FirebaseAuth mAuth;
-    private StorageReference mStorage;
-    private FirebaseFirestore mFirestore;
-    private UserInformation info;
-    FirebaseDatabase database;
-    DatabaseReference user;
+//    private FirebaseAuth mAuth;
+//    private StorageReference mStorage;
+//    private FirebaseFirestore mFirestore;
+//    private UserInformation info;
+//    FirebaseDatabase database;
+//    DatabaseReference user;
     private static final String TAG = "Map";
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -123,10 +123,10 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
         //fragment.getMapAsync(this);
         //Log.e(TAG, "onViewCreated: asasa" );
 
-        database = FirebaseDatabase.getInstance();
-        mAuth = FirebaseAuth.getInstance();
-        mStorage = FirebaseStorage.getInstance().getReference().child("images");
-        mFirestore = FirebaseFirestore.getInstance();
+//        database = FirebaseDatabase.getInstance();
+//        mAuth = FirebaseAuth.getInstance();
+//        mStorage = FirebaseStorage.getInstance().getReference().child("images");
+//        mFirestore = FirebaseFirestore.getInstance();
         getLocationPermission();
     }
 
@@ -216,7 +216,7 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
         try {
             if (mLocationPermissionGranted) {
                 final com.google.android.gms.tasks.Task<Location> location = mFusedLocationProviderClient.getLastLocation();
-                location.addOnCompleteListener(new OnCompleteListener<Location>() {
+                location.addOnCompleteListener(getActivity(), new OnCompleteListener<Location>() {
                     @Override
                     public void onComplete(@NonNull com.google.android.gms.tasks.Task<Location> task) {
                         //final String placeId = task.getPlaceId();

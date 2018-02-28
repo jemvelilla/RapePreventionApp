@@ -42,44 +42,44 @@
 
             <EditText
                 android:id="@+id/editTextFN"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:hint="First Name*       "
+                android:hint="First Name*"
                 android:imeOptions="actionNext"
                 android:inputType="textPersonName"
                 android:nextFocusForward="@+id/editTextLN" />
 
             <EditText
                 android:id="@+id/editTextLN"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="10dp"
                 android:layout_toRightOf="@id/editTextFN"
-                android:hint="Last Name*       "
+                android:hint="Last Name*"
                 android:imeOptions="actionNext"
                 android:inputType="textPersonName"
                 android:nextFocusForward="@+id/editTextAge" />
 
             <EditText
                 android:id="@+id/editTextAge"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/editTextFN"
-                android:hint="Age*                    "
+                android:hint="Age*"
                 android:imeOptions="actionNext"
                 android:inputType="number"
                 android:nextFocusForward="@+id/editTextDOB" />
 
             <EditText
                 android:id="@+id/editTextDOB"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/editTextFN"
                 android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@id/editTextAge"
-                android:hint="Birthday*              "
+                android:hint="Birthday*"
                 android:imeOptions="actionNext"
                 android:inputType="date"
                 android:nextFocusForward="@+id/editTextCAdd" />
@@ -97,9 +97,9 @@
 
             <EditText
                 android:id="@+id/editTextCAdd"
-                android:layout_width="wrap_content"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:hint="Current Address*                               "
+                android:hint="Current Address*"
                 android:nextFocusForward="@+id/editTextCP1"
                 android:imeOptions="actionNext"
                 android:layout_centerHorizontal="true"
@@ -120,7 +120,7 @@
 
             <EditText
                 android:id="@+id/editTextCP1"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:hint="Contact Person 1*"
                 android:nextFocusForward="@+id/editTextCP1Num"
@@ -129,9 +129,9 @@
 
             <EditText
                 android:id="@+id/editTextCP1Num"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:hint="Number*          "
+                android:hint="Number*"
                 android:inputType="phone"
                 android:layout_toRightOf="@id/editTextCP1"
                 android:nextFocusForward="@+id/editTextCP2"
@@ -140,7 +140,7 @@
 
             <EditText
                 android:id="@+id/editTextCP2"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:hint="Contact Person 2*"
                 android:nextFocusForward="@+id/editTextCP2Num"
@@ -150,9 +150,9 @@
 
             <EditText
                 android:id="@+id/editTextCP2Num"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:hint="Number*          "
+                android:hint="Number*"
                 android:inputType="phone"
                 android:layout_below="@id/editTextCP1"
                 android:layout_toRightOf="@id/editTextCP2"
@@ -162,7 +162,7 @@
 
             <EditText
                 android:id="@+id/editTextCP3"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:hint="Contact Person 3*"
                 android:inputType="textPersonName"
@@ -172,9 +172,9 @@
 
             <EditText
                 android:id="@+id/editTextCP3Num"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:hint="Number*          "
+                android:hint="Number*"
                 android:imeOptions="actionDone"
                 android:inputType="phone"
                 android:layout_below="@id/editTextCP2"

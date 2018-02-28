@@ -7,11 +7,14 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
     -->
-    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
@@ -25,6 +28,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:hardwareAccelerated="false"
+        android:largeHeap="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
             android:name=".Base.MainActivity"
@@ -35,81 +40,77 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".Base.Welcome"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Bluno.BlunoMain"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Registration.RegisterStep1"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Registration.RegisterStep2"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Registration.RegisterStep3"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Registration.RegisterStep4"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Registration.RegisterStep5"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Registration.AccountCreated"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Login.Login"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Registration.Slides"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Login.ForgotPassStep1"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Login.ForgotPassStep2"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Login.AccountVerification"
-            android:screenOrientation="portrait"></activity>
-        <activity
-            android:name=".WebActivity"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Login.ForgotPassStep3"
             android:screenOrientation="portrait">
-
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="http" />
                 <data android:scheme="https" />
                 <data android:host="rapepreventionapp-dev1.firebaseapp.com" />
             </intent-filter>
-
         </activity>
-
         <activity
             android:name=".PushNotif.LocationTracking"
             android:screenOrientation="portrait">
-
             <intent-filter>
-                <action android:name="com.build1.rapepreventionapp.TARGETNOTIFICATION"></action>
-                <category android:name="android.intent.category.DEFAULT"></category>
-            </intent-filter>
+                <action android:name="com.build1.rapepreventionapp.TARGETNOTIFICATION" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="http" />
                 <data android:scheme="https" />
                 <data android:host="tulongrapepreventionapp.dev" />
             </intent-filter>
-
         </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -125,27 +126,29 @@
 
         <activity
             android:name=".Home.BottomNavigation"
-            android:label="TULONG Rape Prevention">
-        </activity>
-
+            android:label="TULONG Rape Prevention"></activity>
         <activity
             android:name=".PushNotif.ViewProfile"
-            android:label="TULONG Rape Prevention">
-        </activity>
+            android:label="TULONG Rape Prevention"></activity>
 
-        <service android:name="com.build1.rapepreventionapp.Bluno.BluetoothLeService" android:enabled="true"/>
         <service
-            android:name=".PushNotif.FirebaseMessagingService">
+            android:name=".Bluno.BluetoothLeService"
+            android:enabled="true" />
+        <service android:name=".PushNotif.FirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="@string/default_notification_channel_id"/>
+            android:value="@string/default_notification_channel_id" />
 
+        <activity android:name=".Login.PasswordUpdated"></activity>
 
+        <activity android:name=".Login.LogIn2"></activity>
 
+        <activity android:name=".Login.EnterPassword"></activity>
     </application>
 
 </manifest>

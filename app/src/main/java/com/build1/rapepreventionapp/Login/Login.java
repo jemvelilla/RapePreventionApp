@@ -2,6 +2,7 @@ package com.build1.rapepreventionapp.Login;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -42,7 +43,6 @@ public class Login extends AppCompatActivity {
 
     private FirebaseFirestore mFirestore;
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener authStateListener;
     private Button btnLogin;
 
     private EditText email;
@@ -69,33 +69,8 @@ public class Login extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mFirestore = FirebaseFirestore.getInstance();
 
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser()!=null){
-                    if(!mAuth.getCurrentUser().isEmailVerified()){
-                        Intent intent = new Intent(getApplicationContext(), AccountVerification.class);
-                        startActivity(intent);
-                        finish();
-                    } else{
-                        Intent intent = new Intent(getApplicationContext(), BottomNavigation.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                }
-            }
-        };
-
-
         Log.v("message","onCreate");
 
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.v("message","onStart");
-        mAuth.addAuthStateListener(authStateListener);
     }
 
     public void btnOnClickLogin(View v){
@@ -120,6 +95,10 @@ public class Login extends AppCompatActivity {
                         if (task.isSuccessful()) {
 
                             if(task.getResult().size() == 0){
+                                btnLogin.setVisibility(View.VISIBLE);
+                                loading.setVisibility(View.INVISIBLE);
+                                animation.stop();
+
                                 Toast.makeText(Login.this, "Incorrect username or password.", Toast.LENGTH_LONG).show();
                             } else {
                                 for (DocumentSnapshot document : task.getResult()) {
@@ -133,7 +112,7 @@ public class Login extends AppCompatActivity {
                             loading.setVisibility(View.INVISIBLE);
                             animation.stop();
                             Log.v("result", "Error getting documents: ", task.getException());
-                            Toast.makeText(Login.this, "Incorrect username or password.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(Login.this, "Slow or no internet connection.", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -166,7 +145,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void login(){
-        mAuth.signInWithEmailAndPassword(username,passwordText).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithEmailAndPassword(username,passwordText).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
@@ -177,31 +156,23 @@ public class Login extends AppCompatActivity {
                     Map<String, Object> tokenMap = new HashMap<>();
                     tokenMap.put("token_id", token_id);
 
-                    mFirestore.collection("Users").document(current_id).update(tokenMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    mFirestore.collection("Users").document(current_id).update(tokenMap).addOnSuccessListener(Login.this, new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             btnLogin.setVisibility(View.VISIBLE);
                             loading.setVisibility(View.INVISIBLE);
                             animation.stop();
-                            sendToMain();
+
+                            finish();
                         }
                     });
                 } else {
+                    btnLogin.setVisibility(View.VISIBLE);
+                    loading.setVisibility(View.INVISIBLE);
+                    animation.stop();
                     Toast.makeText(Login.this, "Incorrect username or password.", Toast.LENGTH_LONG).show();
                 }
             }
         });
-    }
-
-    public void sendToMain(){
-        if(!mAuth.getCurrentUser().isEmailVerified()){
-            Intent intent = new Intent(getApplicationContext(), AccountVerification.class);
-            startActivity(intent);
-            finish();
-        } else{
-            Intent intent = new Intent(getApplicationContext(), BottomNavigation.class);
-            startActivity(intent);
-            finish();
-        }
     }
 }
