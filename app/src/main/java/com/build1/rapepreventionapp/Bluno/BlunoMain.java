@@ -133,6 +133,7 @@ public class BlunoMain extends BlunoLibrary {
         });
 
         Log.v("message", "onCreate");
+        getDeviceLocation2();
     }
 
     @Override
@@ -365,5 +366,51 @@ public class BlunoMain extends BlunoLibrary {
             Log.e(TAG, "getDeviceLocation: SecurityException " + e.getMessage());
         }
 
+    }
+    private void getDeviceLocation2(){
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        try{
+
+            if (mLocationPermissionGranted) {
+
+                final com.google.android.gms.tasks.Task<Location> location = mFusedLocationProviderClient.getLastLocation();
+                location.addOnCompleteListener(this, new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull final com.google.android.gms.tasks.Task<Location> task) {
+                        //final String placeId = task.getPlaceId();
+                        if (task.isSuccessful()) {
+                            currentLocation = new Location(task.getResult());
+                            latitude = String.valueOf(currentLocation.getLatitude());
+
+                            longtitude = String.valueOf(currentLocation.getLongitude());
+
+                            Map<String, Object> locationMap = new HashMap<>();
+                            locationMap.put("latitude", latitude);
+                            locationMap.put("longitude", longtitude);
+
+                            mFirestore.collection("Users").document(current_id).update(locationMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+
+                                    Log.d("message", "location stored.");
+                                }
+                            });
+
+                            Log.v("message", "onComplete: " + latitude);
+                            Log.v("message", "onComplete: " + longtitude);
+
+                            //final String placeId = task.getResult();
+
+                        }
+
+                    }
+                });
+            } else {
+                Log.d(TAG, "onComplete: NASAN");
+            }
+        }catch(SecurityException e)
+        {
+            Log.e(TAG, "getDeviceLocation: SecurityException " + e.getMessage());
+        }
     }
 }
