@@ -231,6 +231,11 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
 
 
                             currentLocationLatlng = new LatLng(latitude,longtitude);
+                            double test = currentLocationLatlng.latitude;
+
+                            LatLng origin = currentLocationLatlng;
+
+                            Log.d(TAG, "onCompletetangina: " +origin);
 
 
                             Geocoder geocoder = new Geocoder(getActivity().getApplicationContext());
@@ -596,6 +601,7 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
 
         latitude = currentLocationLatlng.latitude;
         longtitude = currentLocationLatlng.longitude;
+        Log.d(TAG, "getNearbyPoliceStation: tangina"+latitude);
         String police = "police";
         String url = getUrl(latitude, longtitude, police);
         Object dataTransfer[] = new Object[2];
