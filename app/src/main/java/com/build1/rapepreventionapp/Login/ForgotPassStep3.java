@@ -23,8 +23,6 @@ public class ForgotPassStep3 extends AppCompatActivity {
 
     private ImageView loading;
     AnimationDrawable animation;
-
-    FirebaseUser currentUser;
     EditText newPassword, confirmPassword;
 
     Button btnSubmit;
@@ -34,12 +32,8 @@ public class ForgotPassStep3 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password_step3);
-        TextView user = (TextView) findViewById(R.id.tvName);
 
         mAuth = FirebaseAuth.getInstance();
-
-        //
-//        user.setText(currentUser.getEmail());
 
         loading = (ImageView) findViewById(R.id.loading);
         loading.setVisibility(View.INVISIBLE);

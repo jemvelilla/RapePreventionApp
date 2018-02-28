@@ -3,7 +3,9 @@ package com.build1.rapepreventionapp.Profile;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -31,7 +34,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -42,10 +48,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class EditProfile extends Fragment implements View.OnClickListener{
 
     EditText editAge, editBirthdate, editContact1, editContactNumber1 ,editContact2, editContactNumber2, editContact3, editContactNumber3;
-    EditText editAddress, editFirstName, editLastName;
+    EditText editAddress, editFirstName, editLastName, editMobileNumber;
     Button btnSave, btnCancel;
+    private ImageView loading;
+    AnimationDrawable animation;
 
-    String currentUserId;
+    String currentUserId, user_id;
 
     private StorageReference mStorage;
     private FirebaseFirestore mFirestore;
@@ -53,12 +61,18 @@ public class EditProfile extends Fragment implements View.OnClickListener{
 
     private DatePickerDialog.OnDateSetListener mDateSetListener;
     private CircleImageView mProfilePicture;
+    private static final int PICK_IMAGE = 1;
+    private Uri imageUri;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
         mAuth = FirebaseAuth.getInstance();
         mFirestore = FirebaseFirestore.getInstance();
+        mStorage = FirebaseStorage.getInstance().getReference().child("images");
+
+        imageUri = null;
 
         currentUserId =  mAuth.getCurrentUser().getUid();
     }
@@ -68,6 +82,10 @@ public class EditProfile extends Fragment implements View.OnClickListener{
 
         UserInformation userInformation = new UserInformation();
 
+        loading = (ImageView) v.findViewById(R.id.loading);
+        loading.setVisibility(View.INVISIBLE);
+        loading.bringToFront();
+        animation = (AnimationDrawable) loading.getDrawable();
 
         mProfilePicture = (CircleImageView) v.findViewById(R.id.profilePicture);
         editAge = (EditText) v.findViewById(R.id.editTextAge);
@@ -81,6 +99,7 @@ public class EditProfile extends Fragment implements View.OnClickListener{
         editAddress = (EditText) v.findViewById(R.id.editTextCAdd);
         editFirstName = (EditText) v.findViewById(R.id.editTextFN);
         editLastName = (EditText) v.findViewById(R.id.editTextLN);
+        editMobileNumber = (EditText) v.findViewById(R.id.editTextMobileNumber);
 
         editAge.setText(Integer.toString(EditInformation.age));
         editBirthdate.setText(EditInformation.birthday);
@@ -93,13 +112,36 @@ public class EditProfile extends Fragment implements View.OnClickListener{
         editAddress.setText(EditInformation.currentAddress);
         editFirstName.setText(EditInformation.firstName);
         editLastName.setText(EditInformation.lastName);
+        editMobileNumber.setText(EditInformation.mobileNumber);
+
+
+        mProfilePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
+            }
+        });
 
         btnSave = (Button) v.findViewById(R.id.btnSaveChanges);
         btnCancel = (Button) v.findViewById(R.id.btnCancel);
 
+
+        animation.start();
+        loading.setVisibility(View.VISIBLE);
+        btnSave.setVisibility(View.INVISIBLE);
+        btnCancel.setVisibility(View.INVISIBLE);
+
         mFirestore.collection("Users").document(currentUserId).get().addOnSuccessListener(getActivity(), new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
+                animation.stop();
+                loading.setVisibility(View.INVISIBLE);
+                btnSave.setVisibility(View.VISIBLE);
+                btnCancel.setVisibility(View.VISIBLE);
 
                 RequestOptions placeHolderOptions = new RequestOptions();
                 placeHolderOptions.placeholder(R.drawable.default_profile);
@@ -146,6 +188,11 @@ public class EditProfile extends Fragment implements View.OnClickListener{
         switch (view.getId()) {
             case R.id.btnSaveChanges:
 
+                animation.start();
+                loading.setVisibility(View.VISIBLE);
+                btnSave.setVisibility(View.INVISIBLE);
+                btnCancel.setVisibility(View.INVISIBLE);
+
                 String mobileNumPattern = "^(09|\\+639)\\d{9}$";
 
                 if (editFirstName.getText().toString().trim().equals("")){
@@ -156,6 +203,8 @@ public class EditProfile extends Fragment implements View.OnClickListener{
                     editAge.setError("Field Required");
                 }else if (editBirthdate.getText().toString().trim().equals("")){
                     editBirthdate.setError("Field Required");
+                }else if (editMobileNumber.getText().toString().trim().equals("")){
+                    editAge.setError("Field Required");
                 }else if (editAddress.getText().toString().trim().equals("")){
                     editAddress.setError("Field Required");
                 }else if (editContact1.getText().toString().trim().equals("")){
@@ -171,30 +220,91 @@ public class EditProfile extends Fragment implements View.OnClickListener{
                 }else if (!editContactNumber3.getText().toString().matches(mobileNumPattern)){
                     editContactNumber3.setError("Invalid mobile number");
                 } else {
+                    user_id = mAuth.getCurrentUser().getUid();
 
-                    String user_id = mAuth.getCurrentUser().getUid();
+                    if (imageUri != null){
 
-                    DocumentReference user = mFirestore.collection("Users").document(user_id);
-                    user.update("first_name", editFirstName.getText().toString());
-                    user.update("last_name", editLastName.getText().toString());
-                    user.update("age", editAge.getText().toString());
-                    user.update("birthdate", editBirthdate.getText().toString());
-                    user.update("current_address", editAddress.getText().toString());
-                    user.update("contact_person1", editContact1.getText().toString());
-                    user.update("contact_person2", editContact2.getText().toString());
-                    user.update("contact_person3", editContact3.getText().toString());
-                    user.update("contact_number1", editContactNumber1.getText().toString());
-                    user.update("contact_number2", editContactNumber2.getText().toString());
-                    user.update("contact_number3", editContactNumber3.getText().toString())
-                            .addOnSuccessListener(new OnSuccessListener < Void > () {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Toast.makeText(getActivity(), "Updated Successfully",
-                                            Toast.LENGTH_SHORT).show();
-                                    redirectToProfile();
+                        StorageReference user_profile = mStorage.child(user_id + ".jpg");
+
+                        user_profile.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> uploadTask) {
+                                if (uploadTask.isSuccessful()){
+                                    String download_url = uploadTask.getResult().getDownloadUrl().toString();
+
+                                    //String token_id = FirebaseInstanceId.getInstance().getToken();
+
+                                    Map<String, Object> userMap = new HashMap<>();
+                                    userMap.put("first_name", editFirstName.getText().toString());
+                                    userMap.put("last_name", editLastName.getText().toString());
+                                    userMap.put("age", editAge.getText().toString());
+                                    userMap.put("birthdate", editBirthdate.getText().toString());
+                                    userMap.put("current_address", editAddress.getText().toString());
+                                    userMap.put("contact_person1", editContact1.getText().toString());
+                                    userMap.put("contact_person2", editContact2.getText().toString());
+                                    userMap.put("contact_person3", editContact3.getText().toString());
+                                    userMap.put("contact_number1", editContactNumber1.getText().toString());
+                                    userMap.put("contact_number2", editContactNumber2.getText().toString());
+                                    userMap.put("contact_number3", editContactNumber3.getText().toString());
+                                    userMap.put("mobile_number", editMobileNumber.getText().toString());
+                                    userMap.put("image", download_url);
+                                    //userMap.put("token_id", token_id);
+
+                                    mFirestore. collection("Users").document(user_id).update(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Toast.makeText(getActivity(), "Updated Successfully",
+                                                    Toast.LENGTH_SHORT).show();
+
+                                            animation.stop();
+                                            loading.setVisibility(View.INVISIBLE);
+                                            btnSave.setVisibility(View.VISIBLE);
+                                            btnCancel.setVisibility(View.VISIBLE);
+
+                                            redirectToProfile();
+                                        }
+                                    });
+                                } else {
+                                    Toast.makeText(getActivity(), "Error" + uploadTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
+
+                                    animation.stop();
+                                    loading.setVisibility(View.INVISIBLE);
+                                    btnSave.setVisibility(View.VISIBLE);
+                                    btnCancel.setVisibility(View.VISIBLE);
                                 }
-                            });
+                            }
+                        });
+                   } else { //else walang image update
+                        Map<String, Object> userMap = new HashMap<>();
+                        userMap.put("first_name", editFirstName.getText().toString());
+                        userMap.put("last_name", editLastName.getText().toString());
+                        userMap.put("age", editAge.getText().toString());
+                        userMap.put("birthdate", editBirthdate.getText().toString());
+                        userMap.put("current_address", editAddress.getText().toString());
+                        userMap.put("contact_person1", editContact1.getText().toString());
+                        userMap.put("contact_person2", editContact2.getText().toString());
+                        userMap.put("contact_person3", editContact3.getText().toString());
+                        userMap.put("contact_number1", editContactNumber1.getText().toString());
+                        userMap.put("contact_number2", editContactNumber2.getText().toString());
+                        userMap.put("contact_number3", editContactNumber3.getText().toString());
+                        userMap.put("mobile_number", editMobileNumber.getText().toString());
+                        //userMap.put("token_id", token_id);
 
+                        mFirestore. collection("Users").document(user_id).update(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(getActivity(), "Updated Successfully",
+                                        Toast.LENGTH_SHORT).show();
+
+                                animation.stop();
+                                loading.setVisibility(View.INVISIBLE);
+                                btnSave.setVisibility(View.VISIBLE);
+                                btnCancel.setVisibility(View.VISIBLE);
+
+                                redirectToProfile();
+                            }
+                        });
+                    }
                 }
                 break;
             case R.id.btnCancel:
@@ -217,6 +327,18 @@ public class EditProfile extends Fragment implements View.OnClickListener{
             if (ft != null) {
                 ft.replace(R.id.rootLayout, new Profile());
                 ft.commit();
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == PICK_IMAGE){
+            if(data.getData() != null){
+                imageUri = data.getData();
+                mProfilePicture.setImageURI(imageUri);
             }
         }
     }
