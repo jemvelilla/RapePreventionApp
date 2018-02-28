@@ -96,6 +96,7 @@ public class Profile extends Fragment implements View.OnClickListener{
                 editInformation.contactPerson3 = documentSnapshot.getString("contact_person3");
                 editInformation.currentAddress = documentSnapshot.getString("current_address");
                 editInformation.mobileNumber = documentSnapshot.getString("mobile_number");
+                editInformation.email = documentSnapshot.getString("email");
             }
         });
 

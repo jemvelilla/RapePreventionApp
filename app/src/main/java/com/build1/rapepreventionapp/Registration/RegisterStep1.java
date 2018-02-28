@@ -2,6 +2,7 @@ package com.build1.rapepreventionapp.Registration;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.build1.rapepreventionapp.Login.LogIn2;
 import com.build1.rapepreventionapp.Login.Login;
 import com.build1.rapepreventionapp.Model.UserInformation;
 import com.build1.rapepreventionapp.R;
@@ -27,6 +29,8 @@ public class RegisterStep1 extends AppCompatActivity {
     private ImageView loading;
     AnimationDrawable animation;
 
+    String savedAccount;
+
     FirebaseAuth auth;
     EditText emailAdd;
 
@@ -38,6 +42,9 @@ public class RegisterStep1 extends AppCompatActivity {
         setContentView(R.layout.activity_register_step1);
 
         btnNext = (Button) findViewById(R.id.buttonNextone);
+
+        SharedPreferences preferences = getSharedPreferences("PREFS", 0);
+        savedAccount = preferences.getString("savedAccount", "");
 
         loading = (ImageView) findViewById(R.id.loading);
         loading.setVisibility(View.INVISIBLE);
@@ -104,8 +111,14 @@ public class RegisterStep1 extends AppCompatActivity {
     }
 
     public void btnOnClickLoginPage(View v){
-        Intent i = new Intent(getApplicationContext(), Login.class);
-        startActivity(i);
+
+        if (!savedAccount.isEmpty()){
+            Intent i = new Intent(RegisterStep1.this, LogIn2.class);
+            startActivity(i);
+        } else {
+            Intent i = new Intent(RegisterStep1.this, Login.class);
+            startActivity(i);
+        }
     }
 
     private boolean isNetworkAvailable() {
