@@ -127,6 +127,7 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 //setUpGClient();
+
 //                final String message = EditInformation.firstName + " " + EditInformation.lastName + " needs help.";
 //
 //                    Map<String, Object> notificationMessage = new HashMap<>();
@@ -156,10 +157,33 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
                     //getDeviceLocation();
 
                buttonScanOnClickProcess();										//Alert Dialog for selecting the BLE device
+
+                final String message = EditInformation.firstName + " " + EditInformation.lastName + " needs help.";
+
+                    Map<String, Object> notificationMessage = new HashMap<>();
+                    notificationMessage.put("message", message);
+                    notificationMessage.put("from", mCurrentId);
+
+                    for (String id : ids) {
+                        mFirestore.collection("Users/" + id + "/Notifications").add(notificationMessage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Toast.makeText(BlunoMain.this, "Notification sent.", Toast.LENGTH_SHORT).show();
+
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(BlunoMain.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+//               buttonScanOnClickProcess();										//Alert Dialog for selecting the BLE device                 //Alert Dialog for selecting the BLE device
+                getDeviceLocation();
+
             }
         });
         Log.v("message", "onCreate");
-        //getDeviceLocation();
     }
 
     @Override

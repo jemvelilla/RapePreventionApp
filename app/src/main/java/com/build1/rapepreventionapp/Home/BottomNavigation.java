@@ -33,6 +33,7 @@ import java.util.List;
 public class BottomNavigation extends AppCompatActivity {
     Map map = new Map();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +75,6 @@ public class BottomNavigation extends AppCompatActivity {
                     });
         }
     }
-
     /**
      * Perform action when any item is selected.
      *

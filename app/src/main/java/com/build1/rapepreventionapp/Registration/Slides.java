@@ -19,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.build1.rapepreventionapp.Login.Login;
-import com.build1.rapepreventionapp.PrefManager;
 import com.build1.rapepreventionapp.R;
 
 public class Slides extends AppCompatActivity {
@@ -30,7 +29,6 @@ public class Slides extends AppCompatActivity {
     private TextView[] dots;
     private int[] layouts;
     private Button skipBtn, nextBtn;
-    private PrefManager prefManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

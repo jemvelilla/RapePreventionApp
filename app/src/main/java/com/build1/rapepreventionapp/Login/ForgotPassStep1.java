@@ -62,23 +62,30 @@ public class ForgotPassStep1 extends AppCompatActivity {
             auth.fetchProvidersForEmail(email).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
                 @Override
                 public void onComplete(@NonNull Task<ProviderQueryResult> task) {
+                    if (task.isSuccessful()){
+                        boolean check = !task.getResult().getProviders().isEmpty();
 
-                    boolean check = !task.getResult().getProviders().isEmpty();
+                        if (check){
 
-                    if (check){
+                            Intent i = new Intent(getApplicationContext(), ForgotPassStep2.class);
+                            i.putExtra("email", emailAdd.getText().toString());
+                            startActivity(i);
 
-                        Intent i = new Intent(getApplicationContext(), ForgotPassStep2.class);
-                        i.putExtra("email", emailAdd.getText().toString());
-                        startActivity(i);
+                        } else {
+                            loading.setVisibility(View.INVISIBLE);
+                            animation.stop();
+                            btnSearch.setVisibility(View.VISIBLE);
 
+                            emailAdd.setError("Email address doesn't exist.");
+                        }
                     } else {
+                        btnSearch.setVisibility(View.VISIBLE);
                         loading.setVisibility(View.INVISIBLE);
                         animation.stop();
-                        btnSearch.setVisibility(View.VISIBLE);
+                        Log.v("result", "Error getting documents: ", task.getException());
+                        Toast.makeText(ForgotPassStep1.this, "Slow or no internet connection.", Toast.LENGTH_LONG).show();
 
-                        emailAdd.setError("Email address doesn't exist.");
                     }
-
                 }
             });
         } else{
