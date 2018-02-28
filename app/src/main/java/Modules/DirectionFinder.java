@@ -24,16 +24,21 @@ import java.util.List;
  */
 public class DirectionFinder {
     private static final String DIRECTION_URL_API = "https://maps.googleapis.com/maps/api/directions/json?";
-    private static final String GOOGLE_API_KEY = "AIzaSyDHyMpbK6XIavNW_fDC6xFH2r9WBW6jkM4";
+    private static final String GOOGLE_API_KEY = "AIzaSyCHJNSlDyssAWHd0VbeS6-s8nFK43wyTMU";
     private DirectionFinderListener listener;
-    private LatLng origin;
-    private LatLng destination;
+    private double originLat;
+    private double originLon;
+    private double destLat;
+    private double destLon;
     private static final String TAG = "DirectionFinder";
 
-    public DirectionFinder(DirectionFinderListener listener, LatLng origin, LatLng destination) {
+    public DirectionFinder(DirectionFinderListener listener, Double originLat, Double originLon, Double destLat, Double destLon) {
         this.listener = listener;
-        this.origin = origin;
-        this.destination = destination;
+        this.originLat = originLat;
+        this.originLon = originLon;
+        this.destLat = destLat;
+        this.destLon = destLon;
+
     }
 
     public void execute() throws UnsupportedEncodingException {
@@ -42,10 +47,15 @@ public class DirectionFinder {
     }
 
     private String createUrl() throws UnsupportedEncodingException {
-        String urlOrigin = origin.latitude + "," +origin.longitude;
-        String urlDestination = destination.latitude + "," +destination.longitude;
-        Log.d(TAG, "createUrl: "+urlOrigin);
-        String url = DIRECTION_URL_API + "origin=" + urlOrigin + "&destination=" + urlDestination + "&key=" + GOOGLE_API_KEY;
+        double origLat = originLat;
+        double origLon = originLon;
+        double destiLat = destLat;
+        double destiLon = destLon;
+        //Log.d(TAG, "createUrl: "+originLat);
+        //String urlOrigin = origin.latitude + "," +origin.longitude;
+        //String urlDestination = destination.latitude + "," +destination.longitude;
+        //Log.d(TAG, "createUrl: "+urlOrigin);
+        String url = DIRECTION_URL_API + "origin=" + origLat + "," + origLon + "&destination=" + destiLat + "," + destiLon + "&key=" + GOOGLE_API_KEY;
 
         Log.d(TAG, "createUrl: " +url);
         return url;

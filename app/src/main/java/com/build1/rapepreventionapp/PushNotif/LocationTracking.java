@@ -99,6 +99,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
     private GeoDataClient mGeoDataClient;
     Location currentLocation;
     LatLng currentLocationLatlng;
+    LatLng victimLocation;
     private PlaceDetectionClient mPlaceDetectionClient;
     private final float DEFAULT_ZOOM = 16f;
     private GoogleApiClient mGoogleApiClient;
@@ -158,6 +159,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
         listPoints =new ArrayList<>();
 
         sendRequest();
+        Log.d(TAG, "onCreate: pumasok ba?");
 
     }
 
@@ -174,9 +176,13 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                 name.setText(documentSnapshot.getString("first_name") + " " + documentSnapshot.getString("last_name"));
                 double latitude = Double.parseDouble(documentSnapshot.getString("latitude"));
                 double longitude = Double.parseDouble(documentSnapshot.getString("longitude"));
-                latDB = latitude;
-                lonDB = longitude;
+                latDB = 14.612584;
+                lonDB = 120.98239;
                 location.setText(getLocation(latitude, longitude));
+                victimLocation = new LatLng(latDB,lonDB);
+                Log.d(TAG, "onSuccess:lat " +latitude);
+                Log.d(TAG, "onSuccess:lon " +longitude);
+                Log.d(TAG, "onSuccess: " +victimLocation);
 
             }
         });
@@ -619,11 +625,24 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
     //////// NEW GOOGLE DIRECTION WITH ETA AND DISTANCE
     private void sendRequest() {
         //private static final String TAG = "MapsActivity";
-        origin = new LatLng(latitude,longtitude);
+//        origin = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
+//        destination = new LatLng(latDB,lonDB);
+        //latDB= currentLocationLatlng.latitude;
+        //lonDB= currentLocationLatlng.longitude;
+        origin = new LatLng(14.6184447,120.9873903);
         destination = new LatLng(latDB,lonDB);
+//        double originLat = currentLocationLatlng.latitude;
+//        double originLon = currentLocationLatlng.longitude;
+        double originLat = 14.6184447;
+        double originLon = 120.9873903;
+        double destLat = 14.6184447;
+        double destLon = 120.9873903;
+
+        Log.d(TAG, "sendRequest: origin"+latDB);
+        Log.d(TAG, "sendRequest: destination"+victimLocation);
 
         try {
-            new DirectionFinder(this, origin, destination).execute();
+            new DirectionFinder(this, originLat, originLon, destLat, destLon).execute();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
