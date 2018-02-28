@@ -2,6 +2,7 @@ package com.build1.rapepreventionapp.Registration;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import com.build1.rapepreventionapp.Login.LogIn2;
 import com.build1.rapepreventionapp.Login.Login;
 import com.build1.rapepreventionapp.Model.UserInformation;
 import com.build1.rapepreventionapp.R;
@@ -20,6 +22,9 @@ public class RegisterStep3 extends AppCompatActivity {
     private UserInformation info;
     private EditText mDisplayDate;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
+
+    String savedAccount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +56,10 @@ public class RegisterStep3 extends AppCompatActivity {
                 mDisplayDate.setText(date);
             }
         };
+
+        SharedPreferences preferences = getSharedPreferences("PREFS", 0);
+        savedAccount = preferences.getString("savedAccount", "");
+
     }
     public void btnOnClickRegInfo(View v){
         EditText fName = (EditText) findViewById(R.id.editTextFN);
@@ -118,8 +127,14 @@ public class RegisterStep3 extends AppCompatActivity {
     }
 
     public void btnOnClickLoginPage(View v){
-        Intent i = new Intent(getApplicationContext(), Login.class);
-        startActivity(i);
+
+        if (!savedAccount.isEmpty()){
+            Intent i = new Intent(RegisterStep3.this, LogIn2.class);
+            startActivity(i);
+        } else {
+            Intent i = new Intent(RegisterStep3.this, Login.class);
+            startActivity(i);
+        }
     }
 
 

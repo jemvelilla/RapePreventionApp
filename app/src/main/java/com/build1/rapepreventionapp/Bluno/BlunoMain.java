@@ -1,12 +1,9 @@
 package com.build1.rapepreventionapp.Bluno;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
-import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -14,43 +11,26 @@ import android.os.Bundle;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.build1.rapepreventionapp.Contacts.Contacts;
 import com.build1.rapepreventionapp.Model.EditInformation;
 import com.build1.rapepreventionapp.R;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import android.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.iid.FirebaseInstanceId;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -84,7 +64,6 @@ public class BlunoMain extends BlunoLibrary {
     String[] numbers, ids;
 
     String current_id;
-    Button buttonSendNotification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -374,11 +353,6 @@ public class BlunoMain extends BlunoLibrary {
                             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
                             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 1, (android.location.LocationListener) listener);
-
-
-
-
-
 
                         } else {
                             Log.d(TAG, "onComplete: NASAN");

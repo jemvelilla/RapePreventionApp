@@ -1,6 +1,7 @@
 package com.build1.rapepreventionapp.Registration;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.build1.rapepreventionapp.Login.LogIn2;
 import com.build1.rapepreventionapp.Login.Login;
 import com.build1.rapepreventionapp.Model.UserInformation;
 import com.build1.rapepreventionapp.R;
@@ -56,6 +58,9 @@ public class RegisterStep5 extends AppCompatActivity {
     private CircleImageView mImageButton;
     private static final int PICK_IMAGE = 1;
     private Uri imageUri;
+
+    String savedAccount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +92,9 @@ public class RegisterStep5 extends AppCompatActivity {
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
             }
         });
+
+        SharedPreferences preferences = getSharedPreferences("PREFS", 0);
+        savedAccount = preferences.getString("savedAccount", "");
 
     }
     public void btnOnClickFinish(View v){
@@ -184,8 +192,14 @@ public class RegisterStep5 extends AppCompatActivity {
     }
 
     public void btnOnClickLoginPage(View v){
-        Intent i = new Intent(getApplicationContext(), Login.class);
-        startActivity(i);
+
+        if (!savedAccount.isEmpty()){
+            Intent i = new Intent(RegisterStep5.this, LogIn2.class);
+            startActivity(i);
+        } else {
+            Intent i = new Intent(RegisterStep5.this, Login.class);
+            startActivity(i);
+        }
     }
 
     private void sendToAccountCreated(){

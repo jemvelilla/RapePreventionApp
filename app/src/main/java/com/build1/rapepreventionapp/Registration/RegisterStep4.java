@@ -1,6 +1,7 @@
 package com.build1.rapepreventionapp.Registration;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.build1.rapepreventionapp.Login.LogIn2;
 import com.build1.rapepreventionapp.Login.Login;
 import com.build1.rapepreventionapp.Model.UserInformation;
 import com.build1.rapepreventionapp.R;
@@ -30,6 +32,7 @@ public class RegisterStep4 extends AppCompatActivity {
 
     private StorageReference mStorage;
 
+    String savedAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,10 @@ public class RegisterStep4 extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         mStorage = FirebaseStorage.getInstance().getReference().child("images");
+
+        SharedPreferences preferences = getSharedPreferences("PREFS", 0);
+        savedAccount = preferences.getString("savedAccount", "");
+
 
     }
     public void btnOnClickNextPassword(View v){
@@ -77,8 +84,14 @@ public class RegisterStep4 extends AppCompatActivity {
     }
 
     public void btnOnClickLoginPage(View v){
-        Intent i = new Intent(getApplicationContext(), Login.class);
-        startActivity(i);
+
+        if (!savedAccount.isEmpty()){
+            Intent i = new Intent(RegisterStep4.this, LogIn2.class);
+            startActivity(i);
+        } else {
+            Intent i = new Intent(RegisterStep4.this, Login.class);
+            startActivity(i);
+        }
     }
 
 

@@ -86,20 +86,18 @@ public class LogIn2 extends AppCompatActivity {
 
     public void btnOnClickLogIn (View v) {
         Intent i = new Intent(this, EnterPassword.class);
+        finish();
         i.putExtra("email", email);
         startActivity(i);
-        finish();
     }
 
     public void btnOnClickLogInAnotherAccnt (View v){
         Intent i = new Intent(this, Login.class); // Login
         startActivity(i);
-        finish();
     }
 
     public void btnOnClickCreateAccnt (View v){
         Intent i = new Intent(this, RegisterStep1.class); // RegisterStep1
         startActivity(i);
-        finish();
     }
 }

@@ -1,6 +1,7 @@
 package com.build1.rapepreventionapp.Registration;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.build1.rapepreventionapp.Login.LogIn2;
 import com.build1.rapepreventionapp.Login.Login;
 import com.build1.rapepreventionapp.Model.UserInformation;
 import com.build1.rapepreventionapp.R;
@@ -25,6 +27,8 @@ public class RegisterStep2 extends AppCompatActivity {
     private Button btnNext;
     private ImageView loading;
     AnimationDrawable animation;
+
+    String savedAccount;
 
     private UserInformation info;
     private FirebaseFirestore mFirestore;
@@ -41,6 +45,10 @@ public class RegisterStep2 extends AppCompatActivity {
         animation = (AnimationDrawable) loading.getDrawable();
 
         mFirestore = FirebaseFirestore.getInstance();
+
+        SharedPreferences preferences = getSharedPreferences("PREFS", 0);
+        savedAccount = preferences.getString("savedAccount", "");
+
     }
     public void btnOnClickMobNum(View v){
 
@@ -94,8 +102,14 @@ public class RegisterStep2 extends AppCompatActivity {
         }
     }
     public void btnOnClickLoginPage(View v){
-        Intent i = new Intent(getApplicationContext(), Login.class);
-        startActivity(i);
+
+        if (!savedAccount.isEmpty()){
+            Intent i = new Intent(RegisterStep2.this, LogIn2.class);
+            startActivity(i);
+        } else {
+            Intent i = new Intent(RegisterStep2.this, Login.class);
+            startActivity(i);
+        }
     }
 
 
