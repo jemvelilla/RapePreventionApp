@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.build1.rapepreventionapp.Model.EditInformation;
+import com.build1.rapepreventionapp.PushNotif.LocationTracking;
 import com.build1.rapepreventionapp.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -68,6 +69,7 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
     private Boolean mLocationPermissionGranted = true;
     Location currentLocation;
     String latitude, longtitude;
+    private LocationManager locationManager;
 
     /**sending SMS**/
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 0;
@@ -147,7 +149,9 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
         });
 
         Log.v("message", "onCreate");
+
         getDeviceLocation2();
+        this.locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
     }
 
     @Override
@@ -243,11 +247,11 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
             }
             sendNotification();
 
-            getDeviceLocation();
             Log.d(TAG, "onSerialReceived: notif lang");
             Log.d(TAG, "onSerialReceived: umabot");
         }
 
+        getDeviceLocation();
     }
 
     public void sendNotification() {
@@ -299,6 +303,7 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
+
         Log.d("pangdebug", "pumasok");
         try {
             if (mLocationPermissionGranted) {
@@ -311,64 +316,17 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
                         if (task.isSuccessful()) {
 
                             Log.d("pangdebug", "pumasok sa onLocationChanged");
+                            currentLocation = new Location(task.getResult());
+                            latitude = String.valueOf(currentLocation.getLatitude());
 
-                            final LocationListener listener = new LocationListener() {
-                                @Override
-                                public void onLocationChanged(Location location) {
-
-                                    Log.d("pangdebug", "pumasok sa onLocationChanged");
-
-                                    mylocation = location;
-                                    if (mylocation != null) {
-                                        Log.d("pangdebug", "pumasok sa myLocation");
-
-                                        //Double latitude=mylocation.getLatitude();
-                                        //Double longitude=mylocation.getLongitude();
-                                        //Or Do whatever you want with your location
-                                        Log.v("message", "onComplete: found locationasd");
-                                        currentLocation = new Location(task.getResult());
-                                        latitude = String.valueOf(currentLocation.getLatitude());
-
-                                        longtitude = String.valueOf(currentLocation.getLongitude());
-
-                                        Map<String, Object> locationMap = new HashMap<>();
-                                        locationMap.put("latitude", latitude);
-                                        locationMap.put("longitude", longtitude);
-
-                                        mFirestore.collection("Users").document(current_id).update(locationMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-
-                                                Log.d("message", "location stored.");
-                                            }
-                                        });
-
-                                        Log.v("message", "onComplete: " +latitude);
-                                        Log.v("message", "onComplete: " +longtitude);
-
-                                        //final String placeId = task.getResult();
-                                    }
-                                }
-
-                                @Override
-                                public void onStatusChanged(String provider, int status, Bundle extras) {
-
-                                }
-
-                                @Override
-                                public void onProviderEnabled(String provider) {
-
-                                }
-
-                                @Override
-                                public void onProviderDisabled(String provider) {
-
-                                }
-
-                            };
+                            longtitude = String.valueOf(currentLocation.getLongitude());
                             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-                            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 1, (android.location.LocationListener) listener);
+                            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 1, BlunoMain.this);
+                            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 500, 1, BlunoMain.this);
+
+
+
 
                         } else {
                             Log.d(TAG, "onComplete: NASAN");
@@ -428,6 +386,63 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
             Log.e(TAG, "getDeviceLocation: SecurityException " + e.getMessage());
         }
     }
+
+        @Override
+        public void onLocationChanged(Location location) {
+
+            Log.d("pangdebug", "pumasok sa onLocationChangedasa");
+
+            mylocation = location;
+            Log.d("pangdebug", "onLocationChanged: "+ mylocation);
+            if (mylocation != null) {
+                Log.d("pangdebug", "pumasok sa myLocation");
+
+                //Double latitude=mylocation.getLatitude();
+                //Double longitude=mylocation.getLongitude();
+                //Or Do whatever you want with your location
+                Log.v("message", "onComplete: found locationasd");
+                //currentLocation = new Location(task.getResult());
+                latitude = String.valueOf(location.getLatitude());
+
+                longtitude = String.valueOf(location.getLongitude());
+
+                Map<String, Object> locationMap = new HashMap<>();
+                locationMap.put("latitude", latitude);
+                locationMap.put("longitude", longtitude);
+
+                mFirestore.collection("Users").document(current_id).update(locationMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                        Log.d("pangdebug", "location stored.");
+                    }
+                });
+
+                Log.v("message", "onComplete: " +latitude);
+                Log.v("message", "onComplete: " +longtitude);
+
+                //final String placeId = task.getResult();
+            } else{
+                Log.d("pangdebug", "onLocationChanged: KINGINA" + location);
+            }
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+
+
 
 
     //turn on gps
@@ -564,28 +579,5 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
         }
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
 
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
-    }
 }
