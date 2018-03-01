@@ -53,8 +53,12 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -119,9 +123,15 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
     private FirebaseFirestore mFirestore;
     String dataFrom;
 
+    private FirebaseAuth mAuth;
+    //private FirebaseFirestore mFirestore;
+    private String mCurrentId;
+
     private List<Marker> originMarkers = new ArrayList<>();
     private List<Marker> destinationMarkers = new ArrayList<>();
     private List<Polyline> polylinePaths = new ArrayList<>();
+
+    String current_id;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -129,6 +139,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
         setContentView(R.layout.activity_location_tracking);
         getLocationPermission();
 
+//        current_id = mAuth.getCurrentUser().getUid();
         mFirestore = FirebaseFirestore.getInstance();
 
         final Intent intent = getIntent();
@@ -350,36 +361,35 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 
 
         }
+        //mFirestore = FirebaseFirestore.getInstance();
 
         Log.d(TAG, "onMapReady: Map is Readyasasa" +latitude+","+longtitude);
     }
 
-    private void twoPointsMarker(LatLng latLng) {
-
-    }
 
 
 
 
-    private String getRequestUrl(LatLng origin, LatLng destination) {
-        //value of origin
-        String stringOrigin = "origin=" +origin.latitude+ "," +origin.longitude;
-        Log.e(TAG, "getRequestUrl: "+origin );
-        //value of destination
-        String stringDestination = "destination="+destination.latitude+ ","+destination.longitude;
-        //Set value enable the sensor
-        String sensor = "sensor=false";
-        //mode for find direction
-        String mode = "mode=driving";
-        //Build the full param
-        String param = stringOrigin +"&" + stringDestination + "&" +sensor+ "&" +mode;
-        // output format
-        String output = "json";
-        //Create url to request
-        String url = "https://maps.googleapis.com/maps/api/directions/" +output + "?" +param;
-        Log.e(TAG, "getRequestUrl: "+url );
-        return url;
-    }
+
+//    private String getRequestUrl(LatLng origin, LatLng destination) {
+//        //value of origin
+//        String stringOrigin = "origin=" +origin.latitude+ "," +origin.longitude;
+//        Log.e(TAG, "getRequestUrl: "+origin );
+//        //value of destination
+//        String stringDestination = "destination="+destination.latitude+ ","+destination.longitude;
+//        //Set value enable the sensor
+//        String sensor = "sensor=false";
+//        //mode for find direction
+//        String mode = "mode=driving";
+//        //Build the full param
+//        String param = stringOrigin +"&" + stringDestination + "&" +sensor+ "&" +mode;
+//        // output format
+//        String output = "json";
+//        //Create url to request
+//        String url = "https://maps.googleapis.com/maps/api/directions/" +output + "?" +param;
+//        Log.e(TAG, "getRequestUrl: "+url );
+//        return url;
+//    }
 
     private String requestDirection(String reqUrl) throws IOException {
         String responseString = "";
@@ -663,7 +673,6 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
             Log.d(TAG, "sendRequest: " +origin);
         }
         else{
-            Log.d(TAG, "sendRequest: TANGINA WALANG LAMAN ARRAY");
             Log.d(TAG, "sendRequest: " +destination);
             Log.d(TAG, "sendRequest: " +listPoints);
         }
@@ -705,6 +714,9 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
         originMarkers = new ArrayList<>();
         destinationMarkers = new ArrayList<>();
 
+        Log.d(TAG, "onDirectionFinderSuccess: "+destinationMarkers);
+        Log.d(TAG, "onDirectionFinderSuccess: "+routes);
+
 
         for (Route route : routes) {
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
@@ -736,4 +748,19 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
+//    private void addRealtimeUpdate() {
+//        DocumentReference contactListener = mFirestore.collection("Users").document(current_id);
+//        contactListener.addSnapshotListener(new EventListener< DocumentSnapshot >() {
+//            @Override
+//            public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+//                if (e != null) {
+//                    Log.d("ERROR", e.getMessage());
+//                    return;
+//                }
+//                if (documentSnapshot != null && documentSnapshot.exists()) {
+//                    Toast.makeText(LocationTracking.this, "Current data:" + documentSnapshot.getData(), Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
+//    }
 }

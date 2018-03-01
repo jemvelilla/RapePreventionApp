@@ -105,30 +105,30 @@ public class BlunoMain extends BlunoLibrary {
                 // TODO Auto-generated method stub
                 //setUpGClient();
 
-                final String message = EditInformation.firstName + " " + EditInformation.lastName + " needs help.";
+//                final String message = EditInformation.firstName + " " + EditInformation.lastName + " needs help.";
+//
+//                Map<String, Object> notificationMessage = new HashMap<>();
+//                notificationMessage.put("message", message);
+//                notificationMessage.put("from", mCurrentId);
+//
+//                for (String id : ids) {
+//                    mFirestore.collection("Users/" + id + "/Notifications").add(notificationMessage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                        @Override
+//                        public void onSuccess(DocumentReference documentReference) {
+//                            Toast.makeText(BlunoMain.this, "Notification sent.", Toast.LENGTH_SHORT).show();
+//
+//                        }
+//                    }).addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            Toast.makeText(BlunoMain.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+//                }
+//                sendNotification(); //send text and call
+//                getDeviceLocation(); //store on database onlocationchanged
 
-                Map<String, Object> notificationMessage = new HashMap<>();
-                notificationMessage.put("message", message);
-                notificationMessage.put("from", mCurrentId);
-
-                for (String id : ids) {
-                    mFirestore.collection("Users/" + id + "/Notifications").add(notificationMessage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            Toast.makeText(BlunoMain.this, "Notification sent.", Toast.LENGTH_SHORT).show();
-
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(BlunoMain.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-                sendNotification(); //send text and call
-                getDeviceLocation(); //store on database onlocationchanged
-
-                //buttonScanOnClickProcess();                                        //Alert Dialog for selecting the BLE device                 //Alert Dialog for selecting the BLE device
+                buttonScanOnClickProcess();                                        //Alert Dialog for selecting the BLE device                 //Alert Dialog for selecting the BLE device
             }
         });
 
@@ -228,11 +228,12 @@ public class BlunoMain extends BlunoLibrary {
                 });
             }
             sendNotification();
+
+            getDeviceLocation();
             Log.d(TAG, "onSerialReceived: notif lang");
             Log.d(TAG, "onSerialReceived: umabot");
         }
 
-        getDeviceLocation();
     }
 
     public void sendNotification() {
