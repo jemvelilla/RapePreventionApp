@@ -75,23 +75,30 @@ public class ConfCall extends Fragment implements View.OnClickListener{
 
             case R.id.btnSaveChanges:
 
+                String mobileNumPattern = "^(09|\\+639)\\d{9}$";
+
                 if(!editPhoneNumber.getText().toString().equals("")){
-                    SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString("automatedCall",  editPhoneNumber.getText().toString());
-                    editor.commit();
 
-                    Toast.makeText(getActivity(), "SUCCESSFULLY UPDATED.", Toast.LENGTH_SHORT).show();
+                    if(editPhoneNumber.getText().toString().matches(mobileNumPattern)){
+                        SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString("automatedCall",  editPhoneNumber.getText().toString());
+                        editor.commit();
 
-                    android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
-                    if (fragmentManager != null) {
-                        android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction();
-                        if (ft != null) {
-                            ft.replace(R.id.rootLayout, new Profile());
-                            ft.commit();
+                        Toast.makeText(getActivity(), "SUCCESSFULLY UPDATED.", Toast.LENGTH_SHORT).show();
+
+                        android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
+                        if (fragmentManager != null) {
+                            android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction();
+                            if (ft != null) {
+                                ft.replace(R.id.rootLayout, new Profile());
+                                ft.commit();
+                            }
                         }
-                    }
+                    } else {
+                        editPhoneNumber.setError("Invalid mobile number.");
 
+                    }
                 } else {
                     editPhoneNumber.setError("Phone number cannot be empty.");
                 }
