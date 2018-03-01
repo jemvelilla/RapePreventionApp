@@ -24,6 +24,8 @@ import android.widget.Toast;
 import com.build1.rapepreventionapp.Model.EditInformation;
 import com.build1.rapepreventionapp.PushNotif.LocationTracking;
 import com.build1.rapepreventionapp.R;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -42,6 +44,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -224,29 +227,36 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
     public void onSerialReceived(String theString) {                            //Once connection data received, this function will be called
         // TODO Auto-generated method stub
         Log.v("message", theString);
-        final String message = EditInformation.firstName + " " + EditInformation.lastName + " needs help.";
 
         if (theString.contains("Tulong Activated")) {
 
-            Map<String, Object> notificationMessage = new HashMap<>();
-            notificationMessage.put("message", message);
-            notificationMessage.put("from", mCurrentId);
+            mFirestore.collection("Users").document(mCurrentId).get().addOnSuccessListener(this, new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-            for (String id : ids) {
-                mFirestore.collection("Users/" + id + "/Notifications").add(notificationMessage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(BlunoMain.this, "Notification sent.", Toast.LENGTH_SHORT).show();
+                    sendNotification(documentSnapshot.getString("first_name") + " " + documentSnapshot.getString("last_name"));
 
+                    final String message = documentSnapshot.getString("first_name") + " " + documentSnapshot.getString("last_name") + " needs help.";
+                    Map<String, Object> notificationMessage = new HashMap<>();
+                    notificationMessage.put("message", message);
+                    notificationMessage.put("from", mCurrentId);
+
+                    for (String id : ids) {
+                        mFirestore.collection("Users/" + id + "/Notifications").add(notificationMessage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Toast.makeText(BlunoMain.this, "Notification sent.", Toast.LENGTH_SHORT).show();
+
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(BlunoMain.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(BlunoMain.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-            sendNotification();
+                }
+            });
 
             Log.d(TAG, "onSerialReceived: notif lang");
             Log.d(TAG, "onSerialReceived: umabot");
@@ -255,7 +265,7 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
         getDeviceLocation();
     }
 
-    public void sendNotification() {
+    public void sendNotification(String name) {
 
         numbers = contactNumber.split(",");
 
@@ -264,7 +274,7 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
         }
 
         String call = automatedCall;
-        String message = EditInformation.firstName + " " + EditInformation.lastName + " needs your help!" +
+        String message = name + " needs your help!" +
                 " Check this link to view the location. https://tulongrapepreventionapp.dev/"+current_id;
 
         try {

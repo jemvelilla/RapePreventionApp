@@ -191,7 +191,29 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                 lonDB = longitude;
                 listPoints.add(new LatLng(latitude,longitude));
                 location.setText(getLocation(latitude, longitude));
-                victimLocation = new LatLng(latDB,lonDB);
+                DocumentReference contactListener = mFirestore.collection("Users").document(dataFrom);
+                contactListener.addSnapshotListener(new EventListener< DocumentSnapshot >() {
+                    @Override
+                    public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.d("ERROR", e.getMessage());
+                            return;
+                        }
+                        if (documentSnapshot != null && documentSnapshot.exists()) {
+
+                            double latitude = Double.parseDouble(documentSnapshot.getString("latitude"));
+                            double longitude = Double.parseDouble(documentSnapshot.getString("longitude"));
+                            latDB = latitude;
+                            lonDB = longitude;
+                            listPoints.add(new LatLng(latitude,longitude));
+                            location.setText(getLocation(latitude, longitude));
+                            sendRequest();
+                            //Toast.makeText(LocationTracking.this, "Current data:" + documentSnapshot.getData(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                //victimLocation = new LatLng(latDB,lonDB);
                 Log.d(TAG, "onSuccess:lat " +latitude);
                 Log.d(TAG, "onSuccess:lon " +longitude);
                 Log.d(TAG, "onSuccess: " +listPoints);
@@ -221,19 +243,6 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
         fragment.getMapAsync(this);
 
     }*/
-
-    private void geoLocate(){
-        Geocoder geocoder = new Geocoder(getApplicationContext());
-
-    }
-
-    private void geoDataClient(){
-        mGeoDataClient = Places.getGeoDataClient(getApplicationContext(), null);
-    }
-
-    private void placeDetectionClient() {
-        mPlaceDetectionClient = Places.getPlaceDetectionClient(getApplicationContext(), null);
-    }
 
     private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the device location");
@@ -719,7 +728,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 
 
         for (Route route : routes) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 16));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 18));
             ((TextView) findViewById(R.id.eta)).setText(route.duration.text);
             ((TextView) findViewById(R.id.kmsAway)).setText(route.distance.text);
 
@@ -748,19 +757,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
     public void onPointerCaptureChanged(boolean hasCapture) {
 
     }
-//    private void addRealtimeUpdate() {
-//        DocumentReference contactListener = mFirestore.collection("Users").document(current_id);
-//        contactListener.addSnapshotListener(new EventListener< DocumentSnapshot >() {
-//            @Override
-//            public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
-//                if (e != null) {
-//                    Log.d("ERROR", e.getMessage());
-//                    return;
-//                }
-//                if (documentSnapshot != null && documentSnapshot.exists()) {
-//                    Toast.makeText(LocationTracking.this, "Current data:" + documentSnapshot.getData(), Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-//    }
+    private void addRealtimeUpdate() {
+
+    }
 }
