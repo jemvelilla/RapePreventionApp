@@ -23,6 +23,7 @@ public class ConfCall extends Fragment implements View.OnClickListener{
     String automatedCall;
     String automatedCallState;
 
+    String number;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +56,7 @@ public class ConfCall extends Fragment implements View.OnClickListener{
 
         if(!automatedCall.isEmpty()){
             editPhoneNumber.setText(automatedCall);
+            number = automatedCall;
         }
 
         return v;
@@ -107,6 +109,8 @@ public class ConfCall extends Fragment implements View.OnClickListener{
             case R.id.btnCancel:
 
                 editPhoneNumber.setEnabled(false);
+                editPhoneNumber.setText(number);
+                editPhoneNumber.setError(null);
                 btnEditNumber.setVisibility(View.VISIBLE);
                 btnSaveChanges.setVisibility(View.INVISIBLE);
                 btnCancel.setVisibility(View.INVISIBLE);

@@ -125,7 +125,7 @@ public class BlunoMain extends BlunoLibrary {
                         }
                     });
                 }
-                //sendNotification(); //send text and call
+                sendNotification(); //send text and call
                 getDeviceLocation(); //store on database onlocationchanged
 
                 //buttonScanOnClickProcess();                                        //Alert Dialog for selecting the BLE device                 //Alert Dialog for selecting the BLE device
