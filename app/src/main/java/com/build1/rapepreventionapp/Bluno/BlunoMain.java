@@ -175,6 +175,7 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
         super.onPause();
         //getDeviceLocation();
         //onPauseProcess();
+        onResumeProcess();
         //onPause Process by BlunoLibrary
 
         Log.v("message", "onPauseProcess");

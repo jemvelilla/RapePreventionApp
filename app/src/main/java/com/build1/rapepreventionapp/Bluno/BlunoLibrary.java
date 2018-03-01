@@ -221,7 +221,6 @@ public abstract class BlunoLibrary extends AppCompatActivity {
 
     }
 
-
     public void onPauseProcess() {
         System.out.println("BLUNOActivity onPause");
         scanLeDevice(false);
