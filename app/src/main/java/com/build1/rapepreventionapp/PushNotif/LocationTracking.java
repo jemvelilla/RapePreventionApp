@@ -138,6 +138,9 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_tracking);
         getLocationPermission();
+        polylinePaths = new ArrayList<>();
+        originMarkers = new ArrayList<>();
+        destinationMarkers = new ArrayList<>();
 
 //        current_id = mAuth.getCurrentUser().getUid();
         mFirestore = FirebaseFirestore.getInstance();
@@ -201,13 +204,19 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                         }
                         if (documentSnapshot != null && documentSnapshot.exists()) {
 
-                            double latitude = Double.parseDouble(documentSnapshot.getString("latitude"));
-                            double longitude = Double.parseDouble(documentSnapshot.getString("longitude"));
-                            latDB = latitude;
-                            lonDB = longitude;
-                            listPoints.add(new LatLng(latitude,longitude));
-                            location.setText(getLocation(latitude, longitude));
-                            sendRequest();
+                            if (destinationMarkers.size() == 1){
+                                destinationMarkers.remove(0);
+                            }else {
+                                double latitude = Double.parseDouble(documentSnapshot.getString("latitude"));
+                                double longitude = Double.parseDouble(documentSnapshot.getString("longitude"));
+                                latDB = latitude;
+                                lonDB = longitude;
+                                listPoints.set(0, new LatLng(latitude,longitude));
+                                location.setText(getLocation(latitude, longitude));
+                                sendRequest();
+                            }
+
+
                             //Toast.makeText(LocationTracking.this, "Current data:" + documentSnapshot.getData(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -678,11 +687,10 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
         if (listPoints.size() == 2){
             destination = listPoints.get(0);
             origin = listPoints.get(1);
-            Log.d(TAG, "sendRequest: " +listPoints);
-            Log.d(TAG, "sendRequest: " +origin);
+            Log.d("pandebug", "sendRequest: " +listPoints);
         }
         else{
-            Log.d(TAG, "sendRequest: " +destination);
+            Log.d("pandebug", "sendRequest: else part" +destination);
             Log.d(TAG, "sendRequest: " +listPoints);
         }
         
@@ -719,9 +727,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
     @Override
     public void onDirectionFinderSuccess(List<Route> routes) {
 
-        polylinePaths = new ArrayList<>();
-        originMarkers = new ArrayList<>();
-        destinationMarkers = new ArrayList<>();
+
 
         Log.d(TAG, "onDirectionFinderSuccess: "+destinationMarkers);
         Log.d(TAG, "onDirectionFinderSuccess: "+routes);
@@ -731,19 +737,27 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 18));
             ((TextView) findViewById(R.id.eta)).setText(route.duration.text);
             ((TextView) findViewById(R.id.kmsAway)).setText(route.distance.text);
+            Log.d(TAG, "onDirectionFinderSuccesss: "+destinationMarkers);
 
             originMarkers.add(mMap.addMarker(new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.victim))
                     .title(route.startAddress)
                     .position(route.startLocation)));
 
+            if (destinationMarkers.size() != 1){
+                destinationMarkers.remove(routes);
+            }
+
             destinationMarkers.add(mMap.addMarker(new MarkerOptions()
-                    //.icon(BitmapDescriptorFactory.fromResource(R.drawable.victimmarker))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.victim))
                     .title(route.endAddress)
                     .position(route.endLocation)));
 
+            Log.d(TAG, "onDirectionFinderSuccesss: "+destinationMarkers);
+
             PolylineOptions polylineOptions = new PolylineOptions().
                     geodesic(true).
-                    color(Color.BLUE).
+                    color(Color.MAGENTA).
                     width(10);
 
             for (int i = 0; i < route.points.size(); i++)
