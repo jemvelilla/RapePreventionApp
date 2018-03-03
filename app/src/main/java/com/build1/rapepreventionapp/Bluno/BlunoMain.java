@@ -128,27 +128,27 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-                        sendNotification(documentSnapshot.getString("first_name") + " " + documentSnapshot.getString("last_name"));
+                        //sendNotification(documentSnapshot.getString("first_name") + " " + documentSnapshot.getString("last_name"));
 
-//                        final String message = documentSnapshot.getString("first_name") + " " + documentSnapshot.getString("last_name") + " needs help.";
-//                        Map<String, Object> notificationMessage = new HashMap<>();
-//                        notificationMessage.put("message", message);
-//                        notificationMessage.put("from", mCurrentId);
-//
-//                        for (String id : ids) {
-//                            mFirestore.collection("Users/" + id + "/Notifications").add(notificationMessage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                                @Override
-//                                public void onSuccess(DocumentReference documentReference) {
-//                                    Toast.makeText(BlunoMain.this, "Notification sent.", Toast.LENGTH_SHORT).show();
-//
-//                                }
-//                            }).addOnFailureListener(new OnFailureListener() {
-//                                @Override
-//                                public void onFailure(@NonNull Exception e) {
-//                                    Toast.makeText(BlunoMain.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-//                                }
-//                            });
-//                        }
+                        final String message = documentSnapshot.getString("first_name") + " " + documentSnapshot.getString("last_name") + " needs help.";
+                        Map<String, Object> notificationMessage = new HashMap<>();
+                        notificationMessage.put("message", message);
+                        notificationMessage.put("from", mCurrentId);
+
+                        for (String id : ids) {
+                            mFirestore.collection("Users/" + id + "/Notifications").add(notificationMessage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Toast.makeText(BlunoMain.this, "Notification sent.", Toast.LENGTH_SHORT).show();
+
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(BlunoMain.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
                     }
                 });
                 getDeviceLocation(); //store on database onlocationchanged
