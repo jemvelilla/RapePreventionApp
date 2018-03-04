@@ -39,6 +39,13 @@ public abstract class BlunoLibrary extends AppCompatActivity {
 
     private Context mainContext=this;
 
+
+
+//	public BlunoLibrary(Context theContext) {
+//
+//		mainContext=theContext;
+//	}
+
     public void setFragment(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();
         if (fragmentManager != null) {
@@ -64,6 +71,9 @@ public abstract class BlunoLibrary extends AppCompatActivity {
 
 
     private String mBaudrateBuffer = "AT+CURRUART="+mBaudrate+"\r\n";
+
+//	byte[] mBaudrateBuffer={0x32,0x00,(byte) (mBaudrate & 0xFF),(byte) ((mBaudrate>>8) & 0xFF),(byte) ((mBaudrate>>16) & 0xFF),0x00};;
+
 
     public void serialBegin(int baud){
         mBaudrate=baud;
@@ -235,6 +245,8 @@ public abstract class BlunoLibrary extends AppCompatActivity {
         System.out.println("MiUnoActivity onStop");
         if(mBluetoothLeService!=null)
         {
+//			mBluetoothLeService.disconnect();
+//            mHandler.postDelayed(mDisonnectingOverTimeRunnable, 10000);
             mHandler.removeCallbacks(mDisonnectingOverTimeRunnable);
             mBluetoothLeService.close();
         }
@@ -335,6 +347,12 @@ public abstract class BlunoLibrary extends AppCompatActivity {
 
 
                 System.out.println("displayData "+intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
+
+//            	mPlainProtocol.mReceivedframe.append(intent.getStringExtra(BluetoothLeService.EXTRA_DATA)) ;
+//            	System.out.print("mPlainProtocol.mReceivedframe:");
+//            	System.out.println(mPlainProtocol.mReceivedframe.toString());
+
+
             }
         }
     };
@@ -365,6 +383,7 @@ public abstract class BlunoLibrary extends AppCompatActivity {
                 mBluetoothLeService.disconnect();
                 mHandler.postDelayed(mDisonnectingOverTimeRunnable, 10000);
 
+//			mBluetoothLeService.close();
                 mConnectionState=connectionStateEnum.isDisconnecting;
                 onConectionStateChange(mConnectionState);
                 break;
