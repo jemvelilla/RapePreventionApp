@@ -128,11 +128,7 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-<<<<<<< HEAD
-                        sendNotification(documentSnapshot.getString("first_name") + " " + documentSnapshot.getString("last_name"));
-=======
                         //sendNotification(documentSnapshot.getString("first_name") + " " + documentSnapshot.getString("last_name"));
->>>>>>> 2763e548e048868a406c84bc275439de15efe03e
 
                         final String message = documentSnapshot.getString("first_name") + " " + documentSnapshot.getString("last_name") + " needs help.";
                         Map<String, Object> notificationMessage = new HashMap<>();
