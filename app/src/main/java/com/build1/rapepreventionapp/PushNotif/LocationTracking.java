@@ -581,7 +581,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
             Log.d("pandebug", "sendRequest: else part" +destination);
             Log.d(TAG, "sendRequest: " +listPoints);
         }
-        
+
 
         try {
             new DirectionFinder(this, origin, destination).execute();
