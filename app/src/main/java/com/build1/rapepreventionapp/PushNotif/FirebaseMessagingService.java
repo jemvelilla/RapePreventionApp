@@ -42,6 +42,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         Intent resultIntent = new Intent(click_action);
         resultIntent.putExtra("message", dataMessage);
         resultIntent.putExtra("from_user_id", dataFrom);
+        resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(resultIntent);
 
         PendingIntent resultPendingIntent =

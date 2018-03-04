@@ -10,9 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.build1.rapepreventionapp.Login.LogIn2;
@@ -212,11 +210,9 @@ public class RegisterStep5 extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == PICK_IMAGE){
-            if(data.getData() != null){
-                imageUri = data.getData();
-                mImageButton.setImageURI(imageUri);
-            }
+        if(requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null){
+            imageUri = data.getData();
+            mImageButton.setImageURI(imageUri);
         }
     }
 }

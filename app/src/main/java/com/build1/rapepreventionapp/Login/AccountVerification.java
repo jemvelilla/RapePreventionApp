@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,11 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 
 public class AccountVerification extends AppCompatActivity {
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener authStateListener;
 
-    DatabaseReference databaseUsers;
-
-    private WebView webView;
     TextView tvUser;
 
     @Override

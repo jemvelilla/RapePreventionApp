@@ -1,6 +1,5 @@
 package com.build1.rapepreventionapp.Login;
 
-import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +10,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.build1.rapepreventionapp.Home.BottomNavigation;
 import com.build1.rapepreventionapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;

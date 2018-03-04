@@ -3,7 +3,6 @@ package com.build1.rapepreventionapp.Home;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -14,22 +13,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.build1.rapepreventionapp.Contacts.Contacts;
-import com.build1.rapepreventionapp.Model.UserInformation;
 import com.build1.rapepreventionapp.Profile.Profile;
 import com.build1.rapepreventionapp.R;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class BottomNavigation extends AppCompatActivity {
     Map map = new Map();
 
@@ -39,20 +24,6 @@ public class BottomNavigation extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bottom_navigation);
 
-        /**
-        final Intent intent = getIntent();
-        final String action = intent.getAction();
-
-        if (Intent.ACTION_VIEW.equals(action)) {
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-            final List<String> segments = intent.getData().getPathSegments();
-            for (int i=0; i< segments.size(); i++) {
-                Log.v("data", segments.get(i));
-            }
-        }
-         **/
-//
-//        map.getDeviceLocation();
         setupNavigationView();
     }
 

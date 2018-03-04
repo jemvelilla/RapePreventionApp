@@ -16,8 +16,6 @@ import com.build1.rapepreventionapp.Login.Login;
 import com.build1.rapepreventionapp.R;
 import com.build1.rapepreventionapp.Registration.RegisterStep1;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class Welcome extends AppCompatActivity {
 

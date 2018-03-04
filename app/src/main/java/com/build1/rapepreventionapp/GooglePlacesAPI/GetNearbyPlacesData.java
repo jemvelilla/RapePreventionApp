@@ -16,10 +16,6 @@ import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
-/**
- * Created by Darise on 06/02/2018.
- */
-
 public class GetNearbyPlacesData extends AsyncTask<Object, String, String> {
 
     private String googlePlacesData;

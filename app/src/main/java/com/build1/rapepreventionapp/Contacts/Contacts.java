@@ -16,12 +16,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.build1.rapepreventionapp.Login.ForgotPassStep2;
-import com.build1.rapepreventionapp.Model.UserModel;
 import com.build1.rapepreventionapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

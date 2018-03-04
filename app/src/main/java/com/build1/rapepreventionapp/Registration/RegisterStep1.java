@@ -32,7 +32,7 @@ public class RegisterStep1 extends AppCompatActivity {
     String savedAccount;
 
     FirebaseAuth auth;
-    EditText emailAdd;
+
 
     UserInformation info = new UserInformation();
 
