@@ -191,13 +191,19 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                         }
                         if (documentSnapshot != null && documentSnapshot.exists()) {
 
-                            double latitude = Double.parseDouble(documentSnapshot.getString("latitude"));
-                            double longitude = Double.parseDouble(documentSnapshot.getString("longitude"));
-                            latDB = latitude;
-                            lonDB = longitude;
-                            listPoints.add(new LatLng(latitude,longitude));
-                            location.setText(getLocation(latitude, longitude));
-                            sendRequest();
+                            if (destinationMarkers.size() == 1){
+                                destinationMarkers.remove(0);
+                            }else {
+                                double latitude = Double.parseDouble(documentSnapshot.getString("latitude"));
+                                double longitude = Double.parseDouble(documentSnapshot.getString("longitude"));
+                                latDB = latitude;
+                                lonDB = longitude;
+                                listPoints.set(1, new LatLng(latitude,longitude));
+                                location.setText(getLocation(latitude, longitude));
+                                sendRequest();
+                            }
+
+
                             //Toast.makeText(LocationTracking.this, "Current data:" + documentSnapshot.getData(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -214,32 +220,9 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 
     }
 
-
-    /*private void init(){
-
-        mGoogleApiClient = new GoogleApiClient
-                .Builder(getActivity().getApplicationContext())
-                .addApi(Places.GEO_DATA_API)
-                .addApi(Places.PLACE_DETECTION_API)
-                .enableAutoManage(getActivity(), this)
-                .build();
-
-
-    }*/
-
-    /*private void initMap() {
-        Log.d(TAG, "initMap: initmap");
-        SupportMapFragment fragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        fragment.getMapAsync(this);
-
-    }*/
-
     private void getDeviceLocation() {
         Log.d(TAG, "getDeviceLocation: getting the device location");
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
-        //latitude = location.getLatitude();
-        //longtitude = location.getLongitude();
-        //lastlocation = location;
 
         try {
             if (mLocationPermissionGranted) {
@@ -265,7 +248,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                                 Log.e(TAG, "onComplete: "+addresses );
                                 listPoints.add(new LatLng(latitude, longtitude));
 
-                                Log.d(TAG, "onComplete twyla: "+listPoints);
+                                Log.d(TAG, "onComplete : "+listPoints);
 //                                moveCamera(new LatLng(latitude, longtitude),
 //                                        DEFAULT_ZOOM, ""+address+"");
 
@@ -297,27 +280,6 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
         }
     }
 
-    /*private void moveCamera(LatLng latLng, float zoom, PlaceInfo placeInfo) {
-        Log.d(TAG, "moveCamera: moving the camera to :");
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-
-        mMap.clear();
-        mMap.setInfoWindowAdapter(new CustomWindowInfoAdapter(getActivity().getApplicationContext()));
-
-        if (placeInfo != null){
-            try {
-                String snippet = "Address: " +placeInfo.getAddress()+ "\n" +"";
-            MarkerOptions options = new MarkerOptions().position(latLng).title(placeInfo.getName()).snippet(snippet);
-            mMarker = mMap.addMarker(options);
-
-            }catch (NullPointerException e){
-                Log.e(TAG, "moveCamera: " );
-            }
-        }else{
-            mMap.addMarker(new MarkerOptions().position(latLng));
-        }
-    }*/
-
     private void moveCamera(LatLng latLng, float zoom, String title) {
         Log.d(TAG, "moveCamera: moving the camera to :");
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
@@ -344,16 +306,10 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 
 
             if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
+
                 return;
             }
-            mMap.setMyLocationEnabled(true);
+            //mMap.setMyLocationEnabled(true);
 
 
             //initMap();
@@ -471,39 +427,6 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
             }
         }
     }
-
-
-
-    /*private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback = new ResultCallback<PlaceBuffer>() {
-        @Override
-        public void onResult(@NonNull PlaceBuffer places) {
-
-            if (!places.getStatus().isSuccess()){
-                places.release();
-                return;
-            }
-
-            final Place place = places.get(0);
-            try{
-                mPlace = new PlaceInfo();
-                mPlace.setName(place.getName().toString());
-                mPlace.setAddress(place.getAddress().toString());
-                mPlace.setId(place.getId());
-                mPlace.setLatLng(place.getLatLng());
-
-            }catch (NullPointerException e){
-                Log.e(TAG, "onResult: NULLPOINTEREXCEPTION" + e.getMessage());
-            }
-
-            moveCamera(new LatLng(place.getViewport().getCenter().latitude, place.getViewport().getCenter().longitude),DEFAULT_ZOOM, mPlace.getName());
-            places.release();
-        }
-    };*/
-
-    ////////////////////////////////////////////
-
-
-
 
     public class TaskRequestDirections extends AsyncTask<String, Void, String> {
 
@@ -634,48 +557,21 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 
     }
 
-
-    //////// NEW GOOGLE DIRECTION WITH ETA AND DISTANCE
-//    private void sendRequest() {
-//        //private static final String TAG = "MapsActivity";
-////        origin = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-////        destination = new LatLng(latDB,lonDB);
-//        //latDB= currentLocationLatlng.latitude;
-//        //lonDB= currentLocationLatlng.longitude;
-//        origin = new LatLng(14.6184447,120.9873903);
-//        destination = new LatLng(latDB,lonDB);
-////        double originLat = currentLocationLatlng.latitude;
-////        double originLon = currentLocationLatlng.longitude;
-//        double originLat = currentLocation.getLatitude();
-//        double originLon = 120.9873903;
-//        double destLat = 14.6184447;
-//        double destLon = 120.9873903;
-//
-//        Log.d(TAG, "sendRequest: origin"+latDB);
-//        Log.d(TAG, "sendRequest: destination"+victimLocation);
-//
-//        try {
-//            new DirectionFinder(this, originLat, originLon, destLat, destLon).execute();
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     public void sendRequest() {
-        //private static final String TAG = "MapsActivity";
 
         Log.d(TAG, "sendRequest: LISTPOINTS" +listPoints);
         if (listPoints.size() == 2){
-            destination = listPoints.get(0);
-            origin = listPoints.get(1);
-            Log.d(TAG, "sendRequest: " +listPoints);
-            Log.d(TAG, "sendRequest: " +origin);
+            destination = listPoints.get(1);
+            origin = listPoints.get(0);
+            Log.d("pandebug ni darise", "sendRequest: listpoints" +listPoints);
+            Log.d("pandebug ni darise", "sendRequest: listpoints origin" +origin);
+            Log.d("pandebug ni darise", "sendRequest: listpoints destination" +destination);
         }
         else{
-            Log.d(TAG, "sendRequest: " +destination);
+            Log.d("pandebug", "sendRequest: else part" +destination);
             Log.d(TAG, "sendRequest: " +listPoints);
         }
-        
+
 
         try {
             new DirectionFinder(this, origin, destination).execute();
@@ -709,9 +605,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
     @Override
     public void onDirectionFinderSuccess(List<Route> routes) {
 
-        polylinePaths = new ArrayList<>();
-        originMarkers = new ArrayList<>();
-        destinationMarkers = new ArrayList<>();
+
 
         Log.d(TAG, "onDirectionFinderSuccess: "+destinationMarkers);
         Log.d(TAG, "onDirectionFinderSuccess: "+routes);
@@ -721,19 +615,30 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 18));
             ((TextView) findViewById(R.id.eta)).setText(route.duration.text);
             ((TextView) findViewById(R.id.kmsAway)).setText(route.distance.text);
+            Log.d(TAG, "onDirectionFinderSuccesss: "+destinationMarkers);
+
+
+
 
             originMarkers.add(mMap.addMarker(new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_blue))
                     .title(route.startAddress)
                     .position(route.startLocation)));
 
+            if (destinationMarkers.size() == 1){
+                destinationMarkers.remove(routes);
+            }
+
             destinationMarkers.add(mMap.addMarker(new MarkerOptions()
-                    //.icon(BitmapDescriptorFactory.fromResource(R.drawable.victimmarker))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.end_green))
                     .title(route.endAddress)
                     .position(route.endLocation)));
 
+            Log.d(TAG, "onDirectionFinderSuccesss: "+destinationMarkers);
+
             PolylineOptions polylineOptions = new PolylineOptions().
                     geodesic(true).
-                    color(Color.BLUE).
+                    color(Color.MAGENTA).
                     width(10);
 
             for (int i = 0; i < route.points.size(); i++)
@@ -745,9 +650,6 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
-
-    }
-    private void addRealtimeUpdate() {
 
     }
 }
