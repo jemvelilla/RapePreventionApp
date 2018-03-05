@@ -45,12 +45,14 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.PlaceDetectionClient;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -167,6 +169,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                 }
             }
         }
+        getDeviceLocation2();
 
 
         name = (TextView) findViewById(R.id.name);
@@ -181,7 +184,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 
 
         Log.d(TAG, "onCreate: pumasok ba?");
-        getDeviceLocation2();
+
 
     }
 
@@ -413,8 +416,11 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
         mMap = googleMap;
 
 
+
+
         if (mLocationPermissionGranted) {
             getDeviceLocation();
+            getDeviceLocation2();
             //if (currentLocationLatlng != null){
             //    getNearbyPoliceStation();
             //}
@@ -805,6 +811,20 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.end_green))
                     .title(route.endAddress)
                     .position(route.endLocation)));
+
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            builder.include(listPoints.get(0));
+            builder.include(listPoints.get(1));
+            LatLngBounds bounds = builder.build();
+
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 30);
+            mMap.animateCamera(cu, new GoogleMap.CancelableCallback(){
+                public void onCancel(){}
+                public void onFinish(){
+                    CameraUpdate zout = CameraUpdateFactory.zoomBy((float)-2.0);
+                    mMap.animateCamera(zout);
+                }
+            });
 
             Log.d(TAG, "onDirectionFinderSuccesss: "+destinationMarkers);
 
