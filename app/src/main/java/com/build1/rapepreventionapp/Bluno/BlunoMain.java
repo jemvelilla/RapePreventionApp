@@ -21,11 +21,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.build1.rapepreventionapp.Model.EditInformation;
-import com.build1.rapepreventionapp.PushNotif.LocationTracking;
 import com.build1.rapepreventionapp.R;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -47,7 +43,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -124,36 +122,40 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
                 // TODO Auto-generated method stub
                 //setUpGClient();
 
-                mFirestore.collection("Users").document(mCurrentId).get().addOnSuccessListener(BlunoMain.this, new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                mFirestore.collection("Users").document(mCurrentId).get().addOnSuccessListener(BlunoMain.this, new OnSuccessListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+//
+//                        //sendNotification(documentSnapshot.getString("first_name") + " " + documentSnapshot.getString("last_name"));
+//
+//                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//                        String currentDateTime = dateFormat.format(new Date()); // Find todays date
+//
+//                        final String message = documentSnapshot.getString("first_name") + " " + documentSnapshot.getString("last_name") + " needs help.";
+//                        Map<String, Object> notificationMessage = new HashMap<>();
+//                        notificationMessage.put("message", message);
+//                        notificationMessage.put("from", mCurrentId);
+//                        notificationMessage.put("timestamp", currentDateTime);
+//
+//                        for (String id : ids) {
+//                            mFirestore.collection("Users/" + id + "/Notifications").add(notificationMessage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                                @Override
+//                                public void onSuccess(DocumentReference documentReference) {
+//                                    Toast.makeText(BlunoMain.this, "Notification sent.", Toast.LENGTH_SHORT).show();
+//
+//                                }
+//                            }).addOnFailureListener(new OnFailureListener() {
+//                                @Override
+//                                public void onFailure(@NonNull Exception e) {
+//                                    Toast.makeText(BlunoMain.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                                }
+//                            });
+//                        }
+//                    }
+//                });
+//                getDeviceLocation(); //store on database onlocationchanged
 
-                        //sendNotification(documentSnapshot.getString("first_name") + " " + documentSnapshot.getString("last_name"));
-
-                        final String message = documentSnapshot.getString("first_name") + " " + documentSnapshot.getString("last_name") + " needs help.";
-                        Map<String, Object> notificationMessage = new HashMap<>();
-                        notificationMessage.put("message", message);
-                        notificationMessage.put("from", mCurrentId);
-
-                        for (String id : ids) {
-                            mFirestore.collection("Users/" + id + "/Notifications").add(notificationMessage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                @Override
-                                public void onSuccess(DocumentReference documentReference) {
-                                    Toast.makeText(BlunoMain.this, "Notification sent.", Toast.LENGTH_SHORT).show();
-
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(BlunoMain.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    }
-                });
-                getDeviceLocation(); //store on database onlocationchanged
-
-                //buttonScanOnClickProcess();                                        //Alert Dialog for selecting the BLE device                 //Alert Dialog for selecting the BLE device
+                buttonScanOnClickProcess();                                        //Alert Dialog for selecting the BLE device                 //Alert Dialog for selecting the BLE device
             }
         });
 
@@ -239,6 +241,7 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
             mFirestore.collection("Users").document(mCurrentId).get().addOnSuccessListener(this, new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
+
 
                     sendNotification(documentSnapshot.getString("first_name") + " " + documentSnapshot.getString("last_name"));
 

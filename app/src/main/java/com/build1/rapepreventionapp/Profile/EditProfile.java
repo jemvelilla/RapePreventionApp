@@ -197,28 +197,82 @@ public class EditProfile extends Fragment implements View.OnClickListener{
 
                 if (editFirstName.getText().toString().trim().equals("")){
                     editFirstName.setError("Field Required");
+                    animation.stop();
+                    loading.setVisibility(View.INVISIBLE);
+                    btnSave.setVisibility(View.VISIBLE);
+                    btnCancel.setVisibility(View.VISIBLE);
                 }else if (editLastName.getText().toString().trim().equals("")){
                     editLastName.setError("Field Required");
+                    animation.stop();
+                    loading.setVisibility(View.INVISIBLE);
+                    btnSave.setVisibility(View.VISIBLE);
+                    btnCancel.setVisibility(View.VISIBLE);
                 }else if (editAge.getText().toString().trim().equals("")){
                     editAge.setError("Field Required");
+                    animation.stop();
+                    loading.setVisibility(View.INVISIBLE);
+                    btnSave.setVisibility(View.VISIBLE);
+                    btnCancel.setVisibility(View.VISIBLE);
                 }else if (editBirthdate.getText().toString().trim().equals("")){
                     editBirthdate.setError("Field Required");
+                    animation.stop();
+                    loading.setVisibility(View.INVISIBLE);
+                    btnSave.setVisibility(View.VISIBLE);
+                    btnCancel.setVisibility(View.VISIBLE);
                 }else if (editMobileNumber.getText().toString().trim().equals("")){
                     editAge.setError("Field Required");
+                    animation.stop();
+                    loading.setVisibility(View.INVISIBLE);
+                    btnSave.setVisibility(View.VISIBLE);
+                    btnCancel.setVisibility(View.VISIBLE);
                 }else if (editAddress.getText().toString().trim().equals("")){
                     editAddress.setError("Field Required");
+                    animation.stop();
+                    loading.setVisibility(View.INVISIBLE);
+                    btnSave.setVisibility(View.VISIBLE);
+                    btnCancel.setVisibility(View.VISIBLE);
                 }else if (editContact1.getText().toString().trim().equals("")){
                     editContact1.setError("Field Required");
+                    animation.stop();
+                    loading.setVisibility(View.INVISIBLE);
+                    btnSave.setVisibility(View.VISIBLE);
+                    btnCancel.setVisibility(View.VISIBLE);
                 }else if (!editContactNumber1.getText().toString().matches(mobileNumPattern)){
                     editContactNumber1.setError("Invalid mobile number");
+                    animation.stop();
+                    loading.setVisibility(View.INVISIBLE);
+                    btnSave.setVisibility(View.VISIBLE);
+                    btnCancel.setVisibility(View.VISIBLE);
                 }else if (editContact2.getText().toString().trim().equals("")){
                     editContact2.setError("Field Required");
+                    animation.stop();
+                    loading.setVisibility(View.INVISIBLE);
+                    btnSave.setVisibility(View.VISIBLE);
+                    btnCancel.setVisibility(View.VISIBLE);
                 }else if (!editContactNumber2.getText().toString().matches(mobileNumPattern)){
                     editContactNumber2.setError("Invalid mobile number");
+                    animation.stop();
+                    loading.setVisibility(View.INVISIBLE);
+                    btnSave.setVisibility(View.VISIBLE);
+                    btnCancel.setVisibility(View.VISIBLE);
                 } else if (editContact3.getText().toString().trim().equals("")){
                     editContact3.setError("Field Required");
+                    animation.stop();
+                    loading.setVisibility(View.INVISIBLE);
+                    btnSave.setVisibility(View.VISIBLE);
+                    btnCancel.setVisibility(View.VISIBLE);
                 }else if (!editContactNumber3.getText().toString().matches(mobileNumPattern)){
                     editContactNumber3.setError("Invalid mobile number");
+                    animation.stop();
+                    loading.setVisibility(View.INVISIBLE);
+                    btnSave.setVisibility(View.VISIBLE);
+                    btnCancel.setVisibility(View.VISIBLE);
+                } else if (!editMobileNumber.getText().toString().matches(mobileNumPattern)){
+                    editMobileNumber.setError("Invalid mobile number");
+                    animation.stop();
+                    loading.setVisibility(View.INVISIBLE);
+                    btnSave.setVisibility(View.VISIBLE);
+                    btnCancel.setVisibility(View.VISIBLE);
                 } else {
                     user_id = mAuth.getCurrentUser().getUid();
 
