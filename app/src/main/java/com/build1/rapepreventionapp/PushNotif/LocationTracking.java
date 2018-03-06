@@ -558,7 +558,6 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 
             //final String placeId = task.getResult();
         } else{
-            Log.d("pangdebug", "onLocationChanged: KINGINA" + location);
         }
     }
 
@@ -799,9 +798,6 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 //                    mMap.animateCamera(zout);
 //                }
 //            });
-            bounds  = new google.
-
-            Log.d(TAG, "onDirectionFinderSuccesss: "+destinationMarkers);
 
             PolylineOptions polylineOptions = new PolylineOptions().
                     geodesic(true).

@@ -1,13 +1,17 @@
 package com.build1.rapepreventionapp.Contacts;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +45,9 @@ public class Contacts extends Fragment implements View.OnClickListener{
     String contactName; //contact name preferences
     String contactNumber; //contact number preferences
     String contactId;
+    private static final String READ_CONTACTS = Manifest.permission.READ_CONTACTS;
+    private static final int CONTACTS_PERMISSION_REQUEST_CODE = 1234;
+    private Boolean mContactsPermissionGranted = false;
 
     List<String> nameList = new ArrayList<>(); //array of saved names
     List<String> numList = new ArrayList<>(); //array of saved numbers
@@ -59,6 +66,7 @@ public class Contacts extends Fragment implements View.OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getContactsPermission();
 
         mFirestore = FirebaseFirestore.getInstance();
 
@@ -69,7 +77,11 @@ public class Contacts extends Fragment implements View.OnClickListener{
 
         Log.v("view", "onCreate");
         //load phonebook and app users
-        loadContacts();
+        if (mContactsPermissionGranted == true){
+            loadContacts();
+        }else{
+
+        }
 
     }
 
@@ -184,6 +196,7 @@ public class Contacts extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View view) {
         android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
+        Log.d("pandegbug", "onClick: true");
         if (fragmentManager != null) {
             android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction();
             if (ft != null) {
@@ -191,6 +204,7 @@ public class Contacts extends Fragment implements View.OnClickListener{
                 ft.commit();
             }
         }
+
     }
 
     public void loadContacts(){
@@ -210,7 +224,7 @@ public class Contacts extends Fragment implements View.OnClickListener{
                 phoneNumber = phoneNumber.replace("+63", "0");
                 Log.v("phone", phoneNumber);
 
-                 /** check if phone number exists in the app firebase**/
+                /** check if phone number exists in the app firebase**/
                 CollectionReference usersRef = mFirestore.collection("Users");
                 com.google.firebase.firestore.Query query = usersRef.whereEqualTo("mobile_number", phoneNumber);
                 query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -223,7 +237,7 @@ public class Contacts extends Fragment implements View.OnClickListener{
                         if (task.isSuccessful()) {
 
                             if(task.getResult().size() == 0){
-                                    usersMap.put("number", "no id");
+                                usersMap.put("number", "no id");
                             } else {
                                 for (DocumentSnapshot document : task.getResult()) {
                                     String phone_number = document.getData().get("mobile_number").toString();
@@ -238,6 +252,23 @@ public class Contacts extends Fragment implements View.OnClickListener{
                 });
                 /**end**/
             }
+        }
+    }
+
+    public void getContactsPermission(){
+        //Log.d(TAG, "getLocationPermission: getting location permissions");
+        String[] permissions = {
+                Manifest.permission.READ_CONTACTS,
+                //Manifest.permission.ACCESS_COARSE_LOCATION
+        };
+
+        if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),READ_CONTACTS) == PackageManager.PERMISSION_GRANTED){
+
+
+            mContactsPermissionGranted = true;
+
+        }else{
+            ActivityCompat.requestPermissions(getActivity(),permissions, CONTACTS_PERMISSION_REQUEST_CODE);
         }
     }
 }
