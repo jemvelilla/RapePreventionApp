@@ -190,49 +190,11 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 
     public void onStart(){
         super.onStart();
-        mFirestore.collection("Users").document(current_id).get().addOnSuccessListener( new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-
-                double latitude = Double.parseDouble(documentSnapshot.getString("latitude"));
-                double longitude = Double.parseDouble(documentSnapshot.getString("longitude"));
-                latDB = latitude;
-                lonDB = longitude;
-                listPoints.add(new LatLng(latitude,longitude));
-
-                DocumentReference contactListener = mFirestore.collection("Users").document(current_id);
-                contactListener.addSnapshotListener(new EventListener< DocumentSnapshot >() {
-                    @Override
-                    public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.d("ERROR", e.getMessage());
-                            return;
-                        }
-                        if (documentSnapshot != null && documentSnapshot.exists()) {
-
-                            if (originMarkers.size() == 1){
-                                originMarkers.remove(0);
-                            }else {
-                                double latitude = Double.parseDouble(documentSnapshot.getString("latitude"));
-                                double longitude = Double.parseDouble(documentSnapshot.getString("longitude"));
-                                latDB = latitude;
-                                lonDB = longitude;
-                                listPoints.set(0, new LatLng(latitude,longitude));
-                                //location.setText(getLocation(latitude, longitude));
-                                sendRequest();
-                            }
-
-
-                            //Toast.makeText(LocationTracking.this, "Current data:" + documentSnapshot.getData(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
-        });
-
         mFirestore.collection("Users").document(dataFrom).get().addOnSuccessListener(this, new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Log.d("pandebug", "onSuccess: pumasok sa datafrom ");
+
                 RequestOptions placeHolderOptions = new RequestOptions();
                 placeHolderOptions.placeholder(R.drawable.default_profile);
 
@@ -282,6 +244,15 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
             }
         });
 
+        //if (listPoints.size() == 0){
+
+
+        //}
+
+
+
+
+
     }
 
     private void getDeviceLocation() {
@@ -302,11 +273,12 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                             latitude = currentLocation.getLatitude();
 
                             longtitude = currentLocation.getLongitude();
+                            listPoints.add(new LatLng(latitude,longtitude));
                             currentLocationLatlng = new LatLng(latitude,longtitude);
                             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-                            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 1, LocationTracking.this);
-                            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 500, 1, LocationTracking.this);
+                            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 2, LocationTracking.this);
+                            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 500, 2, LocationTracking.this);
                             Geocoder geocoder = new Geocoder(getApplicationContext());
                             try {
                                 addresses = geocoder.getFromLocation(currentLocation.getLatitude(), longtitude,1);
@@ -563,9 +535,11 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
             //Or Do whatever you want with your location
             Log.v("message", "onComplete: found locationasd");
             //currentLocation = new Location(task.getResult());
-            latitudeDb = String.valueOf(location.getLatitude());
+            double latitudeDb = location.getLatitude();
 
-            longitudeDb = String.valueOf(location.getLongitude());
+            double longitudeDb = location.getLongitude();
+
+            listPoints.set(0, new LatLng(latitudeDb,longitudeDb));
 
             Map<String, Object> locationMap = new HashMap<>();
             locationMap.put("latitude", latitudeDb);
@@ -743,7 +717,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
             Log.d("pandebug ni darise", "sendRequest: listpoints destination" +destination);
         }
         else{
-            Log.d("pandebug", "sendRequest: else part twy" +origin);
+            Log.d("pandebug", "sendRequest: else part twy" +listPoints+ listPoints.get(0));
             Log.d(TAG, "sendRequest: " +listPoints);
         }
 
@@ -812,19 +786,20 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                     .title(route.endAddress)
                     .position(route.endLocation)));
 
-            LatLngBounds.Builder builder = new LatLngBounds.Builder();
-            builder.include(listPoints.get(0));
-            builder.include(listPoints.get(1));
-            LatLngBounds bounds = builder.build();
+//            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+//            builder.include(listPoints.get(0));
+//            builder.include(listPoints.get(1));
+//            LatLngBounds bounds = builder.build();
 
-            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 30);
-            mMap.animateCamera(cu, new GoogleMap.CancelableCallback(){
-                public void onCancel(){}
-                public void onFinish(){
-                    CameraUpdate zout = CameraUpdateFactory.zoomBy((float)-2.0);
-                    mMap.animateCamera(zout);
-                }
-            });
+//            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 30);
+//            mMap.animateCamera(cu, new GoogleMap.CancelableCallback(){
+//                public void onCancel(){}
+//                public void onFinish(){
+//                    CameraUpdate zout = CameraUpdateFactory.zoomBy((float)-2.0);
+//                    mMap.animateCamera(zout);
+//                }
+//            });
+            bounds  = new google.
 
             Log.d(TAG, "onDirectionFinderSuccesss: "+destinationMarkers);
 
