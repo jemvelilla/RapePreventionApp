@@ -67,6 +67,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static android.Manifest.permission.READ_CONTACTS;
+import static android.Manifest.permission.SEND_SMS;
+
 /**
  * Created by Darise on 24/01/2018.
  */
@@ -87,7 +90,9 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
+    private static final int SMS_PERMISSION_REQUEST_CODE = 1234;
     private Boolean mLocationPermissionGranted = false;
+    private Boolean mSMSPermissionGranted = false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private GeoDataClient mGeoDataClient;
     Location currentLocation;
@@ -128,6 +133,7 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
 //        mStorage = FirebaseStorage.getInstance().getReference().child("images");
 //        mFirestore = FirebaseFirestore.getInstance();
         getLocationPermission();
+        getMessagePermission();
     }
 
     @Nullable
@@ -631,6 +637,21 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
         Log.e(TAG, "getUrl: " +longtitude );
 
          return googlePlaceUrl.toString();
+    }
+
+    public void getMessagePermission(){
+        //Log.d(TAG, "getLocationPermission: getting location permissions");
+        String[] permissions = {
+                SEND_SMS,
+                //Manifest.permission.ACCESS_COARSE_LOCATION
+        };
+
+        if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),SEND_SMS) == PackageManager.PERMISSION_GRANTED){
+
+            mSMSPermissionGranted = true;
+        }else{
+            ActivityCompat.requestPermissions(getActivity(),permissions, SMS_PERMISSION_REQUEST_CODE);
+        }
     }
 
 }

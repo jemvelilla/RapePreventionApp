@@ -799,9 +799,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 //                    mMap.animateCamera(zout);
 //                }
 //            });
-            bounds  = new google.
 
-            Log.d(TAG, "onDirectionFinderSuccesss: "+destinationMarkers);
 
             PolylineOptions polylineOptions = new PolylineOptions().
                     geodesic(true).

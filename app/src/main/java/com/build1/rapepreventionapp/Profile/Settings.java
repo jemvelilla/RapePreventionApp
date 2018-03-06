@@ -1,8 +1,11 @@
 package com.build1.rapepreventionapp.Profile;
 
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +25,17 @@ import com.build1.rapepreventionapp.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
+import static android.Manifest.permission.CALL_PHONE;
+import static android.Manifest.permission.SEND_SMS;
+
 public class Settings extends Fragment {
 
     private FirebaseAuth mAuth;
     DatabaseReference user;
     String userKey;
+
+    private Boolean mPhonePermissionGranted = false;
+    private static final int PHONE_PERMISSION_REQUEST_CODE = 1234;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -86,6 +95,7 @@ public class Settings extends Fragment {
         txtConfCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getPhonePermission();
                 android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
                 if (fragmentManager != null) {
                     android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction();
@@ -134,6 +144,21 @@ public class Settings extends Fragment {
         return v;
 
 
+    }
+
+    public void getPhonePermission(){
+        //Log.d(TAG, "getLocationPermission: getting location permissions");
+        String[] permissions = {
+                CALL_PHONE,
+                //Manifest.permission.ACCESS_COARSE_LOCATION
+        };
+
+        if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),CALL_PHONE) == PackageManager.PERMISSION_GRANTED){
+
+            mPhonePermissionGranted = true;
+        }else{
+            ActivityCompat.requestPermissions(getActivity(),permissions, PHONE_PERMISSION_REQUEST_CODE);
+        }
     }
 
 
