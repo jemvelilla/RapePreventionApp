@@ -82,8 +82,11 @@ public class Contacts extends Fragment implements View.OnClickListener{
         }else{
 
         }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 2b7e2c6fa10b63fe85149abf740bd9b33a289569
 
     }
 
@@ -198,6 +201,7 @@ public class Contacts extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View view) {
         android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
+<<<<<<< HEAD
             Log.d("pandegbug", "onClick: true");
             if (fragmentManager != null) {
                 android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction();
@@ -206,6 +210,16 @@ public class Contacts extends Fragment implements View.OnClickListener{
                     ft.commit();
                 }
             }
+=======
+        Log.d("pandegbug", "onClick: true");
+        if (fragmentManager != null) {
+            android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction();
+            if (ft != null) {
+                ft.replace(R.id.rootLayout, new Phonebook());
+                ft.commit();
+            }
+        }
+>>>>>>> 2b7e2c6fa10b63fe85149abf740bd9b33a289569
 
     }
 
@@ -226,7 +240,7 @@ public class Contacts extends Fragment implements View.OnClickListener{
                 phoneNumber = phoneNumber.replace("+63", "0");
                 Log.v("phone", phoneNumber);
 
-                 /** check if phone number exists in the app firebase**/
+                /** check if phone number exists in the app firebase**/
                 CollectionReference usersRef = mFirestore.collection("Users");
                 com.google.firebase.firestore.Query query = usersRef.whereEqualTo("mobile_number", phoneNumber);
                 query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -239,7 +253,7 @@ public class Contacts extends Fragment implements View.OnClickListener{
                         if (task.isSuccessful()) {
 
                             if(task.getResult().size() == 0){
-                                    usersMap.put("number", "no id");
+                                usersMap.put("number", "no id");
                             } else {
                                 for (DocumentSnapshot document : task.getResult()) {
                                     String phone_number = document.getData().get("mobile_number").toString();

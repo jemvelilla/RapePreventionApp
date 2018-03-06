@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     tools:context="com.build1.rapepreventionapp.Contacts.Contacts">
-
+        
     <ImageView
         android:id="@+id/imageView"
         android:layout_marginTop="15dp"
@@ -29,7 +29,6 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:enabled="false"/>
+        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>
