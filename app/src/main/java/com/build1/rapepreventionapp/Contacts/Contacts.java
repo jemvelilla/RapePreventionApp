@@ -82,11 +82,6 @@ public class Contacts extends Fragment implements View.OnClickListener{
         }else{
 
         }
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 2b7e2c6fa10b63fe85149abf740bd9b33a289569
 
     }
 
@@ -201,7 +196,6 @@ public class Contacts extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View view) {
         android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
-<<<<<<< HEAD
             Log.d("pandegbug", "onClick: true");
             if (fragmentManager != null) {
                 android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction();
@@ -210,7 +204,6 @@ public class Contacts extends Fragment implements View.OnClickListener{
                     ft.commit();
                 }
             }
-=======
         Log.d("pandegbug", "onClick: true");
         if (fragmentManager != null) {
             android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction();
@@ -219,7 +212,6 @@ public class Contacts extends Fragment implements View.OnClickListener{
                 ft.commit();
             }
         }
->>>>>>> 2b7e2c6fa10b63fe85149abf740bd9b33a289569
 
     }
 

@@ -133,7 +133,10 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
 //        mStorage = FirebaseStorage.getInstance().getReference().child("images");
 //        mFirestore = FirebaseFirestore.getInstance();
         getLocationPermission();
-        getMessagePermission();
+        //getMessagePermission();
+
+
+
     }
 
     @Nullable
@@ -163,12 +166,15 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
         //});
 
         //return v;
+
     }
 
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
 
         SupportMapFragment fragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         fragment.getMapAsync(this);
@@ -213,6 +219,7 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
     }
 
     public void getDeviceLocation() {
+
         Log.d(TAG, "getDeviceLocation: getting the device location");
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity().getApplicationContext());
         //latitude = location.getLatitude();
@@ -320,8 +327,10 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
+
         //BottomNavigation bottomNavigation = new BottomNavigation();
         mMap = googleMap;
+        //getMessagePermission();
 
 
         if (mLocationPermissionGranted) {
@@ -639,20 +648,20 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
          return googlePlaceUrl.toString();
     }
 
-    public void getMessagePermission(){
-        //Log.d(TAG, "getLocationPermission: getting location permissions");
-        String[] permissions = {
-                SEND_SMS,
-                //Manifest.permission.ACCESS_COARSE_LOCATION
-        };
-
-        if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),SEND_SMS) == PackageManager.PERMISSION_GRANTED){
-
-            mSMSPermissionGranted = true;
-        }else{
-            ActivityCompat.requestPermissions(getActivity(),permissions, SMS_PERMISSION_REQUEST_CODE);
-        }
-    }
+//    public void getMessagePermission(){
+//        //Log.d(TAG, "getLocationPermission: getting location permissions");
+//        String[] permissions = {
+//                SEND_SMS,
+//                //Manifest.permission.ACCESS_COARSE_LOCATION
+//        };
+//
+//        if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),SEND_SMS) == PackageManager.PERMISSION_GRANTED){
+//
+//            mSMSPermissionGranted = true;
+//        }else{
+//            ActivityCompat.requestPermissions(getActivity(),permissions, SMS_PERMISSION_REQUEST_CODE);
+//        }
+//    }
 
 }
 

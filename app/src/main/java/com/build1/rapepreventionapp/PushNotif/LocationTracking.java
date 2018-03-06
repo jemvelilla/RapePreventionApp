@@ -798,10 +798,6 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 //                    mMap.animateCamera(zout);
 //                }
 //            });
-<<<<<<< HEAD
-
-=======
->>>>>>> 2b7e2c6fa10b63fe85149abf740bd9b33a289569
 
             PolylineOptions polylineOptions = new PolylineOptions().
                     geodesic(true).
