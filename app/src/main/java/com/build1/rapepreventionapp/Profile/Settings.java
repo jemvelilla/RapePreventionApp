@@ -9,8 +9,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.build1.rapepreventionapp.Base.MainActivity;
+import com.build1.rapepreventionapp.Base.Welcome;
+import com.build1.rapepreventionapp.Bluno.BlunoLibrary;
 import com.build1.rapepreventionapp.Bluno.BlunoMain;
 import com.build1.rapepreventionapp.Login.LogIn2;
+import com.build1.rapepreventionapp.Login.Login;
+import com.build1.rapepreventionapp.Profile.ChangePassword;
+import com.build1.rapepreventionapp.Profile.ConfCall;
+import com.build1.rapepreventionapp.Profile.EditProfile;
 import com.build1.rapepreventionapp.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -27,6 +34,28 @@ public class Settings extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
 
+//
+//        userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//        user = FirebaseDatabase.getInstance().getReference("Users").child(userKey);
+//
+//        EditInformation.details = new ArrayList();
+//
+//        user.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//
+//                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()){
+//
+//                    String details = userSnapshot.getValue(String.class);
+//                    EditInformation.details.add(details);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
     }
 
     @Override

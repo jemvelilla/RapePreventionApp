@@ -2,29 +2,40 @@ package com.build1.rapepreventionapp.PushNotif;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.build1.rapepreventionapp.Bluno.BlunoMain;
 import com.build1.rapepreventionapp.GooglePlacesAPI.DirectionsParser;
 import com.build1.rapepreventionapp.GooglePlacesAPI.GetNearbyPlacesData;
+import com.build1.rapepreventionapp.Model.EditInformation;
+import com.build1.rapepreventionapp.PushNotif.LocationTracking;
 import com.build1.rapepreventionapp.Model.PlaceInfo;
 import com.build1.rapepreventionapp.R;
+import com.build1.rapepreventionapp.Registration.RegisterStep3;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.common.ConnectionResult;
@@ -33,12 +44,15 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.PlaceDetectionClient;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -54,6 +68,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -65,6 +80,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -76,7 +92,7 @@ import Modules.Route;
  * Created by JEMYLA VELILLA on 11/02/2018.
  */
 
-public class LocationTracking extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, DirectionFinderListener {
+public class LocationTracking extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, DirectionFinderListener, LocationListener {
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -107,12 +123,14 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
     ArrayList<LatLng> listPoints;
     int PROXIMITY_RADIUS = 1000;
     double latitude,longtitude;
+    String latitudeDb, longitudeDb;
     double latDB, lonDB;
     LatLng origin, destination;
 
     GoogleMap mMap;
     private FirebaseFirestore mFirestore;
     String dataFrom;
+    private Location mylocation;
 
     private FirebaseAuth mAuth;
     //private FirebaseFirestore mFirestore;
@@ -130,8 +148,11 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
         setContentView(R.layout.activity_location_tracking);
         getLocationPermission();
 
-//        current_id = mAuth.getCurrentUser().getUid();
-        mFirestore = FirebaseFirestore.getInstance();
+
+        mAuth = FirebaseAuth.getInstance();
+        mFirestore = FirebaseFirestore.getInstance(); //instantiate firestore
+        mCurrentId = FirebaseAuth.getInstance().getUid();
+        current_id = mAuth.getCurrentUser().getUid();
 
         final Intent intent = getIntent();
         final String action = intent.getAction();
@@ -148,6 +169,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                 }
             }
         }
+        getDeviceLocation2();
 
 
         name = (TextView) findViewById(R.id.name);
@@ -163,10 +185,51 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 
         Log.d(TAG, "onCreate: pumasok ba?");
 
+
     }
 
     public void onStart(){
         super.onStart();
+        mFirestore.collection("Users").document(current_id).get().addOnSuccessListener( new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                double latitude = Double.parseDouble(documentSnapshot.getString("latitude"));
+                double longitude = Double.parseDouble(documentSnapshot.getString("longitude"));
+                latDB = latitude;
+                lonDB = longitude;
+                listPoints.add(new LatLng(latitude,longitude));
+
+                DocumentReference contactListener = mFirestore.collection("Users").document(current_id);
+                contactListener.addSnapshotListener(new EventListener< DocumentSnapshot >() {
+                    @Override
+                    public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.d("ERROR", e.getMessage());
+                            return;
+                        }
+                        if (documentSnapshot != null && documentSnapshot.exists()) {
+
+                            if (originMarkers.size() == 1){
+                                originMarkers.remove(0);
+                            }else {
+                                double latitude = Double.parseDouble(documentSnapshot.getString("latitude"));
+                                double longitude = Double.parseDouble(documentSnapshot.getString("longitude"));
+                                latDB = latitude;
+                                lonDB = longitude;
+                                listPoints.set(0, new LatLng(latitude,longitude));
+                                //location.setText(getLocation(latitude, longitude));
+                                sendRequest();
+                            }
+
+
+                            //Toast.makeText(LocationTracking.this, "Current data:" + documentSnapshot.getData(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
+
         mFirestore.collection("Users").document(dataFrom).get().addOnSuccessListener(this, new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -240,6 +303,10 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 
                             longtitude = currentLocation.getLongitude();
                             currentLocationLatlng = new LatLng(latitude,longtitude);
+                            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+                            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 1, LocationTracking.this);
+                            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 500, 1, LocationTracking.this);
                             Geocoder geocoder = new Geocoder(getApplicationContext());
                             try {
                                 addresses = geocoder.getFromLocation(currentLocation.getLatitude(), longtitude,1);
@@ -247,7 +314,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                                 String address = addresses.get(0).getAddressLine(0);
                                 //String area = addresses.get(0).getLocality();
                                 Log.e(TAG, "onComplete: "+addresses );
-                                listPoints.add(new LatLng(latitude, longtitude));
+                                //listPoints.add(new LatLng(latitude, longtitude));
 
                                 Log.d(TAG, "onComplete : "+listPoints);
 //                                moveCamera(new LatLng(latitude, longtitude),
@@ -281,6 +348,56 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
         }
     }
 
+    private void getDeviceLocation2(){
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        try{
+
+            if (mLocationPermissionGranted) {
+
+                final com.google.android.gms.tasks.Task<Location> location = mFusedLocationProviderClient.getLastLocation();
+                location.addOnCompleteListener(this, new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull final com.google.android.gms.tasks.Task<Location> task) {
+                        //final String placeId = task.getPlaceId();
+                        if (task.isSuccessful()) {
+                            currentLocation = new Location(task.getResult());
+                            latitudeDb = String.valueOf(currentLocation.getLatitude());
+
+                            longitudeDb = String.valueOf(currentLocation.getLongitude());
+
+                            Map<String, Object> locationMap = new HashMap<>();
+                            locationMap.put("latitude", latitudeDb);
+                            locationMap.put("longitude", longitudeDb);
+
+                            mFirestore.collection("Users").document(current_id).update(locationMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+
+                                    //listPoints.add(new LatLng(latitudeDB,longitude));
+                                    Log.d("message", "location stored.");
+                                }
+                            });
+
+
+
+                            Log.v("message", "onComplete: " + latitude);
+                            Log.v("message", "onComplete: " + longtitude);
+
+                            //final String placeId = task.getResult();
+
+                        }
+
+                    }
+                });
+            } else {
+                Log.d(TAG, "onComplete: NASAN");
+            }
+        }catch(SecurityException e)
+        {
+            Log.e(TAG, "getDeviceLocation: SecurityException " + e.getMessage());
+        }
+    }
+
     private void moveCamera(LatLng latLng, float zoom, String title) {
         Log.d(TAG, "moveCamera: moving the camera to :");
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
@@ -299,8 +416,11 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
         mMap = googleMap;
 
 
+
+
         if (mLocationPermissionGranted) {
             getDeviceLocation();
+            getDeviceLocation2();
             //if (currentLocationLatlng != null){
             //    getNearbyPoliceStation();
             //}
@@ -427,6 +547,60 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                 break;
             }
         }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Log.d("pangdebug", "pumasok sa onLocationChangedasa");
+
+        mylocation = location;
+        Log.d("pangdebug", "onLocationChanged: "+ mylocation);
+        if (mylocation != null) {
+            Log.d("pangdebug", "pumasok sa myLocation");
+
+            //Double latitude=mylocation.getLatitude();
+            //Double longitude=mylocation.getLongitude();
+            //Or Do whatever you want with your location
+            Log.v("message", "onComplete: found locationasd");
+            //currentLocation = new Location(task.getResult());
+            latitudeDb = String.valueOf(location.getLatitude());
+
+            longitudeDb = String.valueOf(location.getLongitude());
+
+            Map<String, Object> locationMap = new HashMap<>();
+            locationMap.put("latitude", latitudeDb);
+            locationMap.put("longitude", longitudeDb);
+
+            mFirestore.collection("Users").document(current_id).update(locationMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+
+                    Log.d("pangdebug", "location stored.");
+                }
+            });
+
+            Log.v("message", "onComplete: " +latitude);
+            Log.v("message", "onComplete: " +longtitude);
+
+            //final String placeId = task.getResult();
+        } else{
+            Log.d("pangdebug", "onLocationChanged: KINGINA" + location);
+        }
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
     }
 
     public class TaskRequestDirections extends AsyncTask<String, Void, String> {
@@ -569,7 +743,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
             Log.d("pandebug ni darise", "sendRequest: listpoints destination" +destination);
         }
         else{
-            Log.d("pandebug", "sendRequest: else part" +destination);
+            Log.d("pandebug", "sendRequest: else part twy" +origin);
             Log.d(TAG, "sendRequest: " +listPoints);
         }
 
@@ -619,6 +793,9 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
             Log.d(TAG, "onDirectionFinderSuccesss: "+destinationMarkers);
 
 
+            if (originMarkers.size() == 1){
+                originMarkers.remove(routes);
+            }
 
 
             originMarkers.add(mMap.addMarker(new MarkerOptions()
@@ -634,6 +811,20 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.end_green))
                     .title(route.endAddress)
                     .position(route.endLocation)));
+
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            builder.include(listPoints.get(0));
+            builder.include(listPoints.get(1));
+            LatLngBounds bounds = builder.build();
+
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 30);
+            mMap.animateCamera(cu, new GoogleMap.CancelableCallback(){
+                public void onCancel(){}
+                public void onFinish(){
+                    CameraUpdate zout = CameraUpdateFactory.zoomBy((float)-2.0);
+                    mMap.animateCamera(zout);
+                }
+            });
 
             Log.d(TAG, "onDirectionFinderSuccesss: "+destinationMarkers);
 

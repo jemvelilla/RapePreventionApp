@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.build1.rapepreventionapp.Model.EditInformation;
+import com.build1.rapepreventionapp.Model.UserInformation;
 import com.build1.rapepreventionapp.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -27,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
