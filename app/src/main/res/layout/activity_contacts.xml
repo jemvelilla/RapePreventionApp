@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     tools:context="com.build1.rapepreventionapp.Contacts.Contacts">
-        
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_marginTop="15dp"

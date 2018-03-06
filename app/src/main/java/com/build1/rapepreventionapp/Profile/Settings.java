@@ -22,8 +22,14 @@ import com.build1.rapepreventionapp.Profile.ChangePassword;
 import com.build1.rapepreventionapp.Profile.ConfCall;
 import com.build1.rapepreventionapp.Profile.EditProfile;
 import com.build1.rapepreventionapp.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.Manifest.permission.CALL_PHONE;
 import static android.Manifest.permission.SEND_SMS;
@@ -31,8 +37,10 @@ import static android.Manifest.permission.SEND_SMS;
 public class Settings extends Fragment {
 
     private FirebaseAuth mAuth;
+    private FirebaseFirestore mFirestore;
+
     DatabaseReference user;
-    String userKey;
+    String mUserId;
 
 
 
@@ -41,33 +49,13 @@ public class Settings extends Fragment {
         super.onCreate(savedInstanceState);
 
         mAuth = FirebaseAuth.getInstance();
+        mFirestore = FirebaseFirestore.getInstance();
+        mUserId = mAuth.getCurrentUser().getUid();
 
-//
-//        userKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
-//        user = FirebaseDatabase.getInstance().getReference("Users").child(userKey);
-//
-//        EditInformation.details = new ArrayList();
-//
-//        user.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//
-//                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()){
-//
-//                    String details = userSnapshot.getValue(String.class);
-//                    EditInformation.details.add(details);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_settings, container, false);
 
         TextView txtEditProfile = (TextView) v.findViewById(R.id.editProfileTxt);
@@ -131,10 +119,20 @@ public class Settings extends Fragment {
         btnLogOut.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                mAuth.signOut();
-                Intent i = new Intent(getActivity(), LogIn2.class);
-                getActivity().finish();
-                startActivity(i);
+
+                Map<String, Object> tokenMapRemove = new HashMap<>();
+                tokenMapRemove.put("token_id", FieldValue.delete());
+
+                mFirestore.collection("Users").document(mUserId).update(tokenMapRemove).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        mAuth.signOut();
+
+                        Intent i = new Intent(container.getContext(), LogIn2.class);
+                        getActivity().finish();
+                        startActivity(i);
+                    }
+                });
 
             }
         });
