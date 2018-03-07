@@ -435,18 +435,12 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 
     private String getUrl(double latitude , double longtitude, String nearbyPlace){
 
-        Log.e(TAG, "getUrlaaaaa: "+latitude );
-        Log.e(TAG, "getUrlbbbbb: "+longtitude );
         StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         googlePlaceUrl.append("location="+latitude+","+longtitude);
         googlePlaceUrl.append("&radius="+PROXIMITY_RADIUS);
         googlePlaceUrl.append("&type="+nearbyPlace);
         googlePlaceUrl.append("&sensor=false");
         googlePlaceUrl.append("&key="+"AIzaSyCuTUpBYWXg3DeUUwecjW4NuACBl3SFueE");
-        Log.e(TAG, "getUrl: "+googlePlaceUrl.toString());
-        Log.e(TAG, "getUrl: " +latitude );
-        Log.e(TAG, "getUrl: " +longtitude );
-
         return googlePlaceUrl.toString();
     }
 
@@ -527,11 +521,9 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 
             CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
             mMap.animateCamera(cu);
-            //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 18));
             ((TextView) findViewById(R.id.eta)).setText(route.duration.text);
             ((TextView) findViewById(R.id.kmsAway)).setText(route.distance.text);
             ((TextView) findViewById(R.id.location)).setText(route.endAddress);
-            //location.setText(getLocation(route.endAddress.latitude,route.endLocation.longitude));
             Log.d(TAG, "onDirectionFinderSuccesss: "+destinationMarkers);
 
 
