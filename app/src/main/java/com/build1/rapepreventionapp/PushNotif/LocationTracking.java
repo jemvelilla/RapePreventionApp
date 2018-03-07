@@ -28,9 +28,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.build1.rapepreventionapp.Base.Welcome;
 import com.build1.rapepreventionapp.Bluno.BlunoMain;
 import com.build1.rapepreventionapp.GooglePlacesAPI.DirectionsParser;
 import com.build1.rapepreventionapp.GooglePlacesAPI.GetNearbyPlacesData;
+import com.build1.rapepreventionapp.Home.BottomNavigation;
 import com.build1.rapepreventionapp.Model.EditInformation;
 import com.build1.rapepreventionapp.PushNotif.LocationTracking;
 import com.build1.rapepreventionapp.Model.PlaceInfo;
@@ -574,5 +576,12 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+
+    public void btnOnClickStop(View view) {
+        Intent intent = new Intent(this, Welcome.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        finish();
+        startActivity(intent);
     }
 }
