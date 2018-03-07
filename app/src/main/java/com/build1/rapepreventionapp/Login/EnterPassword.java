@@ -5,6 +5,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -62,34 +63,53 @@ public class EnterPassword extends AppCompatActivity {
         loading.setVisibility(View.VISIBLE);
         btnLogin.setVisibility(View.INVISIBLE);
 
-        mAuth.signInWithEmailAndPassword(email,password.getText().toString()).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()){
+        if(TextUtils.isEmpty(password.getText().toString())){
+            btnLogin.setVisibility(View.VISIBLE);
+            loading.setVisibility(View.INVISIBLE);
+            animation.stop();
+            password.setError("Password is required.");
+        } else {
+            mAuth.signInWithEmailAndPassword(email,password.getText().toString()).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if(task.isSuccessful()){
 
-                    String token_id = FirebaseInstanceId.getInstance().getToken();
-                    String current_id = mAuth.getCurrentUser().getUid();
+                        String token_id = FirebaseInstanceId.getInstance().getToken();
+                        String current_id = mAuth.getCurrentUser().getUid();
 
-                    Map<String, Object> tokenMap = new HashMap<>();
-                    tokenMap.put("token_id", token_id);
+                        Map<String, Object> tokenMap = new HashMap<>();
+                        tokenMap.put("token_id", token_id);
 
-                    mFirestore.collection("Users").document(current_id).update(tokenMap).addOnSuccessListener(EnterPassword.this, new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            btnLogin.setVisibility(View.VISIBLE);
-                            loading.setVisibility(View.INVISIBLE);
-                            animation.stop();
+                        mFirestore.collection("Users").document(current_id).update(tokenMap).addOnSuccessListener(EnterPassword.this, new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                btnLogin.setVisibility(View.VISIBLE);
+                                loading.setVisibility(View.INVISIBLE);
+                                animation.stop();
 
-                            finish();
-                        }
-                    });
-                } else {
-                    btnLogin.setVisibility(View.VISIBLE);
-                    loading.setVisibility(View.INVISIBLE);
-                    animation.stop();
-                    Toast.makeText(EnterPassword.this, "Incorrect username or password.", Toast.LENGTH_LONG).show();
+                                sendToMain();
+                            }
+                        });
+                    } else {
+                        btnLogin.setVisibility(View.VISIBLE);
+                        loading.setVisibility(View.INVISIBLE);
+                        animation.stop();
+                        Toast.makeText(EnterPassword.this, "Incorrect username or password.", Toast.LENGTH_LONG).show();
+                    }
                 }
-            }
-        });
+            });
+        }
+    }
+
+    public void sendToMain(){
+        if(!mAuth.getCurrentUser().isEmailVerified()){
+            Intent intent = new Intent(this, AccountVerification.class);
+            finish();
+            startActivity(intent);
+        } else{
+            Intent intent = new Intent(this, BottomNavigation.class);
+            finish();
+            startActivity(intent);
+        }
     }
 }

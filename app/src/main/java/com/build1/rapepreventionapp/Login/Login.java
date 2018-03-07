@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.build1.rapepreventionapp.Base.Welcome;
 import com.build1.rapepreventionapp.Home.BottomNavigation;
 import com.build1.rapepreventionapp.R;
 import com.build1.rapepreventionapp.Registration.RegisterStep1;
@@ -163,7 +164,7 @@ public class Login extends AppCompatActivity {
                             loading.setVisibility(View.INVISIBLE);
                             animation.stop();
 
-                            finish();
+                            sendToMain();
                         }
                     });
                 } else {
@@ -174,5 +175,17 @@ public class Login extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void sendToMain(){
+        if(!mAuth.getCurrentUser().isEmailVerified()){
+            Intent intent = new Intent(this, AccountVerification.class);
+            finish();
+            startActivity(intent);
+        } else{
+            Intent intent = new Intent(this, BottomNavigation.class);
+            finish();
+            startActivity(intent);
+        }
     }
 }

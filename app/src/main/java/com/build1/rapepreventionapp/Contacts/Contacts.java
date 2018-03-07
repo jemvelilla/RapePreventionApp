@@ -212,7 +212,6 @@ public class Contacts extends Fragment implements View.OnClickListener{
                 ft.commit();
             }
         }
-
     }
 
     public void loadContacts(){

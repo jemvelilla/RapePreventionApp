@@ -6,11 +6,13 @@ import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.build1.rapepreventionapp.Base.MainActivity;
 import com.build1.rapepreventionapp.Base.Welcome;
@@ -39,7 +41,6 @@ public class Settings extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFirestore;
 
-    DatabaseReference user;
     String mUserId;
 
     private Boolean mPhonePermissionGranted = false;
@@ -131,6 +132,7 @@ public class Settings extends Fragment {
                         mAuth.signOut();
 
                         Intent i = new Intent(container.getContext(), LogIn2.class);
+                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         getActivity().finish();
                         startActivity(i);
                     }

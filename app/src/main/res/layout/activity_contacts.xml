@@ -28,6 +28,7 @@
         android:textColor="#FFF"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:enabled="false"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"/>
 

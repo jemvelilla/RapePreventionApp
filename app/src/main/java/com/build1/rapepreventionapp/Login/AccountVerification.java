@@ -13,9 +13,15 @@ import android.widget.Toast;
 
 import com.build1.rapepreventionapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by JEMYLA VELILLA on 30/01/2018.
@@ -25,7 +31,9 @@ public class AccountVerification extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
 
+    String mUserId;
     DatabaseReference databaseUsers;
+    private FirebaseFirestore mFirestore;
 
     private WebView webView;
     TextView tvUser;
@@ -36,6 +44,8 @@ public class AccountVerification extends AppCompatActivity {
         setContentView(R.layout.activity_account_verification);
 
         mAuth = FirebaseAuth.getInstance();
+        mFirestore = FirebaseFirestore.getInstance();
+        mUserId = mAuth.getCurrentUser().getUid();
 
         if (mAuth == null){
             return;
@@ -64,10 +74,20 @@ public class AccountVerification extends AppCompatActivity {
     }
 
     public void btnOnClickLogout (View view){
-        mAuth.signOut();
-        Intent i = new Intent(getApplicationContext(), Login.class);
-        finish();
-        startActivity(i);
+        Map<String, Object> tokenMapRemove = new HashMap<>();
+        tokenMapRemove.put("token_id", FieldValue.delete());
+
+        mFirestore.collection("Users").document(mUserId).update(tokenMapRemove).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                mAuth.signOut();
+
+                Intent i = new Intent(AccountVerification.this, LogIn2.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                finish();
+                startActivity(i);
+            }
+        });
     }
 
 }

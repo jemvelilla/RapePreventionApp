@@ -201,8 +201,8 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                 Glide.with(getApplicationContext()).setDefaultRequestOptions(placeHolderOptions).load(documentSnapshot.getString("image")).into(mProfilePicture);
 
                 name.setText(documentSnapshot.getString("first_name") + " " + documentSnapshot.getString("last_name"));
-                double latitude = Double.parseDouble(documentSnapshot.getString("latitude"));
-                double longitude = Double.parseDouble(documentSnapshot.getString("longitude"));
+                double latitude = Double.parseDouble(documentSnapshot.get("latitude").toString());
+                double longitude = Double.parseDouble(documentSnapshot.get("longitude").toString());
                 latDB = latitude;
                 lonDB = longitude;
                 listPoints.add(new LatLng(latitude,longitude));
@@ -220,8 +220,8 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                             if (destinationMarkers.size() == 1){
                                 destinationMarkers.remove(0);
                             }else {
-                                double latitude = Double.parseDouble(documentSnapshot.getString("latitude"));
-                                double longitude = Double.parseDouble(documentSnapshot.getString("longitude"));
+                                double latitude = Double.parseDouble(documentSnapshot.get("latitude").toString());
+                                double longitude = Double.parseDouble(documentSnapshot.get("longitude").toString());
                                 latDB = latitude;
                                 lonDB = longitude;
                                 listPoints.set(1, new LatLng(latitude,longitude));
@@ -542,8 +542,8 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
             listPoints.set(0, new LatLng(latitudeDb,longitudeDb));
 
             Map<String, Object> locationMap = new HashMap<>();
-            locationMap.put("latitude", latitudeDb);
-            locationMap.put("longitude", longitudeDb);
+            locationMap.put("latitude", String.valueOf(latitudeDb));
+            locationMap.put("longitude", String.valueOf(longitudeDb));
 
             mFirestore.collection("Users").document(current_id).update(locationMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override

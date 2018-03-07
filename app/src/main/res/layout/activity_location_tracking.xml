@@ -14,6 +14,7 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/detailsLayout"
         android:layout_below="@id/logo"
         tools:context="com.build1.rapepreventionapp.PushNotif.LocationTracking"
         tools:ignore="MissingConstraints"
@@ -39,17 +40,11 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/detailsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/background"
         android:layout_alignParentBottom="true">
-
-        <ImageButton
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:id="@+id/place_info"
-            android:src="@drawable/ic_info"
-            />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_below="@id/place_info"
