@@ -203,10 +203,11 @@ public class RegisterStep5 extends AppCompatActivity {
     }
 
     private void sendToAccountCreated(){
-        Intent intent = new Intent(getApplicationContext(), Slides.class);
+        Intent intent = new Intent(RegisterStep5.this, Slides.class);
+        finish();
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-        finish();
+
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){

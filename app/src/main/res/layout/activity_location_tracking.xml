@@ -14,6 +14,7 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/detailsLayout"
         android:layout_below="@id/logo"
         android:layout_above="@id/detailsLayout"
         tools:context="com.build1.rapepreventionapp.PushNotif.LocationTracking"
@@ -40,6 +41,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/detailsLayout"
         android:layout_width="match_parent"
         android:id="@+id/detailsLayout"
         android:layout_height="wrap_content"

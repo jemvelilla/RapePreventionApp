@@ -16,11 +16,13 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.build1.rapepreventionapp.Home.BottomNavigation;
+import com.build1.rapepreventionapp.Home.Help;
 import com.build1.rapepreventionapp.Login.AccountVerification;
 import com.build1.rapepreventionapp.Login.LogIn2;
 import com.build1.rapepreventionapp.Login.Login;
 import com.build1.rapepreventionapp.R;
 import com.build1.rapepreventionapp.Registration.RegisterStep1;
+import com.build1.rapepreventionapp.Registration.Slides;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -64,7 +66,6 @@ public class Welcome extends AppCompatActivity {
                         Intent intent = new Intent(Welcome.this, BottomNavigation.class);
                         finish();
                         startActivity(intent);
-                        Log.d("rehd", "hoy bawal bumalik");
                     }
                 }
             }
@@ -81,19 +82,27 @@ public class Welcome extends AppCompatActivity {
     public void btnOnClickSignUp(View v){
 
         Intent i = new Intent(getApplicationContext(), RegisterStep1.class);
-        startActivity(i);
         finish();
+        startActivity(i);
+
     }
 
     public void btnOnClickLoginPage(View v){
 
         if (!savedAccount.isEmpty()){
             Intent i = new Intent(Welcome.this, LogIn2.class);
+            finish();
             startActivity(i);
         } else {
             Intent i = new Intent(Welcome.this, Login.class);
+            finish();
             startActivity(i);
         }
+    }
+
+    public void btnOnClickHelp(View view) {
+        Intent i = new Intent(Welcome.this, Help.class);
+        startActivity(i);
     }
 
     public boolean isConnected(Context context) {
@@ -110,20 +119,6 @@ public class Welcome extends AppCompatActivity {
         } else
             return false;
     }
-//    public boolean isConnectedLocation(Context context) {
-//
-//        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-//        NetworkInfo netinfo = cm.getActiveNetworkInfo();
-//
-//        if (netinfo != null && netinfo.isConnectedOrConnecting()) {
-//            android.net.NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-//            android.net.NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-//
-//            if((mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting())) return true;
-//            else return false;
-//        } else
-//            return false;
-//    }
 
     public AlertDialog.Builder buildDialog(Context c) {
 

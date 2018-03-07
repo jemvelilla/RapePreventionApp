@@ -155,7 +155,7 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
 //                });
 //                getDeviceLocation(); //store on database onlocationchanged
 
-                buttonScanOnClickProcess();                                        //Alert Dialog for selecting the BLE device                 //Alert Dialog for selecting the BLE device
+               buttonScanOnClickProcess();                                        //Alert Dialog for selecting the BLE device                 //Alert Dialog for selecting the BLE device
             }
         });
 
