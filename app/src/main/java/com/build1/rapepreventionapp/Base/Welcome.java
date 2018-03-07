@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -109,6 +110,20 @@ public class Welcome extends AppCompatActivity {
         } else
             return false;
     }
+//    public boolean isConnectedLocation(Context context) {
+//
+//        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+//        NetworkInfo netinfo = cm.getActiveNetworkInfo();
+//
+//        if (netinfo != null && netinfo.isConnectedOrConnecting()) {
+//            android.net.NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+//            android.net.NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+//
+//            if((mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting())) return true;
+//            else return false;
+//        } else
+//            return false;
+//    }
 
     public AlertDialog.Builder buildDialog(Context c) {
 

@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/logo"
+        android:layout_above="@id/detailsLayout"
         tools:context="com.build1.rapepreventionapp.PushNotif.LocationTracking"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteY="35dp" />
@@ -40,16 +41,10 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:id="@+id/detailsLayout"
         android:layout_height="wrap_content"
         android:background="@color/background"
         android:layout_alignParentBottom="true">
-
-        <ImageButton
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:id="@+id/place_info"
-            android:src="@drawable/ic_info"
-            />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_below="@id/place_info"

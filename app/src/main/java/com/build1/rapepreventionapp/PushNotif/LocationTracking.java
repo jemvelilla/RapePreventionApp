@@ -107,16 +107,9 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private Boolean mLocationPermissionGranted = false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
-    private GeoDataClient mGeoDataClient;
     Location currentLocation;
     LatLng currentLocationLatlng;
     LatLng victimLocation;
-    private PlaceDetectionClient mPlaceDetectionClient;
-    private final float DEFAULT_ZOOM = 16f;
-    private GoogleApiClient mGoogleApiClient;
-    private PlaceInfo mPlace;
-    private Marker mMarker;
-    private ImageButton mInfo;
     private String addressVictim;
     List<Address> addresses;
     List<Address> victimAddress;
@@ -133,7 +126,6 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
     private Location mylocation;
 
     private FirebaseAuth mAuth;
-    //private FirebaseFirestore mFirestore;
     private String mCurrentId;
 
     private List<Marker> originMarkers = new ArrayList<>();
@@ -174,18 +166,11 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 
         name = (TextView) findViewById(R.id.name);
         location = (TextView) findViewById(R.id.location);
-        //eta = (TextView) findViewById(R.id.eta);
-        //kms_away = (TextView) findViewById(R.id.kmsAway);
         mProfilePicture = (CircleImageView) findViewById(R.id.profilePicture);
 
         SupportMapFragment fragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         fragment.getMapAsync(this);
         listPoints =new ArrayList<>();
-
-
-        Log.d(TAG, "onCreate: pumasok ba?");
-
-
     }
 
     public void onStart(){
@@ -193,7 +178,6 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
         mFirestore.collection("Users").document(dataFrom).get().addOnSuccessListener(this, new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Log.d("pandebug", "onSuccess: pumasok sa datafrom ");
 
                 RequestOptions placeHolderOptions = new RequestOptions();
                 placeHolderOptions.placeholder(R.drawable.default_profile);
@@ -206,7 +190,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                 latDB = latitude;
                 lonDB = longitude;
                 listPoints.add(new LatLng(latitude,longitude));
-                location.setText(getLocation(latitude, longitude));
+
                 DocumentReference contactListener = mFirestore.collection("Users").document(dataFrom);
                 contactListener.addSnapshotListener(new EventListener< DocumentSnapshot >() {
                     @Override
@@ -230,29 +214,14 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                             }
 
 
-                            //Toast.makeText(LocationTracking.this, "Current data:" + documentSnapshot.getData(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
 
-                //victimLocation = new LatLng(latDB,lonDB);
-                Log.d(TAG, "onSuccess:lat " +latitude);
-                Log.d(TAG, "onSuccess:lon " +longitude);
-                Log.d(TAG, "onSuccess: " +listPoints);
                 sendRequest();
 
             }
         });
-
-        //if (listPoints.size() == 0){
-
-
-        //}
-
-
-
-
-
     }
 
     private void getDeviceLocation() {
@@ -265,7 +234,6 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                 location.addOnCompleteListener(new OnCompleteListener<Location>() {
                     @Override
                     public void onComplete(@NonNull com.google.android.gms.tasks.Task<Location> task) {
-                        //final String placeId = task.getPlaceId();
                         if (task.isSuccessful()) {
 
                             Log.d(TAG, "onComplete: found location");
@@ -284,13 +252,6 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                                 addresses = geocoder.getFromLocation(currentLocation.getLatitude(), longtitude,1);
 
                                 String address = addresses.get(0).getAddressLine(0);
-                                //String area = addresses.get(0).getLocality();
-                                Log.e(TAG, "onComplete: "+addresses );
-                                //listPoints.add(new LatLng(latitude, longtitude));
-
-                                Log.d(TAG, "onComplete : "+listPoints);
-//                                moveCamera(new LatLng(latitude, longtitude),
-//                                        DEFAULT_ZOOM, ""+address+"");
 
                                 getNearbyPoliceStation();
 
@@ -299,16 +260,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            Log.e(TAG, "onComplete: " +latitude);
-                            Log.e(TAG, "onComplete: " +longtitude);
-
-                            //final String placeId = task.getResult();
-
-
-
-
                         } else {
-                            Log.d(TAG, "onComplete: NASAN");
 
                         }
                     }
@@ -345,24 +297,15 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                                 @Override
                                 public void onSuccess(Void aVoid) {
 
-                                    //listPoints.add(new LatLng(latitudeDB,longitude));
                                     Log.d("message", "location stored.");
                                 }
                             });
-
-
-
-                            Log.v("message", "onComplete: " + latitude);
-                            Log.v("message", "onComplete: " + longtitude);
-
-                            //final String placeId = task.getResult();
 
                         }
 
                     }
                 });
             } else {
-                Log.d(TAG, "onComplete: NASAN");
             }
         }catch(SecurityException e)
         {
@@ -370,109 +313,19 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
         }
     }
 
-    private void moveCamera(LatLng latLng, float zoom, String title) {
-        Log.d(TAG, "moveCamera: moving the camera to :");
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-
-        //if (!title.equals("You are here!")){
-        MarkerOptions options = new MarkerOptions().position(latLng).title(title);
-        mMap.addMarker(options);
-        //}
-
-    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        //BottomNavigation bottomNavigation = new BottomNavigation();
         mMap = googleMap;
-
-
-
-
         if (mLocationPermissionGranted) {
             getDeviceLocation();
             getDeviceLocation2();
-            //if (currentLocationLatlng != null){
-            //    getNearbyPoliceStation();
-            //}
-
-
             if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
                 return;
             }
-            //mMap.setMyLocationEnabled(true);
-
-
-            //initMap();
-
-
         }
-        //mFirestore = FirebaseFirestore.getInstance();
-
-        Log.d(TAG, "onMapReady: Map is Readyasasa" +latitude+","+longtitude);
-    }
-
-
-
-
-
-
-//    private String getRequestUrl(LatLng origin, LatLng destination) {
-//        //value of origin
-//        String stringOrigin = "origin=" +origin.latitude+ "," +origin.longitude;
-//        Log.e(TAG, "getRequestUrl: "+origin );
-//        //value of destination
-//        String stringDestination = "destination="+destination.latitude+ ","+destination.longitude;
-//        //Set value enable the sensor
-//        String sensor = "sensor=false";
-//        //mode for find direction
-//        String mode = "mode=driving";
-//        //Build the full param
-//        String param = stringOrigin +"&" + stringDestination + "&" +sensor+ "&" +mode;
-//        // output format
-//        String output = "json";
-//        //Create url to request
-//        String url = "https://maps.googleapis.com/maps/api/directions/" +output + "?" +param;
-//        Log.e(TAG, "getRequestUrl: "+url );
-//        return url;
-//    }
-
-    private String requestDirection(String reqUrl) throws IOException {
-        String responseString = "";
-        InputStream inputStream = null;
-        HttpURLConnection httpURLConnection = null;
-        try{
-            URL url = new URL(reqUrl);
-            httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.connect();
-
-            //Get the response result
-            inputStream = httpURLConnection.getInputStream();
-            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-            StringBuffer stringBuffer = new StringBuffer();
-            String line = "";
-            while ((line = bufferedReader.readLine()) != null){
-                stringBuffer.append(line);
-
-            }
-
-            responseString = stringBuffer.toString();
-            bufferedReader.close();
-            inputStreamReader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (inputStream != null){
-                inputStream.close();
-            }
-            httpURLConnection.disconnect();
-        }
-        return responseString;
-
     }
 
     public void getLocationPermission(){
@@ -523,20 +376,10 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.d("pangdebug", "pumasok sa onLocationChangedasa");
 
         mylocation = location;
-        Log.d("pangdebug", "onLocationChanged: "+ mylocation);
         if (mylocation != null) {
-            Log.d("pangdebug", "pumasok sa myLocation");
-
-            //Double latitude=mylocation.getLatitude();
-            //Double longitude=mylocation.getLongitude();
-            //Or Do whatever you want with your location
-            Log.v("message", "onComplete: found locationasd");
-            //currentLocation = new Location(task.getResult());
             double latitudeDb = location.getLatitude();
-
             double longitudeDb = location.getLongitude();
 
             listPoints.set(0, new LatLng(latitudeDb,longitudeDb));
@@ -552,11 +395,6 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                     Log.d("pangdebug", "location stored.");
                 }
             });
-
-            Log.v("message", "onComplete: " +latitude);
-            Log.v("message", "onComplete: " +longtitude);
-
-            //final String placeId = task.getResult();
         } else{
         }
     }
@@ -574,79 +412,9 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
     @Override
     public void onProviderDisabled(String provider) {
 
+
     }
 
-    public class TaskRequestDirections extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... strings) {
-            String responseString = "";
-            try {
-                responseString = requestDirection(strings[0]);
-            }catch (IOException e) {
-                e.printStackTrace();
-            }
-            return responseString;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            //
-            LocationTracking.TaskParser taskParser = new LocationTracking.TaskParser();
-            taskParser.execute(s);
-        }
-    }
-    public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String, String>>>>{
-
-        @Override
-        protected List<List<HashMap<String, String>>> doInBackground(String... strings) {
-            JSONObject jsonObject = null;
-            List<List<HashMap<String, String>>> routes = null;
-            try {
-                jsonObject = new JSONObject(strings[0]);
-                DirectionsParser directionsParser = new DirectionsParser();
-                routes = directionsParser.parse(jsonObject);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return routes;
-        }
-
-        @Override
-        protected void onPostExecute(List<List<HashMap<String, String>>> lists) {
-            //Get list route and display it sa map
-
-            ArrayList points = null;
-
-            PolylineOptions polylineOptions = null;
-
-            for (List<HashMap<String, String>> path : lists){
-                points = new ArrayList();
-                polylineOptions = new PolylineOptions();
-
-                for (HashMap<String, String> point : path){
-                    double lat  = Double.parseDouble(point.get("lat"));
-                    double lon  = Double.parseDouble(point.get("lon"));
-
-                    points.add(new LatLng(lat, lon));
-
-                }
-                polylineOptions.addAll(points);
-                polylineOptions.width(15);
-                polylineOptions.color(Color.BLUE);
-                polylineOptions.geodesic(true);
-
-
-            }
-            if (polylineOptions!=null){
-                mMap.addPolyline(polylineOptions);
-
-            }else{
-                Toast.makeText(getApplicationContext(), "DIRECTION NOT FOUND", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 
 
     public void getNearbyPoliceStation(){
@@ -688,7 +456,6 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
             victimAddress = geocoder.getFromLocation(latitude, longitude, 1);
 
             addressVictim = victimAddress.get(0).getAddressLine(0);
-            //String area = addresses.get(0).getLocality();
             Log.e(TAG, "onComplete: "+victimAddress );
 
         } catch (IOException e) {
@@ -706,18 +473,11 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
     }
 
     public void sendRequest() {
-
-        Log.d(TAG, "sendRequest: LISTPOINTS" +listPoints);
         if (listPoints.size() == 2){
             destination = listPoints.get(1);
             origin = listPoints.get(0);
-            Log.d("pandebug ni darise", "sendRequest: listpoints" +listPoints);
-            Log.d("pandebug ni darise", "sendRequest: listpoints origin" +origin);
-            Log.d("pandebug ni darise", "sendRequest: listpoints destination" +destination);
         }
         else{
-            Log.d("pandebug", "sendRequest: else part twy" +listPoints+ listPoints.get(0));
-            Log.d(TAG, "sendRequest: " +listPoints);
         }
 
 
@@ -755,14 +515,23 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 
 
 
-        Log.d(TAG, "onDirectionFinderSuccess: "+destinationMarkers);
-        Log.d(TAG, "onDirectionFinderSuccess: "+routes);
-
-
         for (Route route : routes) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 18));
+            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+            builder.include(route.startLocation);
+            builder.include(route.endLocation);
+            LatLngBounds bounds = builder.build();
+
+            int width = getResources().getDisplayMetrics().widthPixels;
+            int padding = (int) (width*0.2);
+
+
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+            mMap.animateCamera(cu);
+            //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(route.startLocation, 18));
             ((TextView) findViewById(R.id.eta)).setText(route.duration.text);
             ((TextView) findViewById(R.id.kmsAway)).setText(route.distance.text);
+            ((TextView) findViewById(R.id.location)).setText(route.endAddress);
+            //location.setText(getLocation(route.endAddress.latitude,route.endLocation.longitude));
             Log.d(TAG, "onDirectionFinderSuccesss: "+destinationMarkers);
 
 
@@ -785,23 +554,11 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                     .title(route.endAddress)
                     .position(route.endLocation)));
 
-//            LatLngBounds.Builder builder = new LatLngBounds.Builder();
-//            builder.include(listPoints.get(0));
-//            builder.include(listPoints.get(1));
-//            LatLngBounds bounds = builder.build();
+            victimLocation = route.endLocation;
 
-//            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 30);
-//            mMap.animateCamera(cu, new GoogleMap.CancelableCallback(){
-//                public void onCancel(){}
-//                public void onFinish(){
-//                    CameraUpdate zout = CameraUpdateFactory.zoomBy((float)-2.0);
-//                    mMap.animateCamera(zout);
-//                }
-//            });
-<<<<<<< HEAD
 
-=======
->>>>>>> 2bfe5e97afa27ab2e8bae434de01ede4338c9efa
+
+
             PolylineOptions polylineOptions = new PolylineOptions().
                     geodesic(true).
                     color(Color.MAGENTA).
