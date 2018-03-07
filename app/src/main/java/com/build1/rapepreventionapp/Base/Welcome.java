@@ -100,12 +100,11 @@ public class Welcome extends AppCompatActivity {
         }
     }
 
-<<<<<<< HEAD
     public void btnOnClickHelp(View view) {
         Intent i = new Intent(Welcome.this, Help.class);
         startActivity(i);
+    }
 
-=======
     public boolean isConnected(Context context) {
 
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -120,20 +119,6 @@ public class Welcome extends AppCompatActivity {
         } else
             return false;
     }
-//    public boolean isConnectedLocation(Context context) {
-//
-//        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-//        NetworkInfo netinfo = cm.getActiveNetworkInfo();
-//
-//        if (netinfo != null && netinfo.isConnectedOrConnecting()) {
-//            android.net.NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-//            android.net.NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-//
-//            if((mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting())) return true;
-//            else return false;
-//        } else
-//            return false;
-//    }
 
     public AlertDialog.Builder buildDialog(Context c) {
 
@@ -151,6 +136,5 @@ public class Welcome extends AppCompatActivity {
         });
 
         return builder;
->>>>>>> 493432488ac0192c3ebf0a402ae20a5d3d44114f
     }
 }
