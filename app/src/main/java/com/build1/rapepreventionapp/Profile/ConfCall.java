@@ -2,8 +2,11 @@ package com.build1.rapepreventionapp.Profile;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +16,8 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.build1.rapepreventionapp.R;
+
+import static android.Manifest.permission.CALL_PHONE;
 
 public class ConfCall extends Fragment implements View.OnClickListener{
 
@@ -24,6 +29,9 @@ public class ConfCall extends Fragment implements View.OnClickListener{
     String automatedCallState;
 
     String number;
+
+    private Boolean mPhonePermissionGranted = false;
+    private static final int PHONE_PERMISSION_REQUEST_CODE = 1234;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,10 +128,16 @@ public class ConfCall extends Fragment implements View.OnClickListener{
             case R.id.switch1:
 
                 if(switchAutomatedCall.isChecked()){
-                    SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = preferences.edit();
-                     editor.putString("automatedCallState", "on");
-                    editor.commit();
+                    getPhonePermission();
+                    if (mPhonePermissionGranted == true){
+                        SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString("automatedCallState", "on");
+                        editor.commit();
+                    }else{
+
+                    }
+
                 }
                 else {
                     SharedPreferences preferences = getActivity().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
@@ -133,6 +147,20 @@ public class ConfCall extends Fragment implements View.OnClickListener{
                 }
 
                 break;
+        }
+    }
+    public void getPhonePermission(){
+        //Log.d(TAG, "getLocationPermission: getting location permissions");
+        String[] permissions = {
+                CALL_PHONE,
+                //Manifest.permission.ACCESS_COARSE_LOCATION
+        };
+
+        if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),CALL_PHONE) == PackageManager.PERMISSION_GRANTED){
+
+            mPhonePermissionGranted = true;
+        }else{
+            ActivityCompat.requestPermissions(getActivity(),permissions, PHONE_PERMISSION_REQUEST_CODE);
         }
     }
 }

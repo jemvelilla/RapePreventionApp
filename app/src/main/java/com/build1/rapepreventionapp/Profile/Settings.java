@@ -43,8 +43,7 @@ public class Settings extends Fragment {
 
     String mUserId;
 
-    private Boolean mPhonePermissionGranted = false;
-    private static final int PHONE_PERMISSION_REQUEST_CODE = 1234;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -84,7 +83,6 @@ public class Settings extends Fragment {
         txtConfCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getPhonePermission();
                 android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
                 if (fragmentManager != null) {
                     android.support.v4.app.FragmentTransaction ft = fragmentManager.beginTransaction();
@@ -146,20 +144,7 @@ public class Settings extends Fragment {
 
     }
 
-    public void getPhonePermission(){
-        //Log.d(TAG, "getLocationPermission: getting location permissions");
-        String[] permissions = {
-                CALL_PHONE,
-                //Manifest.permission.ACCESS_COARSE_LOCATION
-        };
 
-        if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),CALL_PHONE) == PackageManager.PERMISSION_GRANTED){
-
-            mPhonePermissionGranted = true;
-        }else{
-            ActivityCompat.requestPermissions(getActivity(),permissions, PHONE_PERMISSION_REQUEST_CODE);
-        }
-    }
 
 
 }

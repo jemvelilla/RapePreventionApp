@@ -2,11 +2,14 @@ package com.build1.rapepreventionapp.Home;
 
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +17,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,30 +78,20 @@ import static android.Manifest.permission.SEND_SMS;
  * Created by Darise on 24/01/2018.
  */
 
-public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener {
+public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-//    private FirebaseAuth mAuth;
-//    private StorageReference mStorage;
-//    private FirebaseFirestore mFirestore;
-//    private UserInformation info;
-//    FirebaseDatabase database;
-//    DatabaseReference user;
     private static final String TAG = "Map";
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
-    private static final int SMS_PERMISSION_REQUEST_CODE = 1234;
     private Boolean mLocationPermissionGranted = false;
-    private Boolean mSMSPermissionGranted = false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
-    private GeoDataClient mGeoDataClient;
     Location currentLocation;
     LatLng currentLocationLatlng;
-    private PlaceDetectionClient mPlaceDetectionClient;
     private final float DEFAULT_ZOOM = 16f;
     private GoogleApiClient mGoogleApiClient;
     private PlaceInfo mPlace;
@@ -114,61 +108,21 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //SupportMapFragment fragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        //fragment.getMapAsync(this);
-        // Construct a GeoDataClient.
-        //mGeoDataClient = Places.getGeoDataClient(getActivity().getApplicationContext(), null);
-
-        // Construct a PlaceDetectionClient.
-        //mPlaceDetectionClient = Places.getPlaceDetectionClient(getActivity().getApplicationContext(), null);
-
-        // Construct a FusedLocationProviderClient.
-        //mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity().getApplicationContext());
-        //SupportMapFragment fragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        //fragment.getMapAsync(this);
-        //Log.e(TAG, "onViewCreated: asasa" );
-
-//        database = FirebaseDatabase.getInstance();
-//        mAuth = FirebaseAuth.getInstance();
-//        mStorage = FirebaseStorage.getInstance().getReference().child("images");
-//        mFirestore = FirebaseFirestore.getInstance();
         getLocationPermission();
-        getMessagePermission();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_home,container, false);
-
-        //View v = inflater.inflate(R.layout.activity_home, container, false);
-
-        //mInfo = (ImageButton) v.findViewbyId(R.id.place_info);
-
-        //ImageButton mInfo = (ImageButton) v.findViewById(R.id.place_info);
-        //mInfo.setOnClickListener(new View.OnClickListener() {
-         //   @Override
-         //   public void onClick(View v) {
-        //        try {
-        //            if (mMarker.isInfoWindowShown()){
-        //                mMarker.hideInfoWindow();
-        //            }else{
-        //                mMarker.showInfoWindow();
-        //            }
-
-        //        }catch (NullPointerException e){
-        //            Log.e(TAG, "onClick: NULLPOINTEREXCEPTION" + e.getMessage());
-        //        }
-        //    }
-        //});
-
-        //return v;
     }
 
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
 
         SupportMapFragment fragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         fragment.getMapAsync(this);
@@ -180,44 +134,10 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
 
     }
 
-    /*private void init(){
-
-        mGoogleApiClient = new GoogleApiClient
-                .Builder(getActivity().getApplicationContext())
-                .addApi(Places.GEO_DATA_API)
-                .addApi(Places.PLACE_DETECTION_API)
-                .enableAutoManage(getActivity(), this)
-                .build();
-
-
-    }*/
-
-    /*private void initMap() {
-        Log.d(TAG, "initMap: initmap");
-        SupportMapFragment fragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        fragment.getMapAsync(this);
-
-    }*/
-
-    private void geoLocate(){
-        Geocoder geocoder = new Geocoder(getActivity().getApplicationContext());
-
-    }
-
-    private void geoDataClient(){
-        mGeoDataClient = Places.getGeoDataClient(getActivity().getApplicationContext(), null);
-    }
-
-    private void placeDetectionClient() {
-        mPlaceDetectionClient = Places.getPlaceDetectionClient(getActivity().getApplicationContext(), null);
-    }
-
     public void getDeviceLocation() {
+
         Log.d(TAG, "getDeviceLocation: getting the device location");
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity().getApplicationContext());
-        //latitude = location.getLatitude();
-        //longtitude = location.getLongitude();
-        //lastlocation = location;
 
         try {
             if (mLocationPermissionGranted) {
@@ -225,23 +145,15 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
                 location.addOnCompleteListener(getActivity(), new OnCompleteListener<Location>() {
                     @Override
                     public void onComplete(@NonNull com.google.android.gms.tasks.Task<Location> task) {
-                        //final String placeId = task.getPlaceId();
                         if (task.isSuccessful()) {
 
                             Log.d(TAG, "onComplete: found location");
                             currentLocation = new Location(task.getResult());
+                            currentLocation.getAccuracy();
+                            Log.d("location accuracy", "onComplete: " +currentLocation.getAccuracy());
                             latitude = currentLocation.getLatitude();
-
                             longtitude = currentLocation.getLongitude();
-
-
-
                             currentLocationLatlng = new LatLng(latitude,longtitude);
-                            double test = currentLocationLatlng.latitude;
-
-                            LatLng origin = currentLocationLatlng;
-
-                            Log.d(TAG, "onCompletetangina: " +origin);
 
 
                             Geocoder geocoder = new Geocoder(getActivity().getApplicationContext());
@@ -249,10 +161,7 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
                                 addresses = geocoder.getFromLocation(currentLocation.getLatitude(), longtitude,1);
 
                                 String address = addresses.get(0).getAddressLine(0);
-                                //String area = addresses.get(0).getLocality();
-                                Log.e(TAG, "onComplete: "+addresses );
-                                listPoints.add(new LatLng(latitude, longtitude));
-                                Log.d(TAG, "onComplete twyla: "+listPoints);
+                                //listPoints.add(new LatLng(latitude, longtitude));
 
                                 moveCamera(new LatLng(latitude, longtitude),
                                         DEFAULT_ZOOM, ""+address+"");
@@ -264,16 +173,11 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            Log.e(TAG, "onComplete: " +latitude);
-                            Log.e(TAG, "onComplete: " +longtitude);
-
-                            //final String placeId = task.getResult();
 
 
 
 
                         } else {
-                            Log.d(TAG, "onComplete: NASAN");
 
                         }
                     }
@@ -285,176 +189,34 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
         }
     }
 
-    /*private void moveCamera(LatLng latLng, float zoom, PlaceInfo placeInfo) {
-        Log.d(TAG, "moveCamera: moving the camera to :");
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
-        mMap.clear();
-        mMap.setInfoWindowAdapter(new CustomWindowInfoAdapter(getActivity().getApplicationContext()));
-
-        if (placeInfo != null){
-            try {
-                String snippet = "Address: " +placeInfo.getAddress()+ "\n" +"";
-            MarkerOptions options = new MarkerOptions().position(latLng).title(placeInfo.getName()).snippet(snippet);
-            mMarker = mMap.addMarker(options);
-
-            }catch (NullPointerException e){
-                Log.e(TAG, "moveCamera: " );
-            }
-        }else{
-            mMap.addMarker(new MarkerOptions().position(latLng));
-        }
-    }*/
 
     private void moveCamera(LatLng latLng, float zoom, String title) {
         Log.d(TAG, "moveCamera: moving the camera to :");
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
-        //if (!title.equals("You are here!")){
             MarkerOptions options = new MarkerOptions().position(latLng).title(title);
             mMap.addMarker(options);
-        //}
 
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        //BottomNavigation bottomNavigation = new BottomNavigation();
         mMap = googleMap;
 
 
         if (mLocationPermissionGranted) {
             getDeviceLocation();
-            //if (currentLocationLatlng != null){
-            //    getNearbyPoliceStation();
-            //}
 
 
             if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return;
             }
             mMap.setMyLocationEnabled(true);
-            mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-                @Override
-                public void onMapLongClick(LatLng latLng) {
-                    //reset when 2
-                    if (listPoints.size() == 2) {
-                        listPoints.clear();
-                        mMap.clear();
-                    }
-                    //save first marker
-                    listPoints.add(latLng);
-                    //marker
-                    MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(latLng);
-
-                    if (listPoints.size() == 1){
-                        //add 1st marker
-                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-                        Log.e(TAG, "onMapLongClick: " +listPoints);
-                        Log.e(TAG, "onMapLongClick: "+latLng );
-                        //moveCamera(new LatLng(latLng,DEFAULT_ZOOM, ""++"");
-                        Log.e(TAG, "onMapLongClick: " +listPoints);
-                    }else{
-                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
-                        Geocoder geocoder = new Geocoder(getActivity().getApplicationContext());
-                        try {
-                            victimAddress = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-
-                            String addressVictim = victimAddress.get(0).getAddressLine(0);
-                            //String area = addresses.get(0).getLocality();
-                            Log.e(TAG, "onComplete: "+victimAddress );
-
-                            moveCamera(new LatLng(latLng.latitude, latLng.longitude), DEFAULT_ZOOM, ""+addressVictim+"");
-                            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                    mMap.addMarker(markerOptions);
-                    if (listPoints.size() == 2){
-                        //url creation for request
-                        String test = listPoints.get(0).toString();
-                        String url = getRequestUrl(listPoints.get(0), listPoints.get(1));
-                        TaskRequestDirections taskRequestDirections = new TaskRequestDirections();
-                        taskRequestDirections.execute(url);
-                        Log.e(TAG, "onMapLongClickasasa: " +test);
-                    }
-                }
-            });
-            //initMap();
-
-
         }
 
-        Log.d(TAG, "onMapReady: Map is Ready" +latitude+ "," +longtitude);
         }
-
-    private String getRequestUrl(LatLng origin, LatLng destination) {
-        //value of origin
-        String stringOrigin = "origin=" +origin.latitude+ "," +origin.longitude;
-        Log.e(TAG, "getRequestUrl: "+origin );
-        //value of destination
-        String stringDestination = "destination="+destination.latitude+ ","+destination.longitude;
-        //Set value enable the sensor
-        String sensor = "sensor=false";
-        //mode for find direction
-        String mode = "mode=driving";
-        //Build the full param
-        String param = stringOrigin +"&" + stringDestination + "&" +sensor+ "&" +mode;
-        // output format
-        String output = "json";
-        //Create url to request
-        String url = "https://maps.googleapis.com/maps/api/directions/" +output + "?" +param;
-        Log.e(TAG, "getRequestUrl: "+url );
-        return url;
-    }
-
-    private String requestDirection(String reqUrl) throws IOException {
-        String responseString = "";
-        InputStream inputStream = null;
-        HttpURLConnection httpURLConnection = null;
-        try{
-            URL url = new URL(reqUrl);
-            httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.connect();
-
-            //Get the response result
-            inputStream = httpURLConnection.getInputStream();
-            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-            StringBuffer stringBuffer = new StringBuffer();
-            String line = "";
-            while ((line = bufferedReader.readLine()) != null){
-                stringBuffer.append(line);
-
-            }
-
-            responseString = stringBuffer.toString();
-            bufferedReader.close();
-            inputStreamReader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (inputStream != null){
-                inputStream.close();
-            }
-            httpURLConnection.disconnect();
-        }
-        return responseString;
-
-    }
 
     public void getLocationPermission(){
             Log.d(TAG, "getLocationPermission: getting location permissions");
@@ -466,7 +228,6 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
         if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
             if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
                 mLocationPermissionGranted = true;
-                //initMap();
             }else{
                 ActivityCompat.requestPermissions(getActivity(),permissions, LOCATION_PERMISSION_REQUEST_CODE);
             }
@@ -495,121 +256,38 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
 
 
                     mLocationPermissionGranted = true;
-                    //initMap();
                 }
                 break;
             }
         }
     }
 
-    /*private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback = new ResultCallback<PlaceBuffer>() {
-        @Override
-        public void onResult(@NonNull PlaceBuffer places) {
+    @Override
+    public void onLocationChanged(Location location) {
 
-            if (!places.getStatus().isSuccess()){
-                places.release();
-                return;
-            }
-
-            final Place place = places.get(0);
-            try{
-                mPlace = new PlaceInfo();
-                mPlace.setName(place.getName().toString());
-                mPlace.setAddress(place.getAddress().toString());
-                mPlace.setId(place.getId());
-                mPlace.setLatLng(place.getLatLng());
-
-            }catch (NullPointerException e){
-                Log.e(TAG, "onResult: NULLPOINTEREXCEPTION" + e.getMessage());
-            }
-
-            moveCamera(new LatLng(place.getViewport().getCenter().latitude, place.getViewport().getCenter().longitude),DEFAULT_ZOOM, mPlace.getName());
-            places.release();
-        }
-    };*/
-
-        ////////////////////////////////////////////
-
-
-
-
-    public class TaskRequestDirections extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... strings) {
-            String responseString = "";
-            try {
-                responseString = requestDirection(strings[0]);
-            }catch (IOException e) {
-                e.printStackTrace();
-            }
-            return responseString;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            //
-            TaskParser taskParser = new TaskParser();
-            taskParser.execute(s);
-        }
-    }
-    public class TaskParser extends AsyncTask<String, Void, List<List<HashMap<String, String>>>>{
-
-        @Override
-        protected List<List<HashMap<String, String>>> doInBackground(String... strings) {
-            JSONObject jsonObject = null;
-            List<List<HashMap<String, String>>> routes = null;
-            try {
-                jsonObject = new JSONObject(strings[0]);
-                DirectionsParser directionsParser = new DirectionsParser();
-                routes = directionsParser.parse(jsonObject);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return routes;
-        }
-
-        @Override
-        protected void onPostExecute(List<List<HashMap<String, String>>> lists) {
-            //Get list route and display it sa map
-
-            ArrayList points = null;
-
-            PolylineOptions polylineOptions = null;
-
-            for (List<HashMap<String, String>> path : lists){
-                points = new ArrayList();
-                polylineOptions = new PolylineOptions();
-
-                for (HashMap<String, String> point : path){
-                    double lat  = Double.parseDouble(point.get("lat"));
-                    double lon  = Double.parseDouble(point.get("lon"));
-
-                    points.add(new LatLng(lat, lon));
-
-                }
-                polylineOptions.addAll(points);
-                polylineOptions.width(15);
-                polylineOptions.color(Color.BLUE);
-                polylineOptions.geodesic(true);
-
-            }
-            if (polylineOptions!=null){
-                mMap.addPolyline(polylineOptions);
-
-            }else{
-                Toast.makeText(getActivity().getApplicationContext(), "DIRECTION NOT FOUND", Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+        Log.d(TAG, "onProviderDisabled: LOCATION IS OFF");
+
+    }
 
     public void getNearbyPoliceStation(){
 
         latitude = currentLocationLatlng.latitude;
         longtitude = currentLocationLatlng.longitude;
-        Log.d(TAG, "getNearbyPoliceStation: tangina"+latitude);
         String police = "police";
         String url = getUrl(latitude, longtitude, police);
         Object dataTransfer[] = new Object[2];
@@ -624,8 +302,6 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
 
     private String getUrl(double latitude , double longtitude, String nearbyPlace){
 
-        Log.e(TAG, "getUrlaaaaa: "+latitude );
-        Log.e(TAG, "getUrlbbbbb: "+longtitude );
          StringBuilder googlePlaceUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
          googlePlaceUrl.append("location="+latitude+","+longtitude);
          googlePlaceUrl.append("&radius="+PROXIMITY_RADIUS);
@@ -638,22 +314,6 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
 
          return googlePlaceUrl.toString();
     }
-
-    public void getMessagePermission(){
-        //Log.d(TAG, "getLocationPermission: getting location permissions");
-        String[] permissions = {
-                SEND_SMS,
-                //Manifest.permission.ACCESS_COARSE_LOCATION
-        };
-
-        if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),SEND_SMS) == PackageManager.PERMISSION_GRANTED){
-
-            mSMSPermissionGranted = true;
-        }else{
-            ActivityCompat.requestPermissions(getActivity(),permissions, SMS_PERMISSION_REQUEST_CODE);
-        }
-    }
-
 }
 
 

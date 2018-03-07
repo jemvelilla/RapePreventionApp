@@ -1,13 +1,19 @@
 package com.build1.rapepreventionapp.Base;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.build1.rapepreventionapp.Home.BottomNavigation;
 import com.build1.rapepreventionapp.Home.Help;
@@ -30,7 +36,12 @@ public class Welcome extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_welcome_page);
+
+        if(!isConnected(Welcome.this)) buildDialog(Welcome.this).show();
+        else {
+            //Toast.makeText(Welcome.this,"Welcome", Toast.LENGTH_SHORT).show();
+            setContentView(R.layout.activity_welcome_page);
+        }
 
         SharedPreferences preferences = getSharedPreferences("PREFS", 0);
         savedAccount = preferences.getString("savedAccount", "");
@@ -89,9 +100,57 @@ public class Welcome extends AppCompatActivity {
         }
     }
 
+<<<<<<< HEAD
     public void btnOnClickHelp(View view) {
         Intent i = new Intent(Welcome.this, Help.class);
         startActivity(i);
 
+=======
+    public boolean isConnected(Context context) {
+
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netinfo = cm.getActiveNetworkInfo();
+
+        if (netinfo != null && netinfo.isConnectedOrConnecting()) {
+            android.net.NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            android.net.NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+            if((mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting())) return true;
+            else return false;
+        } else
+            return false;
+    }
+//    public boolean isConnectedLocation(Context context) {
+//
+//        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+//        NetworkInfo netinfo = cm.getActiveNetworkInfo();
+//
+//        if (netinfo != null && netinfo.isConnectedOrConnecting()) {
+//            android.net.NetworkInfo wifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+//            android.net.NetworkInfo mobile = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+//
+//            if((mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting())) return true;
+//            else return false;
+//        } else
+//            return false;
+//    }
+
+    public AlertDialog.Builder buildDialog(Context c) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+        builder.setTitle("No Internet Connection");
+        builder.setMessage("You need to have Mobile Data or wifi to access this. Press ok to Exit");
+
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                finish();
+            }
+        });
+
+        return builder;
+>>>>>>> 493432488ac0192c3ebf0a402ae20a5d3d44114f
     }
 }
