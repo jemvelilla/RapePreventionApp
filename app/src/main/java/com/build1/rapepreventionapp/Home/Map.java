@@ -2,22 +2,17 @@ package com.build1.rapepreventionapp.Home;
 
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,57 +21,25 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 import android.Manifest;
 
-import com.build1.rapepreventionapp.GooglePlacesAPI.DirectionsParser;
 import com.build1.rapepreventionapp.GooglePlacesAPI.GetNearbyPlacesData;
 import com.build1.rapepreventionapp.Model.PlaceInfo;
-import com.build1.rapepreventionapp.Model.UserInformation;
 import com.build1.rapepreventionapp.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.GeoDataClient;
-import com.google.android.gms.location.places.PlaceDetectionClient;
-import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.vision.face.LargestFaceFocusingProcessor;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
-import static android.Manifest.permission.READ_CONTACTS;
-import static android.Manifest.permission.SEND_SMS;
-
-/**
- * Created by Darise on 24/01/2018.
- */
 
 public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
@@ -122,16 +85,12 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-
         SupportMapFragment fragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         fragment.getMapAsync(this);
         listPoints =new ArrayList<>();
 
         double latitude;
         double longitude;
-
-
     }
 
     public void getDeviceLocation() {
@@ -147,36 +106,28 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
                     public void onComplete(@NonNull com.google.android.gms.tasks.Task<Location> task) {
                         if (task.isSuccessful()) {
 
-                            Log.d(TAG, "onComplete: found location");
                             currentLocation = new Location(task.getResult());
                             currentLocation.getAccuracy();
                             Log.d("location accuracy", "onComplete: " +currentLocation.getAccuracy());
+
                             latitude = currentLocation.getLatitude();
                             longtitude = currentLocation.getLongitude();
                             currentLocationLatlng = new LatLng(latitude,longtitude);
-
 
                             Geocoder geocoder = new Geocoder(getActivity().getApplicationContext());
                             try {
                                 addresses = geocoder.getFromLocation(currentLocation.getLatitude(), longtitude,1);
 
                                 String address = addresses.get(0).getAddressLine(0);
-                                //listPoints.add(new LatLng(latitude, longtitude));
 
                                 moveCamera(new LatLng(latitude, longtitude),
                                         DEFAULT_ZOOM, ""+address+"");
 
                                 getNearbyPoliceStation();
 
-
-
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-
-
-
-
                         } else {
 
                         }
@@ -189,15 +140,12 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
         }
     }
 
-
-
     private void moveCamera(LatLng latLng, float zoom, String title) {
         Log.d(TAG, "moveCamera: moving the camera to :");
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
 
             MarkerOptions options = new MarkerOptions().position(latLng).title(title);
             mMap.addMarker(options);
-
     }
 
     @Override
@@ -205,21 +153,18 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
 
         mMap = googleMap;
 
-
         if (mLocationPermissionGranted) {
             getDeviceLocation();
-
 
             if (ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
             mMap.setMyLocationEnabled(true);
         }
-
-        }
+    }
 
     public void getLocationPermission(){
-            Log.d(TAG, "getLocationPermission: getting location permissions");
+
         String[] permissions = {
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION
@@ -234,14 +179,13 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
         }else{
             ActivityCompat.requestPermissions(getActivity(),permissions, LOCATION_PERMISSION_REQUEST_CODE);
         }
-        }
+    }
 
     @SuppressLint("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         mLocationPermissionGranted = false;
 
-        Log.d(TAG, "onRequestPermissionsResult: called");
         switch (requestCode){
             case LOCATION_PERMISSION_REQUEST_CODE:{
                 if (grantResults.length > 0){
@@ -249,11 +193,10 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
                         if (grantResults[i] != PackageManager.PERMISSION_GRANTED){
                             mLocationPermissionGranted = false;
                             mMap.setMyLocationEnabled(true);
-                            Log.d(TAG, "onRequestPermissionsResult: failes");
+
                             return;
                         }
-                    }Log.d(TAG, "onRequestPermissionsResult: granted");
-
+                    }
 
                     mLocationPermissionGranted = true;
                 }
@@ -296,7 +239,7 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
 
         GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
         getNearbyPlacesData.execute(dataTransfer);
-        Toast.makeText(getActivity().getApplicationContext(), "Showing Nearby Plice Station", Toast.LENGTH_SHORT);
+        Toast.makeText(getActivity().getApplicationContext(), "Showing Nearby Police Station", Toast.LENGTH_SHORT);
         Log.e(TAG, "getNearbyPoliceStation: asasa" +url);
     }
 
@@ -315,6 +258,3 @@ public class Map extends Fragment implements OnMapReadyCallback, GoogleApiClient
          return googlePlaceUrl.toString();
     }
 }
-
-
-

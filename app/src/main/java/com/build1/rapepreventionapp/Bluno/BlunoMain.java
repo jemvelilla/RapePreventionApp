@@ -43,9 +43,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,41 +118,6 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                //setUpGClient();
-
-//                mFirestore.collection("Users").document(mCurrentId).get().addOnSuccessListener(BlunoMain.this, new OnSuccessListener<DocumentSnapshot>() {
-//                    @Override
-//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-//
-//                        //sendNotification(documentSnapshot.getString("first_name") + " " + documentSnapshot.getString("last_name"));
-//
-//                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//                        String currentDateTime = dateFormat.format(new Date()); // Find todays date
-//
-//                        final String message = documentSnapshot.getString("first_name") + " " + documentSnapshot.getString("last_name") + " needs help.";
-//                        Map<String, Object> notificationMessage = new HashMap<>();
-//                        notificationMessage.put("message", message);
-//                        notificationMessage.put("from", mCurrentId);
-//                        notificationMessage.put("timestamp", currentDateTime);
-//
-//                        for (String id : ids) {
-//                            mFirestore.collection("Users/" + id + "/Notifications").add(notificationMessage).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                                @Override
-//                                public void onSuccess(DocumentReference documentReference) {
-//                                    Toast.makeText(BlunoMain.this, "Notification sent.", Toast.LENGTH_SHORT).show();
-//
-//                                }
-//                            }).addOnFailureListener(new OnFailureListener() {
-//                                @Override
-//                                public void onFailure(@NonNull Exception e) {
-//                                    Toast.makeText(BlunoMain.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-//                                }
-//                            });
-//                        }
-//                    }
-//                });
-//                getDeviceLocation(); //store on database onlocationchanged
-
                buttonScanOnClickProcess();                                        //Alert Dialog for selecting the BLE device                 //Alert Dialog for selecting the BLE device
             }
         });
@@ -168,43 +131,30 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
     @Override
     protected void onStart() {
         super.onStart();
-        //getDeviceLocation();
     }
 
     protected void onResume() {
         super.onResume();
         System.out.println("BlUNOActivity onResume");
         onResumeProcess();
-        //getDeviceLocation();
-        //onResume Process by BlunoLibrary
-
         Log.v("message", "onResume");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        //getDeviceLocation();
-        //onPauseProcess();
         onResumeProcess();
-        //onPause Process by BlunoLibrary
-
         Log.v("message", "onPauseProcess");
     }
 
     protected void onStop() {
         super.onStop();
-        //getDeviceLocation();
-        //onStopProcess();														//onStop Process by BlunoLibrary
-
         Log.v("message", "onStop");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //onDestroyProcess();														//onDestroy Process by BlunoLibrary
-
         Log.v("message", "onDestroy");
     }
 
@@ -242,7 +192,6 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-
                     sendNotification(documentSnapshot.getString("first_name") + " " + documentSnapshot.getString("last_name"));
 
                     final String message = documentSnapshot.getString("first_name") + " " + documentSnapshot.getString("last_name") + " needs help.";
@@ -266,9 +215,6 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
                     }
                 }
             });
-
-            Log.d(TAG, "onSerialReceived: notif lang");
-            Log.d(TAG, "onSerialReceived: umabot");
         }
 
         getDeviceLocation2();
@@ -298,16 +244,9 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
                     Intent intent = new Intent(Intent.ACTION_CALL);
                     intent.setData(Uri.parse("tel:" + call));
                     if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
                         return;
                     }
-                    startActivity(intent); //edited darise
+                    startActivity(intent);
                 }
             }
 
@@ -335,7 +274,6 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
                         //final String placeId = task.getPlaceId();
                         if (task.isSuccessful()) {
 
-                            Log.d("pangdebug", "pumasok sa onLocationChanged");
                             currentLocation = new Location(task.getResult());
                             latitude = String.valueOf(currentLocation.getLatitude());
 
@@ -344,12 +282,6 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
 
                             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 1, BlunoMain.this);
                             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 500, 1, BlunoMain.this);
-
-
-
-
-                        } else {
-                            Log.d(TAG, "onComplete: NASAN");
 
                         }
                     }
@@ -370,7 +302,6 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
                 location.addOnCompleteListener(this, new OnCompleteListener<Location>() {
                     @Override
                     public void onComplete(@NonNull final com.google.android.gms.tasks.Task<Location> task) {
-                        //final String placeId = task.getPlaceId();
                         if (task.isSuccessful()) {
                             currentLocation = new Location(task.getResult());
                             latitude = String.valueOf(currentLocation.getLatitude());
@@ -391,15 +322,10 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
 
                             Log.v("message", "onComplete: " + latitude);
                             Log.v("message", "onComplete: " + longtitude);
-
-                            //final String placeId = task.getResult();
-
                         }
 
                     }
                 });
-            } else {
-                Log.d(TAG, "onComplete: NASAN");
             }
         }catch(SecurityException e)
         {
@@ -407,63 +333,48 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
         }
     }
 
-        @Override
-        public void onLocationChanged(Location location) {
+    @Override
+    public void onLocationChanged(Location location) {
+        mylocation = location;
 
-            Log.d("pangdebug", "pumasok sa onLocationChangedasa");
+        if (mylocation != null) {
 
-            mylocation = location;
-            Log.d("pangdebug", "onLocationChanged: "+ mylocation);
-            if (mylocation != null) {
-                Log.d("pangdebug", "pumasok sa myLocation");
+            //currentLocation = new Location(task.getResult());
+            latitude = String.valueOf(location.getLatitude());
+            longtitude = String.valueOf(location.getLongitude());
 
-                //Double latitude=mylocation.getLatitude();
-                //Double longitude=mylocation.getLongitude();
-                //Or Do whatever you want with your location
-                Log.v("message", "onComplete: found locationasd");
-                //currentLocation = new Location(task.getResult());
-                latitude = String.valueOf(location.getLatitude());
+            Map<String, Object> locationMap = new HashMap<>();
+            locationMap.put("latitude", latitude);
+            locationMap.put("longitude", longtitude);
 
-                longtitude = String.valueOf(location.getLongitude());
+            mFirestore.collection("Users").document(current_id).update(locationMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
 
-                Map<String, Object> locationMap = new HashMap<>();
-                locationMap.put("latitude", latitude);
-                locationMap.put("longitude", longtitude);
+                }
+            });
 
-                mFirestore.collection("Users").document(current_id).update(locationMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
+            Log.v("message", "onComplete: " +latitude);
+            Log.v("message", "onComplete: " +longtitude);
 
-                        Log.d("pangdebug", "location stored.");
-                    }
-                });
-
-                Log.v("message", "onComplete: " +latitude);
-                Log.v("message", "onComplete: " +longtitude);
-
-                //final String placeId = task.getResult();
-            } else{
-                Log.d("pangdebug", "onLocationChanged: KINGINA" + location);
-            }
+            //final String placeId = task.getResult();
         }
+    }
 
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
 
-        }
+    }
 
-        @Override
-        public void onProviderEnabled(String provider) {
+    @Override
+    public void onProviderEnabled(String provider) {
 
-        }
+    }
 
-        @Override
-        public void onProviderDisabled(String provider) {
+    @Override
+    public void onProviderDisabled(String provider) {
 
-        }
-
-
-
+    }
 
     //turn on gps
     private synchronized void setUpGClient() {
@@ -475,8 +386,6 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
                 .build();
         googleApiClient.connect();
     }
-
-
 
     @Override
     public void onConnected(Bundle bundle) {
@@ -587,7 +496,6 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
         }else{
             getMyLocation();
         }
-
     }
 
     @Override
@@ -598,6 +506,4 @@ public class BlunoMain extends BlunoLibrary implements GoogleApiClient.Connectio
             getMyLocation();
         }
     }
-
-
 }

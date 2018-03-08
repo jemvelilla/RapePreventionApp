@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
-
 public class DirectionsParser {
     /**
      * Returns a list of lists containing latitude and longitude from a JSONObject

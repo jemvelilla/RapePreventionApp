@@ -11,42 +11,26 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.build1.rapepreventionapp.Base.Welcome;
-import com.build1.rapepreventionapp.Bluno.BlunoMain;
-import com.build1.rapepreventionapp.GooglePlacesAPI.DirectionsParser;
 import com.build1.rapepreventionapp.GooglePlacesAPI.GetNearbyPlacesData;
-import com.build1.rapepreventionapp.Home.BottomNavigation;
-import com.build1.rapepreventionapp.Model.EditInformation;
-import com.build1.rapepreventionapp.PushNotif.LocationTracking;
-import com.build1.rapepreventionapp.Model.PlaceInfo;
 import com.build1.rapepreventionapp.R;
-import com.build1.rapepreventionapp.Registration.RegisterStep3;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.GeoDataClient;
-import com.google.android.gms.location.places.PlaceDetectionClient;
-import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -68,17 +52,8 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -89,10 +64,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import Modules.DirectionFinder;
 import Modules.DirectionFinderListener;
 import Modules.Route;
-
-/**
- * Created by JEMYLA VELILLA on 11/02/2018.
- */
 
 public class LocationTracking extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, DirectionFinderListener, LocationListener {
 
@@ -165,7 +136,6 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
         }
         getDeviceLocation2();
 
-
         name = (TextView) findViewById(R.id.name);
         location = (TextView) findViewById(R.id.location);
         mProfilePicture = (CircleImageView) findViewById(R.id.profilePicture);
@@ -214,8 +184,6 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                                 location.setText(getLocation(latitude, longitude));
                                 sendRequest();
                             }
-
-
                         }
                     }
                 });
@@ -256,8 +224,6 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                                 String address = addresses.get(0).getAddressLine(0);
 
                                 getNearbyPoliceStation();
-
-
 
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -302,9 +268,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                                     Log.d("message", "location stored.");
                                 }
                             });
-
                         }
-
                     }
                 });
             } else {
@@ -394,7 +358,6 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                 @Override
                 public void onSuccess(Void aVoid) {
 
-                    Log.d("pangdebug", "location stored.");
                 }
             });
         } else{
@@ -417,8 +380,6 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 
     }
 
-
-
     public void getNearbyPoliceStation(){
 
         latitude = currentLocationLatlng.latitude;
@@ -432,7 +393,6 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
         GetNearbyPlacesData getNearbyPlacesData = new GetNearbyPlacesData();
         getNearbyPlacesData.execute(dataTransfer);
         Toast.makeText(getApplicationContext(), "Showing Nearby Plice Station", Toast.LENGTH_SHORT);
-        Log.e(TAG, "getNearbyPoliceStation: asasa" +url);
     }
 
     private String getUrl(double latitude , double longtitude, String nearbyPlace){
@@ -509,8 +469,6 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
     @Override
     public void onDirectionFinderSuccess(List<Route> routes) {
 
-
-
         for (Route route : routes) {
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
             builder.include(route.startLocation);
@@ -526,13 +484,11 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
             ((TextView) findViewById(R.id.eta)).setText(route.duration.text);
             ((TextView) findViewById(R.id.kmsAway)).setText(route.distance.text);
             ((TextView) findViewById(R.id.location)).setText(route.endAddress);
-            Log.d(TAG, "onDirectionFinderSuccesss: "+destinationMarkers);
-
+            Log.d(TAG, "onDirectionFinderSuccess: "+destinationMarkers);
 
             if (originMarkers.size() == 1){
                 originMarkers.remove(routes);
             }
-
 
             originMarkers.add(mMap.addMarker(new MarkerOptions()
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.helper))
@@ -549,9 +505,6 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
                     .position(route.endLocation)));
 
             victimLocation = route.endLocation;
-
-
-
 
             PolylineOptions polylineOptions = new PolylineOptions().
                     geodesic(true).

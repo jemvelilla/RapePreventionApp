@@ -80,9 +80,7 @@ public class Contacts extends Fragment implements View.OnClickListener{
         if (mContactsPermissionGranted == true){
             loadContacts();
         }else{
-
         }
-
     }
 
     @Nullable
@@ -270,8 +268,6 @@ public class Contacts extends Fragment implements View.OnClickListener{
         };
 
         if (ContextCompat.checkSelfPermission(getActivity().getApplicationContext(),READ_CONTACTS) == PackageManager.PERMISSION_GRANTED){
-
-
             mContactsPermissionGranted = true;
 
         }else{

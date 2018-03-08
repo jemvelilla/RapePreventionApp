@@ -10,10 +10,6 @@ import android.util.Log;
 import com.build1.rapepreventionapp.R;
 import com.google.firebase.messaging.RemoteMessage;
 
-/**
- * Created by JEMYLA VELILLA on 11/02/2018.
- */
-
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService{
 
     @Override
