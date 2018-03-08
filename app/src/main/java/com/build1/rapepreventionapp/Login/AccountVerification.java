@@ -1,6 +1,7 @@
 package com.build1.rapepreventionapp.Login;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,11 +9,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.build1.rapepreventionapp.Home.BottomNavigation;
 import com.build1.rapepreventionapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,15 +34,17 @@ import java.util.Map;
 
 public class AccountVerification extends AppCompatActivity {
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener authStateListener;
 
     String mUserId;
-    DatabaseReference databaseUsers;
     private FirebaseFirestore mFirestore;
 
-    private WebView webView;
     TextView tvUser;
 
+    private ImageView loading;
+    AnimationDrawable animation;
+
+    Button btnOpenEmail;
+    Button btnLogout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +60,13 @@ public class AccountVerification extends AppCompatActivity {
 
         tvUser = (TextView) findViewById(R.id.email);
         tvUser.setText(mAuth.getCurrentUser().getEmail());
+        btnOpenEmail = (Button) findViewById(R.id.btnVerify);
+        btnLogout = (Button) findViewById(R.id.btnLogOut);
+
+        loading = (ImageView) findViewById(R.id.loading);
+        loading.setVisibility(View.INVISIBLE);
+        loading.bringToFront();
+        animation = (AnimationDrawable) loading.getDrawable();
     }
 
     @Override
@@ -60,7 +74,7 @@ public class AccountVerification extends AppCompatActivity {
         super.onResume();
         mAuth.getCurrentUser().reload();
         if (mAuth.getCurrentUser().isEmailVerified()){
-            Intent i = new Intent(this, LogIn2.class);
+            Intent i = new Intent(this, BottomNavigation.class);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             finish();
             startActivity(i);
@@ -85,6 +99,11 @@ public class AccountVerification extends AppCompatActivity {
     }
 
     public void btnOnClickLogout (View view){
+        animation.start();
+        loading.setVisibility(View.VISIBLE);
+        btnOpenEmail.setVisibility(View.INVISIBLE);
+        btnLogout.setVisibility(View.INVISIBLE);
+
         Map<String, Object> tokenMapRemove = new HashMap<>();
         tokenMapRemove.put("token_id", FieldValue.delete());
 
@@ -93,10 +112,23 @@ public class AccountVerification extends AppCompatActivity {
             public void onSuccess(Void aVoid) {
                 mAuth.signOut();
 
+                animation.stop();
+                loading.setVisibility(View.INVISIBLE);
+
                 Intent i = new Intent(AccountVerification.this, LogIn2.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 finish();
                 startActivity(i);
+            }
+        }) .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                animation.stop();
+                loading.setVisibility(View.INVISIBLE);
+                btnOpenEmail.setVisibility(View.VISIBLE);
+                btnLogout.setVisibility(View.VISIBLE);
+
+                Toast.makeText(AccountVerification.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
