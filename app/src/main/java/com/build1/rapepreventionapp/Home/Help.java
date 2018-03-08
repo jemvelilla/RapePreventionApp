@@ -113,7 +113,7 @@ public class Help extends AppCompatActivity {
     }
 
     private void launchHomeScreen() {
-        Intent i = new Intent(this, Login.class);
+        Intent i = new Intent(this, Welcome.class);
         startActivity(i);
     }
 

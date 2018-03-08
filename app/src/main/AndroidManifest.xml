@@ -128,10 +128,12 @@
 
         <activity
             android:name=".Home.BottomNavigation"
-            android:label="TULONG Rape Prevention"></activity>
+            android:label="TULONG Rape Prevention"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".PushNotif.ViewProfile"
-            android:label="TULONG Rape Prevention"></activity>
+            android:label="TULONG Rape Prevention"
+            android:screenOrientation="portrait"></activity>
 
         <service
             android:name=".Bluno.BluetoothLeService"
@@ -146,13 +148,17 @@
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />
 
-        <activity android:name=".Login.PasswordUpdated"></activity>
+        <activity android:name=".Login.PasswordUpdated"
+            android:screenOrientation="portrait"></activity>
 
-        <activity android:name=".Login.LogIn2"></activity>
+        <activity android:name=".Login.LogIn2"
+            android:screenOrientation="portrait"></activity>
 
-        <activity android:name=".Login.EnterPassword"></activity>
+        <activity android:name=".Login.EnterPassword"
+            android:screenOrientation="portrait"></activity>
 
-        <activity android:name=".Home.Help"></activity>
+        <activity android:name=".Home.Help"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

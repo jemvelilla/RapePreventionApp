@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.build1.rapepreventionapp.Home.BottomNavigation;
 import com.build1.rapepreventionapp.Home.Help;
@@ -22,10 +20,7 @@ import com.build1.rapepreventionapp.Login.LogIn2;
 import com.build1.rapepreventionapp.Login.Login;
 import com.build1.rapepreventionapp.R;
 import com.build1.rapepreventionapp.Registration.RegisterStep1;
-import com.build1.rapepreventionapp.Registration.Slides;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class Welcome extends AppCompatActivity {
 
@@ -39,7 +34,6 @@ public class Welcome extends AppCompatActivity {
 
         if(!isConnected(Welcome.this)) buildDialog(Welcome.this).show();
         else {
-            //Toast.makeText(Welcome.this,"Welcome", Toast.LENGTH_SHORT).show();
             setContentView(R.layout.activity_welcome_page);
         }
 
@@ -77,6 +71,14 @@ public class Welcome extends AppCompatActivity {
         super.onStart();
         Log.v("message","onStart");
         mAuth.addAuthStateListener(authStateListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (authStateListener != null) {
+            mAuth.removeAuthStateListener(authStateListener);
+        }
     }
 
     public void btnOnClickSignUp(View v){

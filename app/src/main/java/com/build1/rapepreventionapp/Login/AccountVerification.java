@@ -55,6 +55,17 @@ public class AccountVerification extends AppCompatActivity {
         tvUser.setText(mAuth.getCurrentUser().getEmail());
     }
 
+    @Override
+    protected void onResume(){
+        super.onResume();
+        mAuth.getCurrentUser().reload();
+        if (mAuth.getCurrentUser().isEmailVerified()){
+            Intent i = new Intent(this, LogIn2.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            finish();
+            startActivity(i);
+        }
+    }
     public void btnOnClickVerify (View view){
         Log.v("user", mAuth.getCurrentUser().getEmail());
         mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(AccountVerification.this, new OnCompleteListener<Void>() {

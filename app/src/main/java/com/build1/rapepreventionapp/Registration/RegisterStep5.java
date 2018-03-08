@@ -163,9 +163,9 @@ public class RegisterStep5 extends AppCompatActivity {
                                         userMap.put("image", download_url);
                                         userMap.put("token_id", token_id);
 
-                                        mFirestore. collection("Users").document(user_id).set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        mFirestore. collection("Users").document(user_id).set(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
-                                            public void onSuccess(Void aVoid) {
+                                            public void onComplete(@NonNull Task<Void> task) {
                                                 sendToAccountCreated();
                                             }
                                         });
@@ -213,11 +213,9 @@ public class RegisterStep5 extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == PICK_IMAGE){
-            if(data.getData() != null){
-                imageUri = data.getData();
-                mImageButton.setImageURI(imageUri);
-            }
+        if(requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null){
+            imageUri = data.getData();
+            mImageButton.setImageURI(imageUri);
         }
     }
 }

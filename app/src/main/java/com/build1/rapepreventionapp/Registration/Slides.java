@@ -142,7 +142,7 @@ public class Slides extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         finish();
-                        Intent i = new Intent(getApplicationContext(), Login.class);
+                        Intent i = new Intent(getApplicationContext(), AccountVerification.class);
                         startActivity(i);
                     }
                 });
