@@ -14,7 +14,6 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/detailsLayout"
         android:layout_below="@id/logo"
         tools:context="com.build1.rapepreventionapp.PushNotif.LocationTracking"
         tools:ignore="MissingConstraints"
@@ -177,6 +176,7 @@
             android:layout_below="@id/linearLayoutKilometers"
             android:layout_alignParentRight="true"
             android:text="STOP"
+            android:onClick="btnOnClickStop"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="5dp"/>
 

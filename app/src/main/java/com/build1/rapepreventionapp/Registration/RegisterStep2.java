@@ -1,5 +1,6 @@
 package com.build1.rapepreventionapp.Registration;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
@@ -8,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -51,6 +53,8 @@ public class RegisterStep2 extends AppCompatActivity {
 
     }
     public void btnOnClickMobNum(View v){
+
+        dismissKeyboard();
 
         animation.start();
         loading.setVisibility(View.VISIBLE);
@@ -112,5 +116,12 @@ public class RegisterStep2 extends AppCompatActivity {
         }
     }
 
+    public void dismissKeyboard() {
+        InputMethodManager inputManager = (InputMethodManager)
+                getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
+    }
 
 }

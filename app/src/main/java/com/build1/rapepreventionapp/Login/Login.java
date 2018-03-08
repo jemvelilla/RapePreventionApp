@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -75,6 +76,8 @@ public class Login extends AppCompatActivity {
     }
 
     public void btnOnClickLogin(View v){
+
+        dismissKeyboard();
 
         animation.start();
         loading.setVisibility(View.VISIBLE);
@@ -187,5 +190,13 @@ public class Login extends AppCompatActivity {
             finish();
             startActivity(intent);
         }
+    }
+
+    public void dismissKeyboard() {
+        InputMethodManager inputManager = (InputMethodManager)
+                getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
     }
 }
