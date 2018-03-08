@@ -533,7 +533,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
 
 
             originMarkers.add(mMap.addMarker(new MarkerOptions()
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.start_blue))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.helper))
                     .title(route.startAddress)
                     .position(route.startLocation)));
 
@@ -542,7 +542,7 @@ public class LocationTracking extends AppCompatActivity implements OnMapReadyCal
             }
 
             destinationMarkers.add(mMap.addMarker(new MarkerOptions()
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.end_green))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.victim))
                     .title(route.endAddress)
                     .position(route.endLocation)));
 
