@@ -124,7 +124,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDr1asme-e-xPsHFa7IvFiJIOZHZFmndac" />
+            android:value="AIzaSyCX_1Jou-Z9ZuMUs3C9s4aBF0vThp-P58Y" />
 
         <activity
             android:name=".Home.BottomNavigation"

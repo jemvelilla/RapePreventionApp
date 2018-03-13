@@ -240,7 +240,7 @@ public class Phonebook extends Fragment implements View.OnClickListener{
     }
 
     public void sendInvitation(String sendTo){
-        String message = "It can happen to ANYONE and ANYWHERE. Download TULONG: Rape Prevention App now.";
+        String message = "It can happen to ANYONE and ANYWHERE. Download TULONG: Rape Prevention App now. Available on Google Play: https://play.google.com/store/apps/details?id=com.build1.rapepreventionapp";
 
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + sendTo));
         intent.putExtra("sms_body", message);
